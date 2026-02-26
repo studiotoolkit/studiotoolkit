@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/color-from-image",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "React component for extracting dominant colors from images using advanced color analysis algorithms",
   "author": "StudioToolkit",

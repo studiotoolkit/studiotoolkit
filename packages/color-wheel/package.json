@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/color-wheel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "Interactive color wheel React component for creating and manipulating color harmonies with multiple harmony modes",
   "author": "StudioToolkit",

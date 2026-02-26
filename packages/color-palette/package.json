@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/color-palette",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "React component for displaying and managing color palettes with multiple display modes and customization options",
   "author": "StudioToolkit",
