@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/color-palette",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "description": "React component for displaying and managing color palettes with multiple display modes and customization options",
   "author": "StudioToolkit",
@@ -36,8 +36,7 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./style.css": "./dist/ColorPalette.css",
-    "./src/ColorPalette.css": "./src/ColorPalette.css",
+    "./style.css": "./dist/style.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -52,7 +51,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "npx tsc --project tsconfig.json && vite build",
+    "build": "npx tsc --project tsconfig.json && vite build && cp src/ColorPalette.css dist/style.css",
     "dev": "vite build --watch",
     "clean": "rm -rf dist",
     "lint": "eslint src --ext .ts,.tsx",

@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/color-from-image",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "description": "React component for extracting dominant colors from images using advanced color analysis algorithms",
   "author": "StudioToolkit",
@@ -39,8 +39,7 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./style.css": "./dist/ColorFromImage.css",
-    "./src/ColorFromImage.css": "./src/ColorFromImage.css",
+    "./style.css": "./dist/style.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -56,6 +55,7 @@
   },
   "scripts": {
     "build": "npx tsc --project tsconfig.json && vite build",
+    "build": "npx tsc --project tsconfig.json && vite build && cp src/ColorFromImage.css dist/style.css",
     "dev": "vite build --watch",
     "clean": "rm -rf dist",
     "lint": "eslint src --ext .ts,.tsx",
