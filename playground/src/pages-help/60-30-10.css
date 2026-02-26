@@ -1,0 +1,75 @@
+/* ─── Page shell ──────────────────────────────────────────────────── */
+.help-60-30-10-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f4f8;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+[data-theme="dark"] .help-60-30-10-page {
+  background-color: #0d0f14;
+  color: #dde3ef;
+}
+
+/* ─── Hero ─────────────────────────────────────────────────────────── */
+.help-6030-hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f4c75 60%, #1e3a5f 100%);
+  color: #fff;
+  padding: 48px 24px 40px;
+  text-align: center;
+}
+
+.help-6030-hero-eyebrow {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  color: #93c5fd;
+}
+
+.help-6030-hero h1 {
+  margin: 0 0 8px;
+  font-size: clamp(40px, 8vw, 68px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #fff;
+}
+
+.help-6030-hero-rule {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #93c5fd;
+}
+
+.help-6030-hero-subtitle {
+  margin: 0 auto;
+  max-width: 540px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #cbd5e1;
+}
+
+/* ─── Content wrapper ──────────────────────────────────────────────── */
+.help-6030-content {
+  flex: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+  width: 100%;
+  box-sizing: border-box;
+}

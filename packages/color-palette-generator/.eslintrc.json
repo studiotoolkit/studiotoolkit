@@ -1,0 +1,12 @@
+{
+  "extends": ["../../.eslintrc.json"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "999.999.999"
+    }
+  }
+}

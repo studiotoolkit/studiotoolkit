@@ -1,0 +1,143 @@
+.cfi-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background-color: #ffffff;
+}
+
+[data-theme="dark"] .cfi-container {
+  background-color: #1a1a1a !important;
+}
+
+.cfi-canvas-wrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  border-style: solid;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .cfi-canvas-wrapper {
+  border-color: #444;
+}
+
+.cfi-canvas {
+  display: block;
+}
+
+.cfi-canvas-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: none;
+  background: rgba(248, 248, 248, 0.85);
+  line-height: normal;
+}
+
+[data-theme="dark"] .cfi-canvas-overlay {
+  background: rgba(26, 26, 26, 0.85);
+}
+
+.cfi-canvas-overlay span {
+  font-size: 14px;
+  color: #888;
+  font-family: inherit;
+}
+
+[data-theme="dark"] .cfi-canvas-overlay span {
+  color: #aaa;
+}
+
+.cfi-canvas-overlay span:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+}
+
+[data-theme="dark"] .cfi-canvas-overlay span:first-child {
+  color: #ccc;
+}
+
+.cfi-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfi-file-input {
+  font-family: inherit;
+  font-size: 13px;
+  flex: 1;
+}
+
+.cfi-clear-button {
+  padding: 5px 12px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.cfi-clear-button:hover {
+  background: #c0392b;
+}
+
+.cfi-paste-button {
+  padding: 5px 12px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.cfi-paste-button:hover {
+  background: #1976d2;
+}
+
+.cfi-url-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cfi-url-input {
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.cfi-load-button {
+  padding: 5px 12px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.cfi-load-button:hover {
+  background: #217dbb;
+}
+
+.cfi-url-error {
+  margin: 0;
+  font-size: 12px;
+  color: #c0392b;
+}

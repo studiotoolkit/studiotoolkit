@@ -1,0 +1,484 @@
+/* ─── Page shell ───────────────────────────────────────────────────── */
+.cfih-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f4f8;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+[data-theme="dark"] .cfih-page {
+  background-color: #0d0f14;
+  color: #dde3ef;
+}
+
+/* ─── Hero / title banner ──────────────────────────────────────────── */
+.cfih-hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f4c75 60%, #1e3a5f 100%);
+  color: #fff;
+  padding: 48px 24px 40px;
+  text-align: center;
+}
+
+.cfih-hero-eyebrow {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  color: #93c5fd;
+}
+
+.cfih-hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.cfih-hero-subtitle {
+  margin: 0 auto;
+  max-width: 600px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.cfih-meta-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.cfih-meta-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #e2e8f0;
+}
+
+.cfih-meta-badge span:first-child {
+  opacity: 0.6;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cfih-meta-badge span:last-child {
+  font-weight: 600;
+}
+
+/* ─── Main content layout ──────────────────────────────────────────── */
+.cfih-main {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Section panels ───────────────────────────────────────────────── */
+.cfih-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .cfih-section {
+  background: #161b27;
+  border-color: #2a3347;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.cfih-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #e2e8f0;
+  letter-spacing: -0.3px;
+}
+
+[data-theme="dark"] .cfih-section-title {
+  color: #f1f5f9;
+  border-bottom-color: #2a3347;
+}
+
+.cfih-section-title svg {
+  flex-shrink: 0;
+  color: #3b82f6;
+}
+
+/* ─── Subsection headers ───────────────────────────────────────────── */
+.cfih-step {
+  margin-top: 28px;
+}
+
+.cfih-step:first-of-type {
+  margin-top: 0;
+}
+
+.cfih-step-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+
+.cfih-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.cfih-step-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+[data-theme="dark"] .cfih-step-title {
+  color: #e2e8f0;
+}
+
+.cfih-step-body {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #374151;
+  margin-left: 34px;
+}
+
+[data-theme="dark"] .cfih-step-body {
+  color: #94a3b8;
+}
+
+.cfih-step-body p {
+  margin: 0 0 10px;
+}
+
+.cfih-step-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Sub-headings inside steps ────────────────────────────────────── */
+.cfih-subhead {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 18px 0 6px;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+[data-theme="dark"] .cfih-subhead {
+  color: #cbd5e1;
+}
+
+/* ─── Body prose (outside steps) ──────────────────────────────────── */
+.cfih-prose {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #374151;
+}
+
+[data-theme="dark"] .cfih-prose {
+  color: #94a3b8;
+}
+
+.cfih-prose p {
+  margin: 0 0 12px;
+}
+
+.cfih-prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Inline code ──────────────────────────────────────────────────── */
+code {
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.85em;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid #dbeafe;
+}
+
+[data-theme="dark"] code {
+  background: #1e2a42;
+  color: #93c5fd;
+  border-color: #2d4a7a;
+}
+
+/* ─── Code blocks ──────────────────────────────────────────────────── */
+.cfih-code-block {
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 14px 0;
+  overflow-x: auto;
+  border: 1px solid #1e293b;
+  white-space: pre;
+}
+
+[data-theme="dark"] .cfih-code-block {
+  background: #090d14;
+  border-color: #1e293b;
+}
+
+/* ─── Tables ───────────────────────────────────────────────────────── */
+.cfih-table-wrap {
+  overflow-x: auto;
+  margin: 14px 0;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="dark"] .cfih-table-wrap {
+  border-color: #2a3347;
+}
+
+.cfih-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.cfih-table thead tr {
+  background: #f1f5f9;
+}
+
+[data-theme="dark"] .cfih-table thead tr {
+  background: #1e2a3a;
+}
+
+.cfih-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="dark"] .cfih-table th {
+  color: #64748b;
+  border-bottom-color: #2a3347;
+}
+
+.cfih-table td {
+  padding: 10px 16px;
+  color: #374151;
+  vertical-align: top;
+  border-bottom: 1px solid #f1f5f9;
+  line-height: 1.55;
+}
+
+[data-theme="dark"] .cfih-table td {
+  color: #94a3b8;
+  border-bottom-color: #1e2a3a;
+}
+
+.cfih-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.cfih-table tbody tr:hover td {
+  background: #f8fafc;
+}
+
+[data-theme="dark"] .cfih-table tbody tr:hover td {
+  background: #1a2234;
+}
+
+.cfih-table-check {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+/* ─── Callout / highlight box ──────────────────────────────────────── */
+.cfih-callout {
+  background: #eff6ff;
+  border-left: 4px solid #3b82f6;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #1e40af;
+}
+
+[data-theme="dark"] .cfih-callout {
+  background: #1a2540;
+  border-left-color: #3b82f6;
+  color: #93c5fd;
+}
+
+/* ─── Comparison panel (vs. section) ─────────────────────────────── */
+.cfih-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .cfih-compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cfih-compare-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+[data-theme="dark"] .cfih-compare-card {
+  background: #111827;
+  border-color: #2a3347;
+}
+
+.cfih-compare-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+[data-theme="dark"] .cfih-compare-card-title {
+  color: #e2e8f0;
+}
+
+.cfih-compare-card p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #64748b;
+}
+
+[data-theme="dark"] .cfih-compare-card p {
+  color: #6b7280;
+}
+
+/* ─── API props table ──────────────────────────────────────────────── */
+.cfih-api-prop {
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 13px;
+  color: #7c3aed;
+}
+
+[data-theme="dark"] .cfih-api-prop {
+  color: #a78bfa;
+}
+
+.cfih-api-type {
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 12px;
+  color: #0369a1;
+}
+
+[data-theme="dark"] .cfih-api-type {
+  color: #38bdf8;
+}
+
+/* ─── References section ───────────────────────────────────────────── */
+.cfih-refs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cfih-refs li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+[data-theme="dark"] .cfih-refs li {
+  color: #94a3b8;
+  border-bottom-color: #1e2a3a;
+}
+
+.cfih-refs li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cfih-ref-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: #4338ca;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+[data-theme="dark"] .cfih-ref-num {
+  background: #1e2a42;
+  color: #818cf8;
+}
+
+.cfih-refs em {
+  font-style: italic;
+  color: #1d4ed8;
+}
+
+[data-theme="dark"] .cfih-refs em {
+  color: #93c5fd;
+}

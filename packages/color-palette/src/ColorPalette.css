@@ -1,0 +1,108 @@
+.color-palette-container {
+  padding: 5px;
+  background-color: #ffffff;
+}
+
+[data-theme="dark"] .color-palette-container {
+  background-color: #1a1a1a !important;
+}
+
+.palette-section {
+  margin-bottom: 8px;
+}
+
+.palette-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.palette-section h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.copy-section-button {
+  padding: 4px 10px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.copy-section-button:hover {
+  background: #1e8449;
+}
+
+.colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.swatchBox {
+  text-align: center;
+  font-size: 12px;
+}
+
+/* ─── Table display ───────────────────────────────────── */
+.palette-table {
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.palette-table .color-cell {
+  padding: 0;
+  border: 1px solid #ddd;
+}
+
+.palette-table .hex-cell {
+  text-align: center;
+  font-family: monospace;
+  font-size: 11px;
+  color: #333;
+  padding: 4px 2px;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+.hex-label {
+  display: block;
+  font-family: monospace;
+  font-size: 11px;
+  color: #333;
+}
+
+/* ─── Dark theme support ───────────────────────────────── */
+[data-theme="dark"] .palette-section h3 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .copy-section-button {
+  background: #2ecc71;
+}
+
+[data-theme="dark"] .copy-section-button:hover {
+  background: #27ae60;
+}
+
+[data-theme="dark"] .palette-table {
+  border-color: #444;
+}
+
+[data-theme="dark"] .palette-table .color-cell {
+  border-color: #444;
+}
+
+[data-theme="dark"] .palette-table .hex-cell {
+  color: #e0e0e0;
+  border-color: #444;
+  background: #2a2a2a;
+}
+
+[data-theme="dark"] .hex-label {
+  color: #e0e0e0;
+}

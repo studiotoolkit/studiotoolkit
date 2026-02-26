@@ -1,0 +1,42 @@
+{
+  "name": "@studiotoolkit/color-palette-generator",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Generate color palettes using various algorithms",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/studiotoolkit/studiotoolkit"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./generators/*": {
+      "import": "./dist/generators/*.mjs",
+      "require": "./dist/generators/*.js",
+      "types": "./dist/generators/*.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx tsc --project tsconfig.json && vite build",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vite": "^5.0.0"
+  }
+}

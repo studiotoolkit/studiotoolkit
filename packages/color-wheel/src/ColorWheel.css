@@ -1,0 +1,104 @@
+.color-wheel-container {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+[data-theme="dark"] .color-wheel-container {
+  background-color: #1a1a1a !important;
+}
+
+.color-wheel-container h2 {
+  text-align: center;
+  padding: 15px;
+  margin: 0;
+  background: #222;
+  color: white;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 20% 30% 50%;
+  height: 100vh;
+}
+
+.panel {
+  padding: 15px;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+[data-theme="dark"] .panel {
+  background-color: #1a1a1a !important;
+  border-right-color: #444;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .panel label {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .panel input,
+[data-theme="dark"] .panel select {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .panel hr {
+  border-color: #444;
+}
+
+.panel canvas {
+  display: block;
+  margin: auto;
+  cursor: pointer;
+}
+
+.panel label {
+  font-weight: bold;
+  display: block;
+  margin-top: 12px;
+}
+
+.panel input,
+.panel select {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.panel hr {
+  margin: 18px 0;
+}
+
+.colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.swatchBox {
+  text-align: center;
+  font-size: 13px;
+}
+
+.swatch {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.panel pre {
+  background: #f3f3f3;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  overflow-x: auto;
+  max-height: 320px;
+}
+
+.panel h3 {
+  margin-top: 0;
+}

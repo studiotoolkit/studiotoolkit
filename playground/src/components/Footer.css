@@ -1,0 +1,26 @@
+.footer {
+  background: #ffffff;
+  color: #555;
+  padding: 12px 0;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.footer-container p {
+  margin: 0;
+  font-size: 13px;
+}
+
+[data-theme="dark"] .footer {
+  background: #1a1a1a;
+  color: #aaa;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.4);
+}
