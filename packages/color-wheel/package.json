@@ -2,26 +2,58 @@
   "name": "@studiotoolkit/color-wheel",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "Interactive color wheel component",
+  "description": "Interactive color wheel React component for creating and manipulating color harmonies with multiple harmony modes",
+  "author": "StudioToolkit",
+  "homepage": "https://studiotoolkit.github.io/build-color-wheel",
   "repository": {
     "type": "git",
-    "url": "https://github.com/studiotoolkit/studiotoolkit"
+    "url": "https://github.com/studiotoolkit/studiotoolkit",
+    "directory": "packages/color-wheel"
   },
+  "bugs": {
+    "url": "https://github.com/studiotoolkit/studiotoolkit/issues"
+  },
+  "keywords": [
+    "color-wheel",
+    "color-picker",
+    "color-harmony",
+    "harmony-polygon",
+    "react-color",
+    "color-selection",
+    "design-tools",
+    "ui-components",
+    "complementary",
+    "analogous",
+    "triadic"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     },
     "./style.css": "./dist/ColorWheel.css",
-    "./src/ColorWheel.css": "./src/ColorWheel.css"
+    "./src/ColorWheel.css": "./src/ColorWheel.css",
+    "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "build": "npx tsc --project tsconfig.json && vite build",
     "dev": "vite build --watch",
@@ -30,7 +62,8 @@
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "prepublishOnly": "pnpm run build && pnpm test"
   },
   "peerDependencies": {
     "react": "^18.0.0",

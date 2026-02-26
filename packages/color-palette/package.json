@@ -2,26 +2,55 @@
   "name": "@studiotoolkit/color-palette",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "Display and manage color palettes",
+  "description": "React component for displaying and managing color palettes with multiple display modes and customization options",
+  "author": "StudioToolkit",
+  "homepage": "https://studiotoolkit.github.io/build-color-palette",
   "repository": {
     "type": "git",
-    "url": "https://github.com/studiotoolkit/studiotoolkit"
+    "url": "https://github.com/studiotoolkit/studiotoolkit",
+    "directory": "packages/color-palette"
   },
+  "bugs": {
+    "url": "https://github.com/studiotoolkit/studiotoolkit/issues"
+  },
+  "keywords": [
+    "color-palette",
+    "color-display",
+    "color-swatches",
+    "palette-viewer",
+    "color-management",
+    "design-tools",
+    "react-component",
+    "color-visualization"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     },
     "./style.css": "./dist/ColorPalette.css",
-    "./src/ColorPalette.css": "./src/ColorPalette.css"
+    "./src/ColorPalette.css": "./src/ColorPalette.css",
+    "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "build": "npx tsc --project tsconfig.json && vite build",
     "dev": "vite build --watch",
@@ -30,7 +59,8 @@
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "prepublishOnly": "pnpm run build && pnpm test"
   },
   "peerDependencies": {
     "react": "^18.0.0",

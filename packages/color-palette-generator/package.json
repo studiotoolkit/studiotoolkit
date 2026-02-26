@@ -2,29 +2,102 @@
   "name": "@studiotoolkit/color-palette-generator",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "Generate color palettes using various algorithms",
+  "description": "Generate color palettes using algorithmic, contrast-based, harmony-based, perceptual, and design-specific algorithms",
+  "author": "StudioToolkit",
+  "homepage": "https://studiotoolkit.github.io/build-palette-generator",
   "repository": {
     "type": "git",
-    "url": "https://github.com/studiotoolkit/studiotoolkit"
+    "url": "https://github.com/studiotoolkit/studiotoolkit",
+    "directory": "packages/color-palette-generator"
   },
+  "bugs": {
+    "url": "https://github.com/studiotoolkit/studiotoolkit/issues"
+  },
+  "keywords": [
+    "color-palette",
+    "color-generator",
+    "palette-generation",
+    "color-harmony",
+    "color-algorithm",
+    "design-system",
+    "color-theory",
+    "radium",
+    "60-30-10",
+    "data-visualization",
+    "perceptual-color"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     },
-    "./generators/*": {
-      "import": "./dist/generators/*.mjs",
-      "require": "./dist/generators/*.js",
-      "types": "./dist/generators/*.d.ts"
-    }
+    "./AlgorithmicGenerator": {
+      "types": "./dist/generators/AlgorithmicGenerator.d.ts",
+      "import": "./dist/generators/AlgorithmicGenerator.mjs",
+      "require": "./dist/generators/AlgorithmicGenerator.js",
+      "default": "./dist/generators/AlgorithmicGenerator.js"
+    },
+    "./ContrastGenerator": {
+      "types": "./dist/generators/ContrastGenerator.d.ts",
+      "import": "./dist/generators/ContrastGenerator.mjs",
+      "require": "./dist/generators/ContrastGenerator.js",
+      "default": "./dist/generators/ContrastGenerator.js"
+    },
+    "./DataVisualsGenerator": {
+      "types": "./dist/generators/DataVisualsGenerator.d.ts",
+      "import": "./dist/generators/DataVisualsGenerator.mjs",
+      "require": "./dist/generators/DataVisualsGenerator.js",
+      "default": "./dist/generators/DataVisualsGenerator.js"
+    },
+    "./HarmonyGenerator": {
+      "types": "./dist/generators/HarmonyGenerator.d.ts",
+      "import": "./dist/generators/HarmonyGenerator.mjs",
+      "require": "./dist/generators/HarmonyGenerator.js",
+      "default": "./dist/generators/HarmonyGenerator.js"
+    },
+    "./ImageGenerator": {
+      "types": "./dist/generators/ImageGenerator.d.ts",
+      "import": "./dist/generators/ImageGenerator.mjs",
+      "require": "./dist/generators/ImageGenerator.js",
+      "default": "./dist/generators/ImageGenerator.js"
+    },
+    "./PerceptualGenerator": {
+      "types": "./dist/generators/PerceptualGenerator.d.ts",
+      "import": "./dist/generators/PerceptualGenerator.mjs",
+      "require": "./dist/generators/PerceptualGenerator.js",
+      "default": "./dist/generators/PerceptualGenerator.js"
+    },
+    "./RadiumGenerator": {
+      "types": "./dist/generators/RadiumGenerator.d.ts",
+      "import": "./dist/generators/RadiumGenerator.mjs",
+      "require": "./dist/generators/RadiumGenerator.js",
+      "default": "./dist/generators/RadiumGenerator.js"
+    },
+    "./Select603010": {
+      "types": "./dist/generators/select60-30-10.d.ts",
+      "import": "./dist/generators/select60-30-10.mjs",
+      "require": "./dist/generators/select60-30-10.js",
+      "default": "./dist/generators/select60-30-10.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "build": "npx tsc --project tsconfig.json && vite build",
     "dev": "tsc --watch",
@@ -33,7 +106,8 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "prepublishOnly": "pnpm run build && pnpm test"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
