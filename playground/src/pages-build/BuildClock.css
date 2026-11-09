@@ -1,0 +1,226 @@
+.build-clock-page {
+  min-height: calc(100vh - 58px);
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.build-clock-content {
+  flex: 1;
+  width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.build-clock-row1 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Panels */
+.build-clock-controls,
+.build-clock-preview,
+.build-clock-code-section {
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 16px;
+  background: #fafbfc;
+}
+
+.build-clock-controls {
+  border-color: #2196f3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.build-clock-preview {
+  border-color: #229954;
+  display: flex;
+  flex-direction: column;
+}
+
+.build-clock-code-section {
+  border-color: #9c27b0;
+}
+
+.build-clock-controls h3,
+.build-clock-preview h3,
+.build-clock-code-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Settings */
+.build-clock-control-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.build-clock-control-inline label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #444;
+  white-space: nowrap;
+}
+
+.build-clock-range {
+  flex: 1;
+  max-width: 160px;
+}
+
+.build-clock-text-input,
+.build-clock-select {
+  width: 160px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.build-clock-color-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.build-clock-color-picker {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.build-clock-color-picker:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.build-clock-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #777;
+}
+
+.build-clock-reset-button {
+  padding: 4px 10px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.build-clock-reset-button:hover {
+  background: #c0392b;
+}
+
+/* Preview */
+.build-clock-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 8px 0;
+}
+
+/* Code */
+.build-clock-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.build-clock-textarea {
+  width: 100%;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 250px;
+  box-sizing: border-box;
+}
+
+.build-clock-copy-button {
+  padding: 4px 10px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.build-clock-copy-button:hover {
+  background: #229954;
+}
+
+/* Dark theme */
+[data-theme="dark"] .build-clock-page {
+  background-color: #23272f;
+  color: #f0f2f6;
+}
+
+[data-theme="dark"] .build-clock-controls,
+[data-theme="dark"] .build-clock-preview,
+[data-theme="dark"] .build-clock-code-section {
+  background: #2c313c;
+  border-color: #363c4a;
+  color: #f0f2f6;
+}
+
+[data-theme="dark"] .build-clock-controls h3,
+[data-theme="dark"] .build-clock-preview h3,
+[data-theme="dark"] .build-clock-code-header h3 {
+  color: #f0f2f6;
+}
+
+[data-theme="dark"] .build-clock-control-inline label,
+[data-theme="dark"] .build-clock-hint {
+  color: #9ba1b0;
+}
+
+[data-theme="dark"] .build-clock-text-input,
+[data-theme="dark"] .build-clock-select {
+  background: #2c313c;
+  border-color: #363c4a;
+  color: #f0f2f6;
+}
+
+[data-theme="dark"] .build-clock-textarea {
+  background: #1a1d24;
+  border-color: #363c4a;
+  color: #f0f2f6;
+}
+
+/* Stack columns on narrow screens */
+@media (max-width: 900px) {
+  .build-clock-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 8px 16px;
+  }
+
+  .build-clock-row1 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

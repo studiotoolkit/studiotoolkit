@@ -39,11 +39,12 @@ export default function Header() {
           </div>
 
           {/* Build tools */}
-          <div className="nav-group">
+          <div className="nav-group nav-group--build">
             <NavLink to="/build-color-wheel">Color Wheel</NavLink>
             <NavLink to="/build-color-from-image">Color From Image</NavLink>
             <NavLink to="/build-palette-generator">Palette Generator</NavLink>
             <NavLink to="/build-color-palette">Color Palette</NavLink>
+            <NavLink to="/build-clock">Clock</NavLink>
           </div>
 
           {/* Help dropdown */}

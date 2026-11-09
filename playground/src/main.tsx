@@ -18,6 +18,7 @@ const DemoPaletteGenerator = lazy(
 const BuildColorFromImage = lazy(
   () => import("./pages-build/BuildColorFromImage.tsx"),
 );
+const BuildClock = lazy(() => import("./pages-build/BuildClock.tsx"));
 const ColorPalettes = lazy(() => import("./pages-help/ColorPalettes.tsx"));
 const ColorRule6030 = lazy(() => import("./pages-help/60-30-10.tsx"));
 const ColorFromImageHelp = lazy(
@@ -52,6 +53,7 @@ createRoot(document.getElementById("root")!).render(
               path="/build-color-from-image"
               element={<BuildColorFromImage />}
             />
+            <Route path="/build-clock" element={<BuildClock />} />
             <Route path="/color-palettes" element={<ColorPalettes />} />
             <Route path="/60-30-10" element={<ColorRule6030 />} />
             <Route

@@ -1,0 +1,74 @@
+{
+  "name": "@studiotoolkit/analog-clock",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Analog clock React component (SVG) with time zone support, light/dark themes and an optional digital readout",
+  "author": "StudioToolkit",
+  "homepage": "https://github.com/studiotoolkit/studiotoolkit/tree/main/packages/analog-clock",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/studiotoolkit/studiotoolkit",
+    "directory": "packages/analog-clock"
+  },
+  "bugs": {
+    "url": "https://github.com/studiotoolkit/studiotoolkit/issues"
+  },
+  "keywords": [
+    "analog-clock",
+    "clock",
+    "react-clock",
+    "svg-clock",
+    "timezone",
+    "world-clock",
+    "react-component",
+    "ui-components"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "build": "npx tsc --project tsconfig.json && vite build",
+    "dev": "vite build --watch",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "prepublishOnly": "pnpm run build && pnpm test"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.6"
+  }
+}

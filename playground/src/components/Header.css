@@ -289,8 +289,22 @@
 
   .header-nav {
     order: 3;
-    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
     justify-content: flex-start;
+  }
+
+  .nav-group {
+    flex-shrink: 0;
+  }
+
+  /* Build tabs scroll sideways instead of overflowing the screen */
+  .nav-group--build {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
 
   .help-dropdown {

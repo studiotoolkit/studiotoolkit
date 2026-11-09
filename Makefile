@@ -1,4 +1,4 @@
-.PHONY: help install build dev clean test test-watch test-ui test-color-wheel test-color-palette test-color-from-image lint lint-fix format format-check check-deps update-deps publish check-pnpm install-pnpm
+.PHONY: help install build dev clean test test-watch test-ui test-color-wheel test-color-palette test-color-from-image test-analog-clock lint lint-fix format format-check check-deps update-deps publish check-pnpm install-pnpm
 
 # Default target
 .DEFAULT_GOAL := help
@@ -62,6 +62,10 @@ build-color-wheel: ## Build color-wheel package
 	@echo "$(CYAN)Building @studiotoolkit/color-wheel...$(NC)"
 	pnpm --filter @studiotoolkit/color-wheel build
 
+build-analog-clock: ## Build analog-clock package
+	@echo "$(CYAN)Building @studiotoolkit/analog-clock...$(NC)"
+	pnpm --filter @studiotoolkit/analog-clock build
+
 build-generator: ## Build color-palette-generator package
 	@echo "$(CYAN)Building @studiotoolkit/color-palette-generator...$(NC)"
 	pnpm --filter @studiotoolkit/color-palette-generator build
@@ -78,6 +82,9 @@ dev-color-palette: ## Run color-palette in dev mode
 
 dev-color-wheel: ## Run color-wheel in dev mode
 	pnpm --filter @studiotoolkit/color-wheel dev
+
+dev-analog-clock: ## Run analog-clock in dev mode
+	pnpm --filter @studiotoolkit/analog-clock dev
 
 dev-generator: ## Run color-palette-generator in dev mode
 	pnpm --filter @studiotoolkit/color-palette-generator dev
@@ -118,6 +125,10 @@ test-ui: check-pnpm ## Open Vitest UI
 test-color-wheel: check-pnpm ## Test color-wheel package
 	@echo "$(CYAN)Testing @studiotoolkit/color-wheel...$(NC)"
 	pnpm --filter @studiotoolkit/color-wheel test
+
+test-analog-clock: check-pnpm ## Test analog-clock package
+	@echo "$(CYAN)Testing @studiotoolkit/analog-clock...$(NC)"
+	pnpm --filter @studiotoolkit/analog-clock test
 
 test-color-palette: check-pnpm ## Test color-palette package
 	@echo "$(CYAN)Testing @studiotoolkit/color-palette...$(NC)"

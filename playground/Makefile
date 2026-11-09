@@ -1,37 +1,44 @@
-.PHONY: help install dev build lint audit clean
+.PHONY: help install run dev build preview lint lint-fix typecheck audit clean
 
-# Note: This playground is part of a pnpm workspace.
-# Most commands should be run from the root directory using the root Makefile.
+.DEFAULT_GOAL := help
 
-help:
-	@echo "Playground Commands (part of pnpm workspace)"
-	@echo ""
-	@echo "Note: Run these commands from the root directory instead:"
-	@echo "  cd .. && make install        - Install all dependencies"
-	@echo "  cd .. && make dev-playground - Start playground dev server"
-	@echo "  cd .. && make build-playground - Build playground"
-	@echo ""
-	@echo "Direct commands (if needed):"
-	@echo "  make dev      - Start development server"
-	@echo "  make build    - Build production bundle"
+# Use pnpm if installed, otherwise run it through npx
+PNPM := $(shell command -v pnpm 2> /dev/null || echo "npx -y pnpm@10")
 
-install:
-	@echo "Note: Please run 'cd .. && make install' from the root directory"
-	@exit 1
+# Workspace packages the playground imports (served from their dist/ folders)
+PACKAGES := --filter "./packages/*"
 
-dev:
-	pnpm run dev
+help: ## Show this help
+	@echo "Playground commands:"
+	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  make %-10s %s\n", $$1, $$2}'
 
-build:
-	pnpm run build
+install: ## Install dependencies and build the workspace packages
+	cd .. && $(PNPM) install
+	cd .. && $(PNPM) $(PACKAGES) build
 
-lint:
-	@echo "Note: Please run 'cd .. && make lint' from the root directory"
-	@exit 1
+run: ## Start the dev server
+	$(PNPM) run dev
 
-audit:
-	pnpm audit
+dev: run
 
-clean:
+build: ## Production build into dist/
+	$(PNPM) run build
+
+preview: build ## Serve the production build locally
+	$(PNPM) run preview
+
+lint: ## Run ESLint
+	$(PNPM) run lint
+
+lint-fix: ## Run ESLint and fix what it can
+	$(PNPM) exec eslint . --fix
+
+typecheck: ## Type-check with TypeScript
+	$(PNPM) exec tsc -b
+
+audit: ## Check dependencies for known vulnerabilities
+	$(PNPM) audit
+
+clean: ## Remove node_modules and dist
 	rm -rf node_modules dist
-	@echo "Cleaned node_modules and dist directories"
+	@echo "Cleaned node_modules and dist"

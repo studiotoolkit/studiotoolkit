@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@studiotoolkit/analog-clock": "workspace:*",
     "@studiotoolkit/color-from-image": "workspace:*",
     "@studiotoolkit/color-palette": "workspace:*",
     "@studiotoolkit/color-palette-generator": "workspace:*",
