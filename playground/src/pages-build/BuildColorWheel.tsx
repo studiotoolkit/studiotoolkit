@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ColorWheel, type PaletteOutput } from '@studiotoolkit/color-wheel';
-import '@studiotoolkit/color-wheel/src/ColorWheel.css';
+import '@studiotoolkit/color-wheel/style.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './BuildColorWheel.css';

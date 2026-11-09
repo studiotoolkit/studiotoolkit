@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { ColorPalette } from '@studiotoolkit/color-palette';
-import '@studiotoolkit/color-palette/src/ColorPalette.css';
+import '@studiotoolkit/color-palette/style.css';
 import './BuildColorWheel.css';
 import './BuildColorPalette.css';
 import defaultJson from './BuildColorPalette.json';

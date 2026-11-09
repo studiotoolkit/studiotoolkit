@@ -431,7 +431,6 @@ function GamutSlice({ H, th }: { H: number; th: Record<string, string> }) {
 
   for (let li = 0; li <= 100; li += 2) {
     const L = li / 100;
-    let maxC = 0;
     let lo = 0,
       hi = 0.45;
     const inG = (C: number) => {
@@ -455,7 +454,7 @@ function GamutSlice({ H, th }: { H: number; th: Record<string, string> }) {
       if (inG(mid)) lo = mid;
       else hi = mid;
     }
-    maxC = lo;
+    const maxC = lo;
     const x = (maxC / 0.45) * W;
     const y = HT - L * HT;
     pts.push(`${x},${y}`);

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { ColorFromImage, type ColorEntry } from '@studiotoolkit/color-from-image';
-import '@studiotoolkit/color-from-image/src/ColorFromImage.css';
+import '@studiotoolkit/color-from-image/style.css';
 import './BuildColorFromImage.css';
 
 export default function BuildColorFromImage() {

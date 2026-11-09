@@ -1,6 +1,6 @@
 {
   "name": "studiotoolkit-colors",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "private": true,
   "license": "MIT",
   "description": "Monorepo for Studio Toolkit color components and utilities",
@@ -20,19 +20,20 @@
     "format:check": "prettier --check \"packages/*/src/**/*.{ts,tsx,css}\""
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.1.5",
-    "@testing-library/react": "^14.1.2",
-    "@testing-library/user-event": "^14.5.1",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
-    "@vitest/ui": "^1.1.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "jsdom": "^23.0.1",
-    "prettier": "^3.2.4",
-    "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
+    "@vitest/ui": "^5.1.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "jsdom": "^31.0.0",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.0"
   },
   "engines": {
     "node": ">=18.0.0",

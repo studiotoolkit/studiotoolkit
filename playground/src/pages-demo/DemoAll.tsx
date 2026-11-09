@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
 import { ColorWheel, type PaletteOutput } from '@studiotoolkit/color-wheel';
-import '@studiotoolkit/color-wheel/src/ColorWheel.css';
+import '@studiotoolkit/color-wheel/style.css';
 import { ColorFromImage, type ColorEntry } from '@studiotoolkit/color-from-image';
-import '@studiotoolkit/color-from-image/src/ColorFromImage.css';
+import '@studiotoolkit/color-from-image/style.css';
 import { ColorPalette } from '@studiotoolkit/color-palette';
-import '@studiotoolkit/color-palette/src/ColorPalette.css';
+import '@studiotoolkit/color-palette/style.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import {

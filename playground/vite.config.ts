@@ -15,8 +15,8 @@ export default defineConfig({
   resolve: {
     alias: {
       // Ensure only one copy of React is used
-      react: resolve(__dirname, './node_modules/react'),
-      'react-dom': resolve(__dirname, './node_modules/react-dom'),
+      react: resolve(import.meta.dirname, './node_modules/react'),
+      'react-dom': resolve(import.meta.dirname, './node_modules/react-dom'),
     },
     dedupe: ['react', 'react-dom'],
   },

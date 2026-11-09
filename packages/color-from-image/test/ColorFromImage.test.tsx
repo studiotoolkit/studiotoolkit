@@ -82,7 +82,7 @@ function makeFakeImage(overrides: Partial<HTMLImageElement> = {}) {
 function mockImageLoad(overrides: Partial<HTMLImageElement> = {}) {
   const img = makeFakeImage(overrides);
 
-  vi.spyOn(window, 'Image').mockImplementation(() => {
+  vi.spyOn(window, 'Image').mockImplementation(function () {
     // Trigger onload on the next tick so effects can attach listeners first
     queueMicrotask(() => img.onload?.(new Event('load')));
     return img;
@@ -95,7 +95,7 @@ function mockImageLoad(overrides: Partial<HTMLImageElement> = {}) {
 function mockImageLoadCorsFailThenFallback() {
   let callCount = 0;
 
-  vi.spyOn(window, 'Image').mockImplementation(() => {
+  vi.spyOn(window, 'Image').mockImplementation(function () {
     const img = makeFakeImage();
     callCount++;
     if (callCount === 1) {
@@ -111,7 +111,7 @@ function mockImageLoadCorsFailThenFallback() {
 
 /** Simulate Image constructor where all loads fail. */
 function mockImageLoadAllFail() {
-  vi.spyOn(window, 'Image').mockImplementation(() => {
+  vi.spyOn(window, 'Image').mockImplementation(function () {
     const img = makeFakeImage();
     queueMicrotask(() => img.onerror?.(new Event('error')));
     return img;
@@ -129,7 +129,7 @@ function makeImageFile(name = 'test.png', type = 'image/png'): File {
 
 /** Replace FileReader so readAsDataURL fires onload synchronously. */
 function mockFileReader(result = 'data:image/png;base64,FAKEDATA') {
-  vi.spyOn(window, 'FileReader').mockImplementation(() => {
+  vi.spyOn(window, 'FileReader').mockImplementation(function () {
     const reader = {
       readAsDataURL: vi.fn(function (this: typeof reader) {
         queueMicrotask(() => {

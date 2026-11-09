@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/color-from-image",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "description": "React component for extracting dominant colors from images using advanced color analysis algorithms",
   "author": "StudioToolkit",
@@ -54,7 +54,6 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "npx tsc --project tsconfig.json && vite build",
     "build": "npx tsc --project tsconfig.json && vite build && cp src/ColorFromImage.css dist/style.css",
     "dev": "vite build --watch",
     "clean": "rm -rf dist",
@@ -70,10 +69,12 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0 || ^19.0.0",
-    "@types/react-dom": "^18.2.0 || ^19.0.0",
-    "@vitejs/plugin-react": "^4.2.0",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.0"
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.6"
   }
 }

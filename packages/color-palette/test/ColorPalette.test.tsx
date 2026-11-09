@@ -336,7 +336,7 @@ describe('ColorPalette', () => {
         parts: 1,
       });
       const swatch = container.querySelector('.swatchBox > div') as HTMLElement;
-      expect(swatch.style.borderRadius).toBe('0');
+      expect(swatch.style.borderRadius).toBe('0px');
     });
   });
 
