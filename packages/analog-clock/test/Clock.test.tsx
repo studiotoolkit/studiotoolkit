@@ -373,7 +373,7 @@ describe('face styles', () => {
 describe('public API', () => {
   it('does not expose internal face shapes', () => {
     expect(Object.keys(publicApi).sort()).toEqual(
-      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'formatDigitalTime', 'getTimeInZone'].sort()
+      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'SECOND_HAND_MOTIONS', 'formatDigitalTime', 'getTimeInZone', 'secondHandAngle'].sort()
     );
   });
 

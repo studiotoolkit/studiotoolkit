@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Clock, CLOCK_FACES, type ClockFace, type TimeFormat } from '@studiotoolkit/analog-clock';
+import {
+  Clock,
+  CLOCK_FACES,
+  SECOND_HAND_MOTIONS,
+  type ClockFace,
+  type SecondHandMotion,
+  type TimeFormat,
+} from '@studiotoolkit/analog-clock';
 import '@studiotoolkit/analog-clock/style.css';
 import { useTheme } from '../ThemeContext';
 import './BuildClock.css';
@@ -53,6 +60,7 @@ export default function BuildClock() {
   const [face, setFace] = useState<ClockFace>('default');
   const [timeFormat, setTimeFormat] = useState<TimeFormat>('12h');
   const [showSeconds, setShowSeconds] = useState(true);
+  const [motion, setMotion] = useState<SecondHandMotion>('tick');
   const [showDigital, setShowDigital] = useState(true);
   const [colors, setColors] = useState<ColorState>(initialColors);
 
@@ -77,6 +85,7 @@ export default function BuildClock() {
     theme !== 'light' && `  theme="${theme}"`,
     timeFormat !== '12h' && `  timeFormat="${timeFormat}"`,
     !showSeconds && `  showSeconds={false}`,
+    motion !== 'tick' && `  secondHandMotion="${motion}"`,
     !showDigital && `  showDigital={false}`,
     ...Object.entries(colorProps).map(([prop, value]) => `  ${prop}="${value}"`),
   ].filter(Boolean);
@@ -95,6 +104,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
     setFace('default');
     setTimeFormat('12h');
     setShowSeconds(true);
+    setMotion('tick');
     setShowDigital(true);
     setColors(initialColors());
   };
@@ -185,6 +195,22 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
               />
             </div>
             <div className="build-clock-control-inline">
+              <label htmlFor="clock-motion">Second Hand Motion</label>
+              <select
+                id="clock-motion"
+                value={motion}
+                disabled={!showSeconds}
+                onChange={(e) => setMotion(e.target.value as SecondHandMotion)}
+                className="build-clock-select"
+              >
+                {SECOND_HAND_MOTIONS.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="build-clock-control-inline">
               <label htmlFor="clock-digital">Digital Time</label>
               <input
                 id="clock-digital"
@@ -248,6 +274,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 theme={theme}
                 timeFormat={timeFormat}
                 showSeconds={showSeconds}
+                secondHandMotion={motion}
                 showDigital={showDigital}
                 {...colorProps}
               />
@@ -285,6 +312,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                   radius={72}
                   timezone={timezone || null}
                   showSeconds={showSeconds}
+                  secondHandMotion={motion}
                   showDigital={false}
                 />
               </button>

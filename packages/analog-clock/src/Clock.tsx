@@ -3,10 +3,12 @@ import {
   useEffect,
   useId,
   useInsertionEffect,
+  useRef,
   type CSSProperties,
 } from "react";
 import { FACE_GEOMETRY, type ClockFace } from "./faces";
 import { injectFaceStyles } from "./styles";
+import { secondHandAngle, type SecondHandMotion } from "./motion";
 
 export type ClockTheme = "light" | "dark";
 export type TimeFormat = "12h" | "24h";
@@ -24,6 +26,12 @@ export interface ClockProps {
   theme?: ClockTheme;
   /** Show the second hand. */
   showSeconds?: boolean;
+  /**
+   * How the second hand moves: "tick" (one jump per second), "smooth",
+   * "sweep" (8 beats/s), "swiss" (58 s lap, pause, minute jump),
+   * "bounce", "ease" or "anticipate".
+   */
+  secondHandMotion?: SecondHandMotion;
   /** Show the digital time below the dial. */
   showDigital?: boolean;
   /** Digital time format: "12h" (hh:mm:ss AM) or "24h" (HH:mm:ss). */
@@ -157,6 +165,7 @@ export default function Clock({
   face = "default",
   theme = "light",
   showSeconds = true,
+  secondHandMotion = "tick",
   showDigital = true,
   timeFormat = "12h",
   borderColor,
@@ -177,11 +186,44 @@ export default function Clock({
     injectFaceStyles();
   }, []);
 
+  // Animated motions move the second hand every frame by setting its
+  // transform directly; React still re-renders only once a second.
+  const animated = showSeconds && secondHandMotion !== "tick";
+  const secondHandRef = useRef<SVGGElement>(null);
+  const secondAngleRef = useRef(0);
+  const centreRef = useRef(0);
+
   useEffect(() => {
-    setTime(getTimeInZone(timezone));
-    const timer = setInterval(() => setTime(getTimeInZone(timezone)), 1000);
-    return () => clearInterval(timer);
-  }, [timezone]);
+    if (!animated) {
+      setTime(getTimeInZone(timezone));
+      const timer = setInterval(() => setTime(getTimeInZone(timezone)), 1000);
+      return () => clearInterval(timer);
+    }
+    let frame = 0;
+    let lastSecond = -1;
+    const step = () => {
+      const now = new Date();
+      // Zone offsets are whole minutes, so local seconds match every zone
+      const angle = secondHandAngle(
+        secondHandMotion,
+        now.getSeconds(),
+        now.getMilliseconds(),
+      );
+      secondAngleRef.current = angle;
+      const C = centreRef.current;
+      secondHandRef.current?.setAttribute(
+        "transform",
+        `rotate(${angle} ${C} ${C})`,
+      );
+      if (now.getSeconds() !== lastSecond) {
+        lastSecond = now.getSeconds();
+        setTime(getTimeInZone(timezone, now));
+      }
+      frame = requestAnimationFrame(step);
+    };
+    step();
+    return () => cancelAnimationFrame(frame);
+  }, [timezone, animated, secondHandMotion]);
 
   const g = FACE_GEOMETRY[face] ?? FACE_GEOMETRY.default;
   const fb = fallbacks[theme] ?? fallbacks.light;
@@ -218,6 +260,7 @@ export default function Clock({
   const pad = 18; // room around the dial for the drop shadow
   const svgSize = radius * 2 + pad * 2;
   const C = radius + pad; // centre of the dial inside the SVG
+  centreRef.current = C;
   const r = (fraction: number) => radius * fraction;
 
   // Angles: 0° = 12 o'clock, clockwise
@@ -227,8 +270,14 @@ export default function Clock({
     seconds: 0,
   };
   const hourAngle = (((hours % 12) * 60 + minutes) / 720) * 360;
-  const minuteAngle = ((minutes * 60 + seconds) / 3600) * 360;
-  const secondAngle = (seconds / 60) * 360;
+  // A Swiss railway minute hand jumps once a minute
+  const minuteAngle =
+    secondHandMotion === "swiss"
+      ? minutes * 6
+      : ((minutes * 60 + seconds) / 3600) * 360;
+  const secondAngle = animated
+    ? secondAngleRef.current
+    : secondHandAngle("tick", seconds);
 
   const polar = (angleDeg: number, dist: number) => {
     const rad = (angleDeg - 90) * (Math.PI / 180);
@@ -619,7 +668,9 @@ export default function Clock({
             {handDetails(g.minuteHand, minuteAngle, "minute")}
             {showSeconds && (
               <g
+                ref={secondHandRef}
                 data-hand="second"
+                data-motion={secondHandMotion}
                 className="ac-hand ac-hand--second"
                 transform={`rotate(${secondAngle} ${C} ${C})`}
               >

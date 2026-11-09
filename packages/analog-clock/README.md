@@ -46,6 +46,7 @@ export default function App() {
 | `theme`       | `"light" \| "dark"`   | `"light"`      | Dial colour scheme.                                             |
 | `borderColor` | `string`              | face colour    | Bezel colour.                                                   |
 | `showSeconds` | `boolean`             | `true`         | Show the second hand (and seconds in the digital readout).      |
+| `secondHandMotion` | `SecondHandMotion` | `"tick"`      | How the second hand moves. See [Second hand motion](#second-hand-motion). |
 | `showDigital` | `boolean`             | `true`         | Show the digital time below the dial.                           |
 | `timeFormat`  | `"12h" \| "24h"`      | `"12h"`        | Digital time as `hh:mm:ss AM` or `HH:mm:ss`.                    |
 | `tickColor`   | `string`              | face colour    | Tick marks. Minute ticks are drawn lighter.                     |
@@ -118,6 +119,24 @@ To restyle a face, override its variables:
 3. Rebuild. Every file in `src/faces/` is included in both the built-in styles and `style.css`.
 
 `FACE_GEOMETRY` is internal and not exported, so face shapes can change in any release without breaking apps that use the clock.
+
+## Second hand motion
+
+| Motion       | Movement                                                                 |
+| ------------ | ------------------------------------------------------------------------ |
+| `tick`       | One jump per second (the default).                                       |
+| `smooth`     | Glides continuously, updated every frame.                                |
+| `sweep`      | 8 small steps per second, like an automatic watch.                       |
+| `swiss`      | Swiss railway: one lap in 58 s, a 2 s pause at 12, then the minute hand jumps. The minute hand only moves on the minute. |
+| `bounce`     | Springs to each second, overshoots and wobbles before settling.          |
+| `ease`       | Soft ease-in-out move to each second.                                    |
+| `anticipate` | Dips back slightly, then snaps forward.                                  |
+
+```tsx
+<Clock secondHandMotion="swiss" />
+```
+
+Every motion except `tick` uses `requestAnimationFrame`. Only the second hand's transform changes each frame, and the component still re-renders once a second. `SECOND_HAND_MOTIONS` lists the motions (`[{ id, label }]`) for a picker, and `secondHandAngle(motion, seconds, ms)` returns the angle in degrees.
 
 ## Helpers
 
