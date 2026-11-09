@@ -60,6 +60,27 @@ Colour props always win over the face, so you can start from a face and change j
 
 ## Watch faces
 
+<table>
+<tr>
+<td align="center"><img src="assets/default.png" width="160" alt="Default face"/><br/><code>default</code></td>
+<td align="center"><img src="assets/gold.png" width="160" alt="Gold face"/><br/><code>gold</code></td>
+<td align="center"><img src="assets/blue.png" width="160" alt="Blue face"/><br/><code>blue</code></td>
+<td align="center"><img src="assets/wall-black.png" width="160" alt="Wall Black face"/><br/><code>wall-black</code></td>
+</tr>
+<tr>
+<td align="center"><img src="assets/wall-white.png" width="160" alt="Wall White face"/><br/><code>wall-white</code></td>
+<td align="center"><img src="assets/roman.png" width="160" alt="Roman face"/><br/><code>roman</code></td>
+<td align="center"><img src="assets/steel.png" width="160" alt="Steel face"/><br/><code>steel</code></td>
+<td align="center"><img src="assets/navy.png" width="160" alt="Navy face"/><br/><code>navy</code></td>
+</tr>
+<tr>
+<td align="center"><img src="assets/spectrum.png" width="160" alt="Spectrum face"/><br/><code>spectrum</code></td>
+<td align="center"><img src="assets/chrono.png" width="160" alt="Chrono face"/><br/><code>chrono</code></td>
+<td align="center"><img src="assets/ocean.png" width="160" alt="Ocean face"/><br/><code>ocean</code></td>
+<td align="center"><img src="assets/blush.png" width="160" alt="Blush face"/><br/><code>blush</code></td>
+</tr>
+</table>
+
 | Face      | Look                                                                 |
 | --------- | -------------------------------------------------------------------- |
 | `default` | The original clock: black and white (or slate in dark mode), all 12 numbers. |
