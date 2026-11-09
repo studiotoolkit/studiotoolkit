@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/color-palette-generator",
-  "version": "1.0.3",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "Generate color palettes using algorithmic, contrast-based, harmony-based, perceptual, and design-specific algorithms",
   "author": "StudioToolkit",
