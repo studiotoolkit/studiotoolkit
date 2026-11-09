@@ -1,7 +1,10 @@
 import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Clock, { getTimeInZone, formatDigitalTime } from '../src/Clock';
-import { Clock as NamedClock, AnalogClock } from '../src/index';
+import * as publicApi from '../src/index';
+import { Clock as NamedClock, AnalogClock, CLOCK_FACES } from '../src/index';
+import { FACE_GEOMETRY } from '../src/faces';
+import { FACE_STYLE_ID } from '../src/styles';
 
 // 2026-03-15 10:15:30 UTC
 const FIXED = new Date(Date.UTC(2026, 2, 15, 10, 15, 30));
@@ -39,6 +42,12 @@ describe('formatDigitalTime', () => {
 
   it('can omit seconds', () => {
     expect(formatDigitalTime({ hours: 9, minutes: 30, seconds: 45 }, false)).toBe('09:30 AM');
+  });
+
+  it('formats 24-hour time without AM/PM', () => {
+    expect(formatDigitalTime({ hours: 0, minutes: 5, seconds: 9 }, true, '24h')).toBe('00:05:09');
+    expect(formatDigitalTime({ hours: 15, minutes: 45, seconds: 30 }, true, '24h')).toBe('15:45:30');
+    expect(formatDigitalTime({ hours: 23, minutes: 59, seconds: 0 }, false, '24h')).toBe('23:59');
   });
 });
 
@@ -121,14 +130,180 @@ describe('Clock', () => {
     expect(svg.getAttribute('width')).toBe('136'); // 2 * 50 + 2 * 18 padding
   });
 
-  it('applies theme colours and a custom border colour', () => {
-    const { container, rerender } = render(<Clock theme="dark" />);
+  it('sets the theme and face on the root element', () => {
+    const { container } = render(<Clock theme="dark" face="gold" />);
     const root = container.querySelector('.analog-clock')!;
+    expect(root).toHaveClass('analog-clock--gold');
     expect(root).toHaveAttribute('data-theme', 'dark');
-    expect(container.querySelector('svg > circle')).toHaveAttribute('stroke', '#56677a');
+    expect(root).toHaveAttribute('data-face', 'gold');
+  });
 
-    rerender(<Clock theme="dark" borderColor="#123456" />);
-    expect(container.querySelector('svg > circle')).toHaveAttribute('stroke', '#123456');
+  it('turns colour props into CSS variables that override the face', () => {
+    const { container } = render(
+      <Clock
+        timezone="UTC"
+        borderColor="#123456"
+        tickColor="#111111"
+        hourHandColor="#222222"
+        minuteHandColor="#333333"
+        secondHandColor="#444444"
+        numberColor="#555555"
+        digitalColor="#666666"
+      />
+    );
+    const root = container.querySelector('.analog-clock') as HTMLElement;
+    const v = (name: string) => root.style.getPropertyValue(name);
+    expect(v('--ac-bezel')).toBe('#123456');
+    expect(v('--ac-bezel-2')).toBe('#123456');
+    expect(v('--ac-tick')).toBe('#111111');
+    expect(v('--ac-minor-tick')).toBe('#111111');
+    expect(v('--ac-hour-hand')).toBe('#222222');
+    expect(v('--ac-minute-hand')).toBe('#333333');
+    expect(v('--ac-second-hand')).toBe('#444444');
+    expect(v('--ac-number')).toBe('#555555');
+    expect(v('--ac-digital')).toBe('#666666');
+
+    // Minute ticks stay lighter than hour ticks
+    const ticks = Array.from(container.querySelectorAll('.ac-tick'));
+    expect(ticks).toHaveLength(60);
+    expect(ticks[1]).toHaveAttribute('stroke-opacity', '0.45');
+    expect(ticks[0]).not.toHaveAttribute('stroke-opacity');
+  });
+
+  it('sets no CSS variables when no colour props are given', () => {
+    const { container } = render(<Clock />);
+    const root = container.querySelector('.analog-clock') as HTMLElement;
+    expect(root.style.getPropertyValue('--ac-hour-hand')).toBe('');
+  });
+
+  it('draws the elements from CSS variables with theme fallbacks', () => {
+    const { container } = render(<Clock theme="dark" />);
+    const style = (sel: string) => container.querySelector(sel)!.getAttribute('style') ?? '';
+    expect(style('[data-hand="hour"]')).toContain('var(--ac-hour-hand, #ddd)');
+    expect(style('[data-hand="minute"]')).toContain('var(--ac-minute-hand, #ddd)');
+    expect(style('[data-hand="second"] line')).toContain('var(--ac-second-hand, #e03a3a)');
+    expect(style('.ac-tick--hour')).toContain('var(--ac-tick, #ddd)');
+    expect(style('.ac-number')).toContain('var(--ac-number, #ddd)');
+    expect(style('.analog-clock-digital')).toContain('var(--ac-digital, #ddd)');
+  });
+
+  describe('faces', () => {
+    const count = (face: 'default' | 'gold' | 'blue', sel: string) =>
+      render(<Clock face={face} />).container.querySelectorAll(sel).length;
+
+    it('default face draws all 12 numbers and 60 ticks', () => {
+      expect(count('default', '.ac-number')).toBe(12);
+      expect(count('default', '.ac-tick')).toBe(60);
+    });
+
+    it('gold face shows numbers only at 12, 3, 6 and 9, with no marks under them', () => {
+      const { container } = render(<Clock face="gold" />);
+      const nums = Array.from(container.querySelectorAll('.ac-number')).map((n) => n.textContent);
+      expect(nums).toEqual(['3', '6', '9', '12']);
+      expect(container.querySelectorAll('.ac-tick')).toHaveLength(56);
+    });
+
+    it('blue face has no numbers, double lines at the quarters and pointed hands', () => {
+      const { container } = render(<Clock face="blue" />);
+      expect(container.querySelectorAll('.ac-number')).toHaveLength(0);
+      expect(container.querySelectorAll('g.ac-tick')).toHaveLength(4); // 12, 3, 6, 9
+      expect(container.querySelectorAll('line.ac-tick')).toHaveLength(56);
+      // Tapered hands end in a curve, flat bar hands don't
+      expect(container.querySelector('[data-hand="hour"]')!.getAttribute('d')).toContain('Q');
+      expect(container.querySelector('[data-hand="minute"]')!.getAttribute('d')).toContain('Q');
+    });
+
+    it('wall-black face draws hour marks as dots inside the numbers', () => {
+      const { container } = render(<Clock face="wall-black" />);
+      expect(container.querySelectorAll('circle.ac-tick')).toHaveLength(12);
+      expect(container.querySelectorAll('line.ac-tick')).toHaveLength(48);
+      expect(container.querySelectorAll('.ac-number')).toHaveLength(12);
+    });
+
+    it('wall faces give the second hand a bar-shaped tail', () => {
+      const { container } = render(<Clock face="wall-white" />);
+      expect(container.querySelector('[data-hand="second"] rect')).not.toBeNull();
+    });
+
+    it('roman face uses rotated Roman numerals, a dial ring and no ticks', () => {
+      const { container } = render(<Clock face="roman" />);
+      const nums = Array.from(container.querySelectorAll('.ac-number'));
+      expect(nums.map((n) => n.textContent)).toEqual([
+        'I', 'II', 'III', 'IIII', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII',
+      ]);
+      expect(nums[2].getAttribute('transform')).toMatch(/^rotate\(90 /);
+      expect(container.querySelectorAll('.ac-tick')).toHaveLength(0);
+      expect(container.querySelectorAll('.ac-ring')).toHaveLength(1);
+    });
+
+    it('steel face shows upright Roman XII and VI, with no marks under them', () => {
+      const { container } = render(<Clock face="steel" />);
+      const nums = Array.from(container.querySelectorAll('.ac-number'));
+      expect(nums.map((n) => n.textContent)).toEqual(['VI', 'XII']);
+      expect(nums[0]).not.toHaveAttribute('transform');
+      expect(container.querySelectorAll('.ac-tick--hour')).toHaveLength(10);
+      expect(container.querySelectorAll('.ac-hand-facet')).toHaveLength(2);
+    });
+
+    it('navy face shows 12/3/6/9 with sword hands and a stripe inlay', () => {
+      const { container } = render(<Clock face="navy" />);
+      const nums = Array.from(container.querySelectorAll('.ac-number')).map((n) => n.textContent);
+      expect(nums).toEqual(['3', '6', '9', '12']);
+      expect(container.querySelectorAll('.ac-tick--hour')).toHaveLength(8);
+      expect(container.querySelectorAll('.ac-hand-inlay')).toHaveLength(2);
+      expect(container.querySelectorAll('.ac-hand-facet')).toHaveLength(0);
+    });
+
+    it('spectrum face uses plain line marks only, with no special shapes', () => {
+      const { container } = render(<Clock face="spectrum" />);
+      expect(container.querySelectorAll('line.ac-tick')).toHaveLength(60);
+      expect(container.querySelectorAll('polygon.ac-tick, rect.ac-tick, circle.ac-tick, g.ac-tick')).toHaveLength(0);
+      expect(container.querySelectorAll('.ac-number')).toHaveLength(0);
+    });
+
+    it('spectrum ticks are coloured by position, unless tickColor is set', () => {
+      const style = (el: Element | null) => el?.getAttribute('style') ?? '';
+      const { container, rerender } = render(<Clock face="spectrum" />);
+      expect(style(container.querySelector('line.ac-tick'))).toContain('--ac-tick-hue');
+      rerender(<Clock face="spectrum" tickColor="#ffffff" />);
+      expect(style(container.querySelector('line.ac-tick'))).not.toContain('--ac-tick-hue');
+    });
+
+    it('chrono face has a minute track, all numbers and a triangle at 12', () => {
+      const { container } = render(<Clock face="chrono" />);
+      expect(container.querySelectorAll('.ac-number')).toHaveLength(12);
+      expect(container.querySelectorAll('polygon.ac-tick')).toHaveLength(1);
+      expect(container.querySelectorAll('.ac-hand-inlay')).toHaveLength(2);
+    });
+
+    it('ocean face has hour dots, bars at 3/6/9, a triangle at 12 and striped hands', () => {
+      const { container } = render(<Clock face="ocean" />);
+      expect(container.querySelectorAll('circle.ac-tick')).toHaveLength(8);
+      expect(container.querySelectorAll('polygon.ac-tick')).toHaveLength(1);
+      expect(container.querySelectorAll('line.ac-tick--hour')).toHaveLength(3);
+      expect(container.querySelectorAll('.ac-hand-inlay')).toHaveLength(2);
+    });
+
+    it('blush face shows 12/3/6/9 with faceted hands and dotted minutes', () => {
+      const { container } = render(<Clock face="blush" />);
+      const nums = Array.from(container.querySelectorAll('.ac-number')).map((n) => n.textContent);
+      expect(nums).toEqual(['3', '6', '9', '12']);
+      expect(container.querySelectorAll('circle.ac-tick')).toHaveLength(48);
+      expect(container.querySelectorAll('.ac-hand-facet')).toHaveLength(2);
+    });
+
+    it('every listed face renders', () => {
+      for (const { id } of CLOCK_FACES) {
+        const { container, unmount } = render(<Clock face={id} label="Test" />);
+        expect(container.querySelector('.analog-clock')).toHaveAttribute('data-face', id);
+        unmount();
+      }
+    });
+
+    it('falls back to the default face for an unknown face', () => {
+      // @ts-expect-error testing a bad value from untyped callers
+      expect(count('nope', '.ac-number')).toBe(12);
+    });
   });
 
   it('gives each clock unique SVG ids', () => {
@@ -140,5 +315,75 @@ describe('Clock', () => {
     );
     const ids = Array.from(container.querySelectorAll('radialGradient')).map((g) => g.id);
     expect(new Set(ids).size).toBe(2);
+  });
+});
+
+describe('server rendering', () => {
+  it('renders no time on the server, then hydrates without a mismatch', async () => {
+    const { renderToString } = await import('react-dom/server');
+    const { hydrateRoot } = await import('react-dom/client');
+    const html = renderToString(<Clock label="London" timezone="UTC" />);
+    expect(html).not.toContain('data-hand');
+    expect(html).toContain('aria-label="London: Clock"');
+
+    const host = document.createElement('div');
+    host.innerHTML = html;
+    document.body.appendChild(host);
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const recoverable = vi.fn();
+    await act(async () => {
+      hydrateRoot(host, <Clock label="London" timezone="UTC" />, {
+        onRecoverableError: recoverable,
+      });
+    });
+    expect(recoverable).not.toHaveBeenCalled();
+    expect(errors).not.toHaveBeenCalled();
+    // Once mounted in the browser, the hands and time appear
+    expect(host.querySelector('[data-hand="hour"]')).not.toBeNull();
+    errors.mockRestore();
+    host.remove();
+  });
+});
+
+describe('face styles', () => {
+  it('adds the face stylesheet to <head> once, without importing style.css', () => {
+    document.getElementById(FACE_STYLE_ID)?.remove();
+    render(
+      <>
+        <Clock face="gold" />
+        <Clock face="navy" />
+      </>
+    );
+    const sheets = document.querySelectorAll(`#${FACE_STYLE_ID}`);
+    expect(sheets).toHaveLength(1);
+    expect(sheets[0].textContent).toContain('.analog-clock--gold');
+    expect(sheets[0].textContent).toContain('.analog-clock--navy');
+    // First in <head>, so the app's own CSS wins
+    expect(document.head.firstElementChild).toBe(sheets[0]);
+  });
+
+  it('includes a stylesheet for every face', () => {
+    const css = document.getElementById(FACE_STYLE_ID)?.textContent ?? '';
+    for (const { id } of CLOCK_FACES) {
+      expect(css).toContain(`.analog-clock--${id}`);
+    }
+  });
+});
+
+describe('public API', () => {
+  it('does not expose internal face shapes', () => {
+    expect(Object.keys(publicApi).sort()).toEqual(
+      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'formatDigitalTime', 'getTimeInZone'].sort()
+    );
+  });
+
+  it('keeps face data read-only', () => {
+    expect(Object.isFrozen(CLOCK_FACES)).toBe(true);
+    expect(Object.isFrozen(CLOCK_FACES[0])).toBe(true);
+    expect(Object.isFrozen(FACE_GEOMETRY)).toBe(true);
+    expect(Object.isFrozen(FACE_GEOMETRY.gold.hourHand)).toBe(true);
+    expect(() => {
+      (FACE_GEOMETRY as Record<string, unknown>).gold = {};
+    }).toThrow(TypeError);
   });
 });

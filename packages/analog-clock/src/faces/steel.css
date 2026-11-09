@@ -1,0 +1,28 @@
+/* Steel face: polished steel case, silver-white dial, Roman XII and VI,
+   applied silver batons and slim faceted dauphine hands. */
+.analog-clock--steel {
+  --ac-bezel: #a9afb6;
+  --ac-bezel-2: #f7f8f9;
+  --ac-face-inner: #fbfbfa;
+  --ac-face-outer: #dcdedf;
+  --ac-tick: #9ba1a8;
+  --ac-minor-tick: #6f757c;
+  --ac-number: #8e949b;
+  --ac-number-font: 'Times New Roman', Times, Georgia, serif;
+  --ac-number-weight: 400;
+  --ac-label: #2b2e33;
+  --ac-label-font: 'Times New Roman', Times, Georgia, serif;
+  --ac-label-weight: 600;
+  --ac-hour-hand: #6b7179;
+  --ac-minute-hand: #6b7179;
+  --ac-hand-shine: #c9cdd2;
+  --ac-second-hand: #8a9097;
+  --ac-cap: #9aa0a7;
+  --ac-cap-dot: #d5d8dc;
+  --ac-digital: #55595f;
+  --ac-digital-font: 'Times New Roman', Times, Georgia, serif;
+}
+
+.analog-clock--steel[data-theme="dark"] {
+  --ac-digital: #d5d8dc;
+}

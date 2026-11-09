@@ -1,0 +1,30 @@
+/* Default face: the original clock look. Matches the fallbacks in Clock.tsx. */
+.analog-clock--default {
+  --ac-bezel: #000;
+  --ac-face-inner: #ffffff;
+  --ac-face-outer: #eef1f5;
+  --ac-tick: #000;
+  --ac-minor-tick: rgba(0, 0, 0, 0.3);
+  --ac-number: #000;
+  --ac-number-font: 'Courier New', Courier, monospace;
+  --ac-number-weight: bold;
+  --ac-label: #6b7c8f;
+  --ac-hour-hand: #000;
+  --ac-minute-hand: #000;
+  --ac-second-hand: #e03a3a;
+  --ac-digital: #000;
+  --ac-digital-font: 'Courier New', Courier, monospace;
+}
+
+.analog-clock--default[data-theme="dark"] {
+  --ac-bezel: #56677a;
+  --ac-face-inner: #262b33;
+  --ac-face-outer: #15181d;
+  --ac-tick: #ddd;
+  --ac-minor-tick: rgba(221, 221, 221, 0.35);
+  --ac-number: #ddd;
+  --ac-label: #8fa3b8;
+  --ac-hour-hand: #ddd;
+  --ac-minute-hand: #ddd;
+  --ac-digital: #ddd;
+}

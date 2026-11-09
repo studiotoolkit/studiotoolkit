@@ -26,7 +26,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -34,6 +36,7 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./style.css": "./dist/style.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -48,7 +51,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "npx tsc --project tsconfig.json && vite build",
+    "build": "npx tsc --project tsconfig.json && vite build && cat src/faces/*.css > dist/style.css",
     "dev": "vite build --watch",
     "clean": "rm -rf dist",
     "lint": "eslint src --ext .ts,.tsx",

@@ -1,0 +1,28 @@
+/* Navy face: polished steel case, blue dial that darkens toward the edge,
+   12/3/6/9 numbers, silver batons and sword hands with a bright stripe. */
+.analog-clock--navy {
+  --ac-bezel: #a3a9b0;
+  --ac-bezel-2: #f4f6f8;
+  --ac-face-inner: #4a6aa8;
+  --ac-face-outer: #0d1a3d;
+  --ac-tick: #dfe3e8;
+  --ac-minor-tick: #c3c9d1;
+  --ac-number: #c9ced5;
+  --ac-number-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-number-weight: 500;
+  --ac-label: #e6e9ee;
+  --ac-label-font: 'Times New Roman', Times, Georgia, serif;
+  --ac-label-weight: 600;
+  --ac-hour-hand: #b8bec6;
+  --ac-minute-hand: #b8bec6;
+  --ac-hand-inlay: #f4f7fb;
+  --ac-second-hand: #d3d8de;
+  --ac-cap: #c3c9d1;
+  --ac-cap-dot: #eef1f4;
+  --ac-digital: #1c3166;
+  --ac-digital-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.analog-clock--navy[data-theme="dark"] {
+  --ac-digital: #c8d6ec;
+}

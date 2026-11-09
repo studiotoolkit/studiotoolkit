@@ -1,0 +1,27 @@
+/* Roman face: thick black case, white dial, serif Roman numerals, black spade hands. */
+.analog-clock--roman {
+  --ac-bezel: #000000;
+  --ac-bezel-2: #1c1c1c;
+  --ac-face-inner: #ffffff;
+  --ac-face-outer: #fafafa;
+  --ac-ring: #000000;
+  --ac-tick: #000000;
+  --ac-minor-tick: #000000;
+  --ac-number: #000000;
+  --ac-number-font: 'Times New Roman', Times, Georgia, serif;
+  --ac-number-weight: 400;
+  --ac-label: #444444;
+  --ac-label-font: 'Times New Roman', Times, Georgia, serif;
+  --ac-label-weight: 400;
+  --ac-hour-hand: #000000;
+  --ac-minute-hand: #000000;
+  --ac-second-hand: #000000;
+  --ac-cap: #000000;
+  --ac-cap-dot: #ffffff;
+  --ac-digital: #000000;
+  --ac-digital-font: 'Times New Roman', Times, Georgia, serif;
+}
+
+.analog-clock--roman[data-theme="dark"] {
+  --ac-digital: #f0f0f0;
+}

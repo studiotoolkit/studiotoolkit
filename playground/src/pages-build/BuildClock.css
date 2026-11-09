@@ -108,6 +108,63 @@
   cursor: not-allowed;
 }
 
+.build-clock-subheading {
+  margin: 8px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #e3e6ea;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Collapsible Colors section */
+.build-clock-colors summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.build-clock-colors summary::-webkit-details-marker {
+  display: none;
+}
+
+.build-clock-colors summary::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+  margin-right: 2px;
+}
+
+.build-clock-colors[open] summary::before {
+  transform: rotate(45deg);
+}
+
+.build-clock-colors summary:focus-visible {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.build-clock-colors-count {
+  font-weight: 400;
+  font-size: 12px;
+  color: #2196f3;
+}
+
+.build-clock-colors-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+}
+
 .build-clock-hint {
   margin: 4px 0 0;
   font-size: 12px;
@@ -188,6 +245,15 @@
   color: #f0f2f6;
 }
 
+[data-theme="dark"] .build-clock-subheading {
+  border-top-color: #363c4a;
+  color: #f0f2f6;
+}
+
+[data-theme="dark"] .build-clock-colors-count {
+  color: #6aa9ee;
+}
+
 [data-theme="dark"] .build-clock-controls h3,
 [data-theme="dark"] .build-clock-preview h3,
 [data-theme="dark"] .build-clock-code-header h3 {
@@ -210,6 +276,76 @@
   background: #1a1d24;
   border-color: #363c4a;
   color: #f0f2f6;
+}
+
+/* Faces gallery */
+.build-clock-faces {
+  margin: 24px 0;
+  border: 1px solid #ff9800;
+  border-radius: 10px;
+  padding: 16px;
+  background: #fafbfc;
+}
+
+.build-clock-faces h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.build-clock-faces-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+}
+
+.build-clock-face-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px 4px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.build-clock-face-card:hover {
+  background: rgba(33, 150, 243, 0.06);
+}
+
+.build-clock-face-card.is-selected {
+  border-color: #2196f3;
+  background: rgba(33, 150, 243, 0.08);
+}
+
+.build-clock-face-card:focus-visible {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+.build-clock-face-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+[data-theme="dark"] .build-clock-faces {
+  background: #2c313c;
+  border-color: #363c4a;
+}
+
+[data-theme="dark"] .build-clock-faces h3,
+[data-theme="dark"] .build-clock-face-name {
+  color: #f0f2f6;
+}
+
+[data-theme="dark"] .build-clock-face-card.is-selected {
+  border-color: #4a90e2;
+  background: rgba(74, 144, 226, 0.15);
 }
 
 /* Stack columns on narrow screens */

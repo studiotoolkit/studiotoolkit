@@ -1,0 +1,26 @@
+/* Ocean face: dive style. Thick dark-teal case, deep teal dial fading to
+   near-black, mint lume markers and hands, orange second hand. */
+.analog-clock--ocean {
+  --ac-bezel: #0b2a33;
+  --ac-bezel-2: #2f6170;
+  --ac-face-inner: #127380;
+  --ac-face-outer: #052630;
+  --ac-tick: #d6fff0;
+  --ac-minor-tick: #8fd3c4;
+  --ac-number: #d6fff0;
+  --ac-label: #d6fff0;
+  --ac-label-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-label-weight: 600;
+  --ac-hour-hand: #e4ebee;
+  --ac-minute-hand: #e4ebee;
+  --ac-hand-inlay: #b9ffe6;
+  --ac-second-hand: #ff7a3d;
+  --ac-cap: #e4ebee;
+  --ac-cap-dot: #ff7a3d;
+  --ac-digital: #0b3a44;
+  --ac-digital-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.analog-clock--ocean[data-theme="dark"] {
+  --ac-digital: #a8f0de;
+}

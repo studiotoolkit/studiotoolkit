@@ -1,22 +1,47 @@
-import { useState, useEffect, useId } from "react";
+import {
+  useState,
+  useEffect,
+  useId,
+  useInsertionEffect,
+  type CSSProperties,
+} from "react";
+import { FACE_GEOMETRY, type ClockFace } from "./faces";
+import { injectFaceStyles } from "./styles";
 
 export type ClockTheme = "light" | "dark";
+export type TimeFormat = "12h" | "24h";
 
 export interface ClockProps {
   /** Radius of the dial in pixels. */
   radius?: number;
   /** Text shown on the dial (e.g. a city name). Hidden when radius < 50. */
   label?: string;
-  /** Bezel colour. Defaults to a theme-appropriate colour. */
-  borderColor?: string;
   /** IANA time zone, e.g. "Europe/London". Defaults to the local zone. */
   timezone?: string | null;
-  /** Colour scheme for the dial. */
+  /** Watch face. "gold" and "blue" need '@studiotoolkit/analog-clock/style.css'. */
+  face?: ClockFace;
+  /** Colour scheme for the dial (and the digital time on the gold/blue faces). */
   theme?: ClockTheme;
-  /** Show the red second hand. */
+  /** Show the second hand. */
   showSeconds?: boolean;
   /** Show the digital time below the dial. */
   showDigital?: boolean;
+  /** Digital time format: "12h" (hh:mm:ss AM) or "24h" (HH:mm:ss). */
+  timeFormat?: TimeFormat;
+  /** Bezel colour. Overrides the face. */
+  borderColor?: string;
+  /** Colour of the tick marks. Minute ticks are drawn at reduced opacity. */
+  tickColor?: string;
+  /** Colour of the hour hand (and the centre cap). */
+  hourHandColor?: string;
+  /** Colour of the minute hand. */
+  minuteHandColor?: string;
+  /** Colour of the second hand (and the centre dot). */
+  secondHandColor?: string;
+  /** Colour of the numbers on the dial. */
+  numberColor?: string;
+  /** Colour of the digital time below the dial. */
+  digitalColor?: string;
 }
 
 interface ClockTime {
@@ -26,7 +51,10 @@ interface ClockTime {
 }
 
 /** Current wall-clock time in the given IANA zone (local zone if none or invalid). */
-export function getTimeInZone(timezone?: string | null, now: Date = new Date()): ClockTime {
+export function getTimeInZone(
+  timezone?: string | null,
+  now: Date = new Date(),
+): ClockTime {
   if (timezone) {
     try {
       const parts = new Intl.DateTimeFormat("en-US", {
@@ -39,24 +67,45 @@ export function getTimeInZone(timezone?: string | null, now: Date = new Date()):
       const get = (type: string) =>
         parseInt(parts.find((p) => p.type === type)?.value ?? "0", 10);
       // Some engines report midnight as "24"
-      return { hours: get("hour") % 24, minutes: get("minute"), seconds: get("second") };
+      return {
+        hours: get("hour") % 24,
+        minutes: get("minute"),
+        seconds: get("second"),
+      };
     } catch {
       // Invalid zone: fall through to local time
     }
   }
-  return { hours: now.getHours(), minutes: now.getMinutes(), seconds: now.getSeconds() };
+  return {
+    hours: now.getHours(),
+    minutes: now.getMinutes(),
+    seconds: now.getSeconds(),
+  };
 }
 
-/** Formats a time as "hh:mm:ss AM" (or "hh:mm AM" without seconds). */
-export function formatDigitalTime({ hours, minutes, seconds }: ClockTime, withSeconds = true): string {
-  const hh = String(hours % 12 || 12).padStart(2, "0");
-  const mm = String(minutes).padStart(2, "0");
-  const ss = String(seconds).padStart(2, "0");
-  const period = hours < 12 ? "AM" : "PM";
-  return withSeconds ? `${hh}:${mm}:${ss} ${period}` : `${hh}:${mm} ${period}`;
+/**
+ * Formats a time as "hh:mm:ss AM" (12h) or "HH:mm:ss" (24h).
+ * Seconds are dropped when withSeconds is false.
+ */
+export function formatDigitalTime(
+  { hours, minutes, seconds }: ClockTime,
+  withSeconds = true,
+  format: TimeFormat = "12h",
+): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const hh = format === "24h" ? pad(hours) : pad(hours % 12 || 12);
+  const time = withSeconds
+    ? `${hh}:${pad(minutes)}:${pad(seconds)}`
+    : `${hh}:${pad(minutes)}`;
+  if (format === "24h") return time;
+  return `${time} ${hours < 12 ? "AM" : "PM"}`;
 }
 
-const palettes = {
+/**
+ * Default-face colours, used when style.css is not loaded.
+ * Keep in sync with src/faces/default.css.
+ */
+const fallbacks = {
   light: {
     ink: "#000",
     bezel: "#000",
@@ -80,19 +129,53 @@ const palettes = {
 };
 
 const ACCENT = "#e03a3a";
+const ROMAN = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IIII",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+  "XI",
+  "XII",
+];
 const FONT = "'Courier New', Courier, monospace";
+
+/** `var(--ac-<name>, <fallback>)` */
+const cssVar = (name: string, fallback: string | number) =>
+  `var(--ac-${name}, ${fallback})`;
 
 export default function Clock({
   radius = 100,
   label = "",
-  borderColor,
   timezone = null,
+  face = "default",
   theme = "light",
   showSeconds = true,
   showDigital = true,
+  timeFormat = "12h",
+  borderColor,
+  tickColor,
+  hourHandColor,
+  minuteHandColor,
+  secondHandColor,
+  numberColor,
+  digitalColor,
 }: ClockProps) {
-  const [time, setTime] = useState(() => getTimeInZone(timezone));
+  // No time until mounted: the server and the browser's first render then
+  // match exactly (no hydration mismatch). Hands and digits appear on mount.
+  const [time, setTime] = useState<ClockTime | null>(null);
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+
+  // Face colours work without importing style.css
+  useInsertionEffect(() => {
+    injectFaceStyles();
+  }, []);
 
   useEffect(() => {
     setTime(getTimeInZone(timezone));
@@ -100,63 +183,205 @@ export default function Clock({
     return () => clearInterval(timer);
   }, [timezone]);
 
-  const p = palettes[theme] ?? palettes.light;
-  const bezel = borderColor ?? p.bezel;
+  const g = FACE_GEOMETRY[face] ?? FACE_GEOMETRY.default;
+  const fb = fallbacks[theme] ?? fallbacks.light;
+
+  // Colour props win over the face CSS by setting its variables inline
+  const overrides: Record<string, string> = {};
+  if (borderColor)
+    overrides["--ac-bezel"] = overrides["--ac-bezel-2"] = borderColor;
+  if (tickColor)
+    overrides["--ac-tick"] = overrides["--ac-minor-tick"] = tickColor;
+  if (hourHandColor) overrides["--ac-hour-hand"] = hourHandColor;
+  if (minuteHandColor) overrides["--ac-minute-hand"] = minuteHandColor;
+  if (secondHandColor) overrides["--ac-second-hand"] = secondHandColor;
+  if (numberColor) overrides["--ac-number"] = numberColor;
+  if (digitalColor) overrides["--ac-digital"] = digitalColor;
+
+  const c = {
+    bezel: cssVar("bezel", fb.bezel),
+    bezel2: cssVar("bezel-2", cssVar("bezel", fb.bezel)),
+    faceInner: cssVar("face-inner", fb.faceInner),
+    faceOuter: cssVar("face-outer", fb.faceOuter),
+    tick: cssVar("tick", fb.ink),
+    minorTick: cssVar("minor-tick", fb.minorTick),
+    number: cssVar("number", fb.ink),
+    label: cssVar("label", fb.label),
+    hourHand: cssVar("hour-hand", fb.ink),
+    minuteHand: cssVar("minute-hand", fb.ink),
+    secondHand: cssVar("second-hand", ACCENT),
+    cap: cssVar("cap", cssVar("hour-hand", fb.ink)),
+    capDot: cssVar("cap-dot", cssVar("second-hand", ACCENT)),
+    digital: cssVar("digital", fb.ink),
+  };
 
   const pad = 18; // room around the dial for the drop shadow
   const svgSize = radius * 2 + pad * 2;
   const C = radius + pad; // centre of the dial inside the SVG
+  const r = (fraction: number) => radius * fraction;
 
   // Angles: 0° = 12 o'clock, clockwise
-  const { hours, minutes, seconds } = time;
+  const { hours, minutes, seconds } = time ?? {
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  };
   const hourAngle = (((hours % 12) * 60 + minutes) / 720) * 360;
   const minuteAngle = ((minutes * 60 + seconds) / 3600) * 360;
   const secondAngle = (seconds / 60) * 360;
 
-  const polar = (angleDeg: number, r: number) => {
+  const polar = (angleDeg: number, dist: number) => {
     const rad = (angleDeg - 90) * (Math.PI / 180);
-    return { x: C + Math.cos(rad) * r, y: C + Math.sin(rad) * r };
+    return { x: C + Math.cos(rad) * dist, y: C + Math.sin(rad) * dist };
   };
 
-  // Ticks: 12/3/6/9 longest, other hours medium, minutes fine
+  const numberHours =
+    g.numbers === "all"
+      ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      : g.numbers === "quarters"
+        ? [3, 6, 9, 12]
+        : g.numbers === "none"
+          ? []
+          : g.numbers;
+
+  // 60 marks: quarter / hour / minute, each shaped by the face
   const ticks = Array.from({ length: 60 }, (_, i) => {
     const isHour = i % 5 === 0;
     const isQuarter = i % 15 === 0;
+    const hour = i / 5 || 12;
+    const override = isHour ? g.markOverrides?.[hour] : undefined;
+    const mark =
+      override !== undefined
+        ? override
+        : isQuarter
+          ? g.quarterMark
+          : isHour
+            ? g.hourMark
+            : g.minuteMark;
+    if (!mark) return null;
+    if (isHour && g.hideMarksAtNumbers && numberHours.includes(hour))
+      return null;
     return {
+      i,
       isHour,
-      isQuarter,
-      outer: polar(i * 6, radius * 0.92),
-      inner: polar(i * 6, radius * (isQuarter ? 0.83 : isHour ? 0.85 : 0.89)),
+      shape: mark.shape ?? "line",
+      outer: polar(i * 6, r(mark.from)),
+      inner: polar(i * 6, r(mark.to)),
+      centre: polar(i * 6, r((mark.from + mark.to) / 2)),
+      width: Math.max(mark.minWidth, r(mark.width)),
     };
-  });
+  }).filter((t) => t !== null);
 
-  const numbers = Array.from({ length: 12 }, (_, i) => ({
-    num: i + 1,
-    ...polar((i + 1) * 30, radius * 0.66),
-  }));
+  // Tick colour: spectrum by position (unless tickColor overrides), else hour/minute colour
+  const tickPaint = (i: number, isHour: boolean) =>
+    g.spectrumTicks && !tickColor
+      ? `hsl(calc(var(--ac-tick-hue, 60) + ${i} * var(--ac-tick-hue-step, -6)), var(--ac-tick-sat, 85%), var(--ac-tick-light, 60%))`
+      : isHour
+        ? c.tick
+        : c.minorTick;
 
-  // Tapered hand pointing up from the centre, rotated into place afterwards
-  const handPath = (length: number, tail: number, base: number, tip: number) =>
-    `M ${C - base / 2} ${C + tail} L ${C - tip / 2} ${C - length} ` +
-    `Q ${C} ${C - length - tip} ${C + tip / 2} ${C - length} ` +
-    `L ${C + base / 2} ${C + tail} Z`;
+  const numbers = [...numberHours]
+    .sort((a, b) => a - b)
+    .map((num) => ({
+      num,
+      text: g.numerals === "roman" ? ROMAN[num] : String(num),
+      ...polar(num * 30, r(g.numberRadius)),
+    }));
 
+  // Hands are drawn pointing up from the centre, then rotated into place
+  const handPath = ({ shape, length, tail, base, tip }: typeof g.hourHand) => {
+    const [L, T, B, P] = [r(length), r(tail), r(base), r(tip)];
+    if (shape === "bar") {
+      return `M ${C - B / 2} ${C + T} L ${C - B / 2} ${C - L} L ${C + B / 2} ${C - L} L ${C + B / 2} ${C + T} Z`;
+    }
+    if (shape === "dauphine") {
+      const wide = C - L * 0.14;
+      return `M ${C - B / 2} ${C + T} L ${C - P / 2} ${wide} L ${C} ${C - L} L ${C + P / 2} ${wide} L ${C + B / 2} ${C + T} Z`;
+    }
+    if (shape === "sword") {
+      const shoulder = C - L * 0.8;
+      return `M ${C - B / 2} ${C + T} L ${C - P / 2} ${shoulder} L ${C} ${C - L} L ${C + P / 2} ${shoulder} L ${C + B / 2} ${C + T} Z`;
+    }
+    if (shape === "spade") {
+      // Thin shaft, then a leaf that swells to `tip` wide and closes to a point
+      const neck = C - L * 0.66;
+      const belly = C - L * 0.84;
+      return (
+        `M ${C - B / 2} ${C + T} L ${C - B / 2} ${neck} ` +
+        `Q ${C - P} ${belly} ${C} ${C - L} ` +
+        `Q ${C + P} ${belly} ${C + B / 2} ${neck} ` +
+        `L ${C + B / 2} ${C + T} Z`
+      );
+    }
+    return (
+      `M ${C - B / 2} ${C + T} L ${C - P / 2} ${C - L} ` +
+      `Q ${C} ${C - L - P} ${C + P / 2} ${C - L} ` +
+      `L ${C + B / 2} ${C + T} Z`
+    );
+  };
+
+  // Right half of a dauphine/taper hand, shaded to look faceted
+  const facetPath = ({ length, tail, base, tip }: typeof g.hourHand) => {
+    const [L, T, B, P] = [r(length), r(tail), r(base), r(tip)];
+    const wide = C - L * 0.14;
+    return `M ${C} ${C + T} L ${C + B / 2} ${C + T} L ${C + P / 2} ${wide} L ${C} ${C - L} Z`;
+  };
+
+  // Narrow stripe down the middle of a sword hand
+  const inlayPath = ({ length, tip }: typeof g.hourHand) => {
+    const [L, W] = [r(length), r(tip) * 0.42];
+    return `M ${C - W / 2} ${C - L * 0.16} L ${C - W / 2} ${C - L * 0.78} L ${C} ${C - L * 0.93} L ${C + W / 2} ${C - L * 0.78} L ${C + W / 2} ${C - L * 0.16} Z`;
+  };
+
+  const handDetails = (
+    hand: typeof g.hourHand,
+    angle: number,
+    kind: string,
+  ) => (
+    <>
+      {hand.facet && (
+        <path
+          className={`ac-hand-facet ac-hand-facet--${kind}`}
+          d={facetPath(hand)}
+          style={{ fill: cssVar("hand-shine", "rgba(255,255,255,0.35)") }}
+          transform={`rotate(${angle} ${C} ${C})`}
+        />
+      )}
+      {hand.inlay && (
+        <path
+          className={`ac-hand-inlay ac-hand-inlay--${kind}`}
+          d={inlayPath(hand)}
+          style={{ fill: cssVar("hand-inlay", "rgba(255,255,255,0.85)") }}
+          transform={`rotate(${angle} ${C} ${C})`}
+        />
+      )}
+    </>
+  );
+
+  const sh = g.secondHand;
   const showLabel = Boolean(label) && radius >= 50;
   const faceId = `face${uid}`;
+  const bezelId = `bezel${uid}`;
   const shadowId = `shadow${uid}`;
   const handShadowId = `hshadow${uid}`;
-  const digitalTime = formatDigitalTime(time, showSeconds);
-  const ariaLabel = label ? `${label}: ${digitalTime}` : digitalTime;
+  const digitalTime = formatDigitalTime(
+    time ?? { hours: 0, minutes: 0, seconds: 0 },
+    showSeconds,
+    timeFormat,
+  );
+  const spoken = time ? digitalTime : "Clock";
+  const ariaLabel = label ? `${label}: ${spoken}` : spoken;
 
   return (
     <div
-      className="analog-clock"
+      className={`analog-clock analog-clock--${face}`}
+      data-face={face}
       data-theme={theme}
       style={{
         display: "inline-flex",
         flexDirection: "column",
         alignItems: "center",
-        fontFamily: FONT,
+        ...(overrides as CSSProperties),
       }}
     >
       <svg
@@ -168,134 +393,311 @@ export default function Clock({
       >
         <defs>
           <radialGradient id={faceId} cx="50%" cy="40%" r="65%">
-            <stop offset="0%" stopColor={p.faceInner} />
-            <stop offset="100%" stopColor={p.faceOuter} />
+            <stop offset="0%" style={{ stopColor: c.faceInner }} />
+            <stop offset="100%" style={{ stopColor: c.faceOuter }} />
           </radialGradient>
+          <linearGradient id={bezelId} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" style={{ stopColor: c.bezel }} />
+            <stop offset="50%" style={{ stopColor: c.bezel2 }} />
+            <stop offset="100%" style={{ stopColor: c.bezel }} />
+          </linearGradient>
           <filter id={shadowId} x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow
               dx="0"
-              dy={radius * 0.03}
-              stdDeviation={radius * 0.05}
+              dy={r(0.03)}
+              stdDeviation={r(0.05)}
               floodColor="#000"
-              floodOpacity={p.faceShadow}
+              floodOpacity={fb.faceShadow}
             />
           </filter>
-          <filter id={handShadowId} x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#000" floodOpacity={p.handShadow} />
+          <filter
+            id={handShadowId}
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="1"
+              stdDeviation="1"
+              floodColor="#000"
+              floodOpacity={fb.handShadow}
+            />
           </filter>
         </defs>
 
         {/* Bezel + face */}
         <circle
+          className="ac-bezel"
           cx={C}
           cy={C}
           r={radius}
           fill={`url(#${faceId})`}
-          stroke={bezel}
-          strokeWidth={Math.max(2, radius * 0.035)}
+          stroke={`url(#${bezelId})`}
+          strokeWidth={Math.max(g.bezelMinWidth, r(g.bezelWidth))}
           filter={`url(#${shadowId})`}
         />
-        <circle cx={C} cy={C} r={radius * 0.95} fill="none" stroke={bezel} strokeOpacity={0.25} strokeWidth={1} />
+        {g.innerRing && (
+          <circle
+            cx={C}
+            cy={C}
+            r={r(0.95)}
+            fill="none"
+            style={{ stroke: c.bezel }}
+            strokeOpacity={0.25}
+            strokeWidth={1}
+          />
+        )}
 
-        {/* Tick marks */}
-        {ticks.map((t, i) => (
-          <line
+        {/* Dial rings */}
+        {g.rings.map((ring, i) => (
+          <circle
             key={i}
-            x1={t.outer.x}
-            y1={t.outer.y}
-            x2={t.inner.x}
-            y2={t.inner.y}
-            stroke={t.isHour ? p.ink : p.minorTick}
-            strokeWidth={
-              t.isQuarter ? Math.max(2, radius * 0.03) : t.isHour ? Math.max(1.5, radius * 0.02) : 1
-            }
-            strokeLinecap="round"
+            className="ac-ring"
+            cx={C}
+            cy={C}
+            r={r(ring.radius)}
+            fill="none"
+            style={{ stroke: cssVar("ring", c.tick) }}
+            strokeWidth={Math.max(1, r(ring.width))}
           />
         ))}
 
+        {/* Tick marks */}
+        {ticks.map((t) => {
+          const className = t.isHour ? "ac-tick ac-tick--hour" : "ac-tick";
+          const paint = tickPaint(t.i, t.isHour);
+          const angle = t.i * 6;
+          if (t.shape === "dot") {
+            return (
+              <circle
+                key={t.i}
+                className={className}
+                cx={t.centre.x}
+                cy={t.centre.y}
+                r={t.width / 2}
+                style={{ fill: paint }}
+              />
+            );
+          }
+          if (t.shape === "square") {
+            return (
+              <rect
+                key={t.i}
+                className={className}
+                x={t.centre.x - t.width / 2}
+                y={t.centre.y - t.width / 2}
+                width={t.width}
+                height={t.width}
+                style={{ fill: paint }}
+                transform={`rotate(${angle} ${t.centre.x} ${t.centre.y})`}
+              />
+            );
+          }
+          if (t.shape === "triangle") {
+            // Drawn at 12 o'clock (base outward, point inward), then rotated
+            const top = C - Math.hypot(t.outer.x - C, t.outer.y - C);
+            const tip = C - Math.hypot(t.inner.x - C, t.inner.y - C);
+            return (
+              <polygon
+                key={t.i}
+                className={className}
+                points={`${C - t.width / 2},${top} ${C + t.width / 2},${top} ${C},${tip}`}
+                style={{ fill: paint }}
+                transform={`rotate(${angle} ${C} ${C})`}
+              />
+            );
+          }
+          if (t.shape === "double") {
+            // Two parallel lines, drawn at 12 o'clock then rotated
+            const top = C - Math.hypot(t.outer.x - C, t.outer.y - C);
+            const bottom = C - Math.hypot(t.inner.x - C, t.inner.y - C);
+            const stroke = Math.max(1, t.width * 0.32);
+            return (
+              <g
+                key={t.i}
+                className={className}
+                style={{ stroke: paint }}
+                strokeWidth={stroke}
+                strokeLinecap={g.linecap}
+                transform={`rotate(${angle} ${C} ${C})`}
+              >
+                <line
+                  x1={C - t.width / 2}
+                  y1={top}
+                  x2={C - t.width / 2}
+                  y2={bottom}
+                />
+                <line
+                  x1={C + t.width / 2}
+                  y1={top}
+                  x2={C + t.width / 2}
+                  y2={bottom}
+                />
+              </g>
+            );
+          }
+          return (
+            <line
+              key={t.i}
+              className={className}
+              x1={t.outer.x}
+              y1={t.outer.y}
+              x2={t.inner.x}
+              y2={t.inner.y}
+              style={{ stroke: paint }}
+              strokeOpacity={!t.isHour && tickColor ? 0.45 : undefined}
+              strokeWidth={t.width}
+              strokeLinecap={g.linecap}
+            />
+          );
+        })}
+
         {/* Numbers */}
-        {numbers.map(({ num, x, y }) => (
+        {numbers.map(({ num, text, x, y }) => (
           <text
             key={num}
+            className="ac-number"
             x={x}
             y={y}
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize={radius * (num % 3 === 0 ? 0.19 : 0.15)}
-            fontFamily={FONT}
-            fontWeight="bold"
-            fill={p.ink}
-            opacity={num % 3 === 0 ? 1 : 0.8}
+            fontSize={r(num % 3 === 0 ? g.numberSize : g.minorNumberSize)}
+            style={{
+              fill: c.number,
+              fontFamily: cssVar("number-font", FONT),
+              fontWeight: cssVar("number-weight", "bold"),
+            }}
+            opacity={num % 3 === 0 ? 1 : g.minorNumberOpacity}
+            transform={
+              g.rotateNumbers ? `rotate(${num * 30} ${x} ${y})` : undefined
+            }
           >
-            {num}
+            {text}
           </text>
         ))}
 
         {/* Label */}
         {showLabel && (
           <text
+            className="ac-label"
             x={C}
-            y={C - radius * 0.32}
+            y={C - r(g.labelOffset)}
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize={radius * 0.1}
-            fontFamily={FONT}
-            fontWeight="bold"
-            letterSpacing={radius * 0.012}
-            fill={p.label}
+            fontSize={r(0.1)}
+            letterSpacing={r(0.012)}
+            style={{
+              fill: c.label,
+              fontFamily: cssVar("label-font", FONT),
+              fontWeight: cssVar("label-weight", "bold"),
+            }}
           >
             {label.toUpperCase()}
           </text>
         )}
 
-        {/* Hands */}
-        <g filter={`url(#${handShadowId})`}>
-          <path
-            data-hand="hour"
-            d={handPath(radius * 0.5, radius * 0.1, radius * 0.075, radius * 0.035)}
-            fill={p.ink}
-            transform={`rotate(${hourAngle} ${C} ${C})`}
-          />
-          <path
-            data-hand="minute"
-            d={handPath(radius * 0.74, radius * 0.12, radius * 0.055, radius * 0.022)}
-            fill={p.ink}
-            transform={`rotate(${minuteAngle} ${C} ${C})`}
-          />
-          {showSeconds && (
-            <g data-hand="second" transform={`rotate(${secondAngle} ${C} ${C})`}>
-              <line
-                x1={C}
-                y1={C + radius * 0.2}
-                x2={C}
-                y2={C - radius * 0.84}
-                stroke={ACCENT}
-                strokeWidth={Math.max(1, radius * 0.012)}
-                strokeLinecap="round"
-              />
-              <circle cx={C} cy={C + radius * 0.2} r={radius * 0.035} fill={ACCENT} />
-            </g>
-          )}
-        </g>
+        {/* Hands (only once the time is known) */}
+        {time && (
+          <g filter={`url(#${handShadowId})`}>
+            <path
+              data-hand="hour"
+              className="ac-hand ac-hand--hour"
+              d={handPath(g.hourHand)}
+              style={{ fill: c.hourHand }}
+              transform={`rotate(${hourAngle} ${C} ${C})`}
+            />
+            {handDetails(g.hourHand, hourAngle, "hour")}
+            <path
+              data-hand="minute"
+              className="ac-hand ac-hand--minute"
+              d={handPath(g.minuteHand)}
+              style={{ fill: c.minuteHand }}
+              transform={`rotate(${minuteAngle} ${C} ${C})`}
+            />
+            {handDetails(g.minuteHand, minuteAngle, "minute")}
+            {showSeconds && (
+              <g
+                data-hand="second"
+                className="ac-hand ac-hand--second"
+                transform={`rotate(${secondAngle} ${C} ${C})`}
+              >
+                <line
+                  x1={C}
+                  y1={C + r(sh.tail)}
+                  x2={C}
+                  y2={C - r(sh.length)}
+                  style={{ stroke: c.secondHand }}
+                  strokeWidth={Math.max(1, r(sh.width))}
+                  strokeLinecap="round"
+                />
+                {sh.weightStyle === "bar" ? (
+                  <rect
+                    x={C - r(sh.weight) / 2}
+                    y={C}
+                    width={r(sh.weight)}
+                    height={r(sh.tail)}
+                    style={{ fill: c.secondHand }}
+                  />
+                ) : (
+                  <circle
+                    cx={C}
+                    cy={C + r(sh.tail)}
+                    r={r(sh.weight)}
+                    style={
+                      sh.weightStyle === "ring"
+                        ? { fill: "none", stroke: c.secondHand }
+                        : { fill: c.secondHand }
+                    }
+                    strokeWidth={
+                      sh.weightStyle === "ring"
+                        ? Math.max(1, r(sh.width))
+                        : undefined
+                    }
+                  />
+                )}
+              </g>
+            )}
+          </g>
+        )}
 
         {/* Centre cap */}
-        <circle cx={C} cy={C} r={Math.max(3, radius * 0.05)} fill={p.ink} />
-        <circle cx={C} cy={C} r={Math.max(1.5, radius * 0.025)} fill={ACCENT} />
+        <circle
+          data-part="cap"
+          cx={C}
+          cy={C}
+          r={Math.max(3, r(g.capRadius))}
+          style={{ fill: c.cap }}
+        />
+        <circle
+          data-part="cap-dot"
+          cx={C}
+          cy={C}
+          r={Math.max(1.5, r(g.capDotRadius))}
+          style={{ fill: c.capDot }}
+        />
       </svg>
 
       {showDigital && (
         <div
           className="analog-clock-digital"
           style={{
-            fontSize: radius * 0.25,
-            fontFamily: FONT,
+            fontSize: r(0.25),
+            fontFamily: cssVar("digital-font", FONT),
             fontWeight: "bold",
             letterSpacing: "0.1em",
             marginTop: 8,
-            color: p.ink,
+            color: c.digital,
           }}
         >
-          {digitalTime}
+          {/* Before mount, a hidden placeholder keeps the layout from jumping */}
+          <span
+            style={time ? undefined : { visibility: "hidden" }}
+            aria-hidden={time ? undefined : true}
+          >
+            {digitalTime}
+          </span>
         </div>
       )}
     </div>

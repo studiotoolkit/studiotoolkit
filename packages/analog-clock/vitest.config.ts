@@ -9,6 +9,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    // Load the face stylesheets for real (Vitest blanks CSS by default)
+    css: { include: [/src\/faces\/.*\.css/] },
     setupFiles: './test/setup.ts',
     coverage: {
       provider: 'v8',

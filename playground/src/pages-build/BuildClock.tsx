@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Clock } from '@studiotoolkit/analog-clock';
+import { Clock, CLOCK_FACES, type ClockFace, type TimeFormat } from '@studiotoolkit/analog-clock';
+import '@studiotoolkit/analog-clock/style.css';
 import { useTheme } from '../ThemeContext';
 import './BuildClock.css';
 
@@ -25,30 +26,63 @@ const TIMEZONES: { label: string; tz: string }[] = [
   { label: 'Auckland', tz: 'Pacific/Auckland' },
 ];
 
+/** Colour props on <Clock>, in the order they appear in Settings. */
+const COLOR_PROPS = [
+  { prop: 'borderColor', label: 'Border', initial: '#000000' },
+  { prop: 'tickColor', label: 'Ticks', initial: '#000000' },
+  { prop: 'numberColor', label: 'Numbers', initial: '#000000' },
+  { prop: 'hourHandColor', label: 'Hour Hand', initial: '#000000' },
+  { prop: 'minuteHandColor', label: 'Minute Hand', initial: '#000000' },
+  { prop: 'secondHandColor', label: 'Second Hand', initial: '#e03a3a' },
+  { prop: 'digitalColor', label: 'Digital Time', initial: '#000000' },
+] as const;
+
+type ColorProp = (typeof COLOR_PROPS)[number]['prop'];
+type ColorState = Record<ColorProp, { enabled: boolean; value: string }>;
+
+const initialColors = (): ColorState =>
+  Object.fromEntries(
+    COLOR_PROPS.map((c) => [c.prop, { enabled: false, value: c.initial }]),
+  ) as ColorState;
+
 export default function BuildClock() {
   const { isDark } = useTheme();
   const [radius, setRadius] = useState(120);
   const [label, setLabel] = useState('');
   const [timezone, setTimezone] = useState('');
-  const [customBorder, setCustomBorder] = useState(false);
-  const [borderColor, setBorderColor] = useState('#000000');
+  const [face, setFace] = useState<ClockFace>('default');
+  const [timeFormat, setTimeFormat] = useState<TimeFormat>('12h');
   const [showSeconds, setShowSeconds] = useState(true);
   const [showDigital, setShowDigital] = useState(true);
+  const [colors, setColors] = useState<ColorState>(initialColors);
 
   const theme = isDark ? 'dark' : 'light';
+
+  const setColor = (prop: ColorProp, patch: Partial<ColorState[ColorProp]>) =>
+    setColors((prev) => ({ ...prev, [prop]: { ...prev[prop], ...patch } }));
+
+  // Only the colours the user switched on are passed to <Clock>
+  const colorProps: Partial<Record<ColorProp, string>> = Object.fromEntries(
+    COLOR_PROPS.filter((c) => colors[c.prop].enabled).map((c) => [c.prop, colors[c.prop].value]),
+  );
+
+  const customColorCount = Object.keys(colorProps).length;
 
   // Only list props that differ from the component defaults
   const props = [
     radius !== 100 && `  radius={${radius}}`,
     label && `  label="${label}"`,
     timezone && `  timezone="${timezone}"`,
+    face !== 'default' && `  face="${face}"`,
     theme !== 'light' && `  theme="${theme}"`,
-    customBorder && `  borderColor="${borderColor}"`,
+    timeFormat !== '12h' && `  timeFormat="${timeFormat}"`,
     !showSeconds && `  showSeconds={false}`,
     !showDigital && `  showDigital={false}`,
+    ...Object.entries(colorProps).map(([prop, value]) => `  ${prop}="${value}"`),
   ].filter(Boolean);
 
   const generatedCode = `import { Clock } from '@studiotoolkit/analog-clock';
+import '@studiotoolkit/analog-clock/style.css';
 
 ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
 
@@ -58,10 +92,11 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
     setRadius(120);
     setLabel('');
     setTimezone('');
-    setCustomBorder(false);
-    setBorderColor('#000000');
+    setFace('default');
+    setTimeFormat('12h');
     setShowSeconds(true);
     setShowDigital(true);
+    setColors(initialColors());
   };
 
   return (
@@ -75,6 +110,21 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
           {/* Column 1: Settings */}
           <div className="build-clock-controls">
             <h3>Settings</h3>
+            <div className="build-clock-control-inline">
+              <label htmlFor="clock-face">Watch Face</label>
+              <select
+                id="clock-face"
+                value={face}
+                onChange={(e) => setFace(e.target.value as ClockFace)}
+                className="build-clock-select"
+              >
+                {CLOCK_FACES.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="build-clock-control-inline">
               <label htmlFor="clock-radius">Radius ({radius}px)</label>
               <input
@@ -114,23 +164,16 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
               </select>
             </div>
             <div className="build-clock-control-inline">
-              <label htmlFor="clock-custom-border">Custom Border</label>
-              <div className="build-clock-color-row">
-                <input
-                  id="clock-custom-border"
-                  type="checkbox"
-                  checked={customBorder}
-                  onChange={(e) => setCustomBorder(e.target.checked)}
-                />
-                <input
-                  type="color"
-                  aria-label="Border color"
-                  value={borderColor}
-                  disabled={!customBorder}
-                  onChange={(e) => setBorderColor(e.target.value)}
-                  className="build-clock-color-picker"
-                />
-              </div>
+              <label htmlFor="clock-format">Digital Format</label>
+              <select
+                id="clock-format"
+                value={timeFormat}
+                onChange={(e) => setTimeFormat(e.target.value as TimeFormat)}
+                className="build-clock-select"
+              >
+                <option value="12h">12-hour</option>
+                <option value="24h">24-hour</option>
+              </select>
             </div>
             <div className="build-clock-control-inline">
               <label htmlFor="clock-seconds">Second Hand</label>
@@ -150,6 +193,40 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 onChange={(e) => setShowDigital(e.target.checked)}
               />
             </div>
+
+            <details className="build-clock-colors">
+              <summary className="build-clock-subheading">
+                Colors
+                {customColorCount > 0 && (
+                  <span className="build-clock-colors-count">· {customColorCount} custom</span>
+                )}
+              </summary>
+              <div className="build-clock-colors-body">
+                <p className="build-clock-hint">Tick a color to override the watch face.</p>
+                {COLOR_PROPS.map(({ prop, label: colorLabel }) => (
+                  <div className="build-clock-control-inline" key={prop}>
+                    <label htmlFor={`clock-${prop}`}>{colorLabel}</label>
+                    <div className="build-clock-color-row">
+                      <input
+                        id={`clock-${prop}`}
+                        type="checkbox"
+                        checked={colors[prop].enabled}
+                        onChange={(e) => setColor(prop, { enabled: e.target.checked })}
+                      />
+                      <input
+                        type="color"
+                        aria-label={`${colorLabel} color`}
+                        value={colors[prop].value}
+                        disabled={!colors[prop].enabled}
+                        onChange={(e) => setColor(prop, { value: e.target.value })}
+                        className="build-clock-color-picker"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </details>
+
             <p className="build-clock-hint">Theme follows the site's light/dark toggle.</p>
             <div className="build-clock-control-inline">
               <span />
@@ -167,10 +244,12 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 radius={radius}
                 label={label}
                 timezone={timezone || null}
+                face={face}
                 theme={theme}
-                borderColor={customBorder ? borderColor : undefined}
+                timeFormat={timeFormat}
                 showSeconds={showSeconds}
                 showDigital={showDigital}
+                {...colorProps}
               />
             </div>
           </div>
@@ -186,6 +265,32 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
             <textarea className="build-clock-textarea" value={generatedCode} readOnly />
           </div>
         </div>
+
+        {/* Faces gallery */}
+        <section className="build-clock-faces" aria-labelledby="clock-faces-title">
+          <h3 id="clock-faces-title">Faces</h3>
+          <div className="build-clock-faces-grid">
+            {CLOCK_FACES.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                className={`build-clock-face-card${face === f.id ? ' is-selected' : ''}`}
+                aria-pressed={face === f.id}
+                onClick={() => setFace(f.id)}
+              >
+                <span className="build-clock-face-name">{f.label}</span>
+                <Clock
+                  face={f.id}
+                  theme={theme}
+                  radius={72}
+                  timezone={timezone || null}
+                  showSeconds={showSeconds}
+                  showDigital={false}
+                />
+              </button>
+            ))}
+          </div>
+        </section>
       </main>
       <Footer />
     </div>

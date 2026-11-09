@@ -1,0 +1,24 @@
+/* Blue face: brushed steel case, navy dial, white bar markers and hands. */
+.analog-clock--blue {
+  --ac-bezel: #9aa1aa;
+  --ac-bezel-2: #eef1f4;
+  --ac-face-inner: #24406f;
+  --ac-face-outer: #10213f;
+  --ac-tick: #f4f6f8;
+  --ac-minor-tick: #e3e8ee;
+  --ac-number: #f4f6f8;
+  --ac-number-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-label: #f4f6f8;
+  --ac-label-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-label-weight: 500;
+  --ac-hour-hand: #e9edf1;
+  --ac-minute-hand: #e9edf1;
+  --ac-second-hand: #e2382c;
+  --ac-cap: #c9ced4;
+  --ac-digital: #1a3462;
+  --ac-digital-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.analog-clock--blue[data-theme="dark"] {
+  --ac-digital: #c8d6ec;
+}

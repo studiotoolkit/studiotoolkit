@@ -1,0 +1,28 @@
+/* Blush face: dress style. Rose-gold case, soft blush dial, serif 12/3/6/9,
+   rose-gold markers and faceted hands, burgundy second hand. */
+.analog-clock--blush {
+  --ac-bezel: #b7795e;
+  --ac-bezel-2: #f4cdb9;
+  --ac-face-inner: #fff6f3;
+  --ac-face-outer: #f1d3ca;
+  --ac-tick: #b7795e;
+  --ac-minor-tick: #c99a86;
+  --ac-number: #9c5f48;
+  --ac-number-font: Didot, 'Bodoni 72', 'Bodoni MT', Georgia, serif;
+  --ac-number-weight: 400;
+  --ac-label: #9c5f48;
+  --ac-label-font: Didot, 'Bodoni 72', 'Bodoni MT', Georgia, serif;
+  --ac-label-weight: 400;
+  --ac-hour-hand: #a8674d;
+  --ac-minute-hand: #a8674d;
+  --ac-hand-shine: #ebbca6;
+  --ac-second-hand: #8c2f39;
+  --ac-cap: #b7795e;
+  --ac-cap-dot: #f4cdb9;
+  --ac-digital: #9c5f48;
+  --ac-digital-font: Didot, 'Bodoni 72', 'Bodoni MT', Georgia, serif;
+}
+
+.analog-clock--blush[data-theme="dark"] {
+  --ac-digital: #f4cdb9;
+}

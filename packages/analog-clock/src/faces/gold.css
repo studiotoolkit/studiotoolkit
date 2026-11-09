@@ -1,0 +1,25 @@
+/* Gold face: polished gold case, white dial, gold sticks and hands, red second hand. */
+.analog-clock--gold {
+  --ac-bezel: #b8862b;
+  --ac-bezel-2: #f3d98b;
+  --ac-face-inner: #ffffff;
+  --ac-face-outer: #e9e6df;
+  --ac-tick: #b08d3c;
+  --ac-minor-tick: rgba(176, 141, 60, 0.75);
+  --ac-number: #a5813a;
+  --ac-number-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-number-weight: 400;
+  --ac-label: #a5813a;
+  --ac-label-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-label-weight: 500;
+  --ac-hour-hand: #b08d3c;
+  --ac-minute-hand: #b08d3c;
+  --ac-second-hand: #e2382c;
+  --ac-cap: #c79a3e;
+  --ac-digital: #a5813a;
+  --ac-digital-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.analog-clock--gold[data-theme="dark"] {
+  --ac-digital: #e3c374;
+}

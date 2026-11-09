@@ -1,0 +1,28 @@
+/* Chrono face: steel case, black dial, white minute track and numbers,
+   white batons and sword hands with a bright stripe. */
+.analog-clock--chrono {
+  --ac-bezel: #a7adb4;
+  --ac-bezel-2: #f5f7f9;
+  --ac-face-inner: #1b1d21;
+  --ac-face-outer: #08090b;
+  --ac-tick: #f4f5f6;
+  --ac-minor-tick: #d9dcdf;
+  --ac-number: #f4f5f6;
+  --ac-number-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-number-weight: 600;
+  --ac-label: #f4f5f6;
+  --ac-label-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-label-weight: 600;
+  --ac-hour-hand: #c4c9cf;
+  --ac-minute-hand: #c4c9cf;
+  --ac-hand-inlay: #ffffff;
+  --ac-second-hand: #f4f5f6;
+  --ac-cap: #c4c9cf;
+  --ac-cap-dot: #e3241b;
+  --ac-digital: #1b1d21;
+  --ac-digital-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.analog-clock--chrono[data-theme="dark"] {
+  --ac-digital: #e6e8ea;
+}

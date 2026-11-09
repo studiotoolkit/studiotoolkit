@@ -1,0 +1,25 @@
+/* Wall White face: slim white case, white dial, heavy black numbers, red second hand. */
+.analog-clock--wall-white {
+  --ac-bezel: #d9dbde;
+  --ac-bezel-2: #ffffff;
+  --ac-face-inner: #ffffff;
+  --ac-face-outer: #f3f4f5;
+  --ac-tick: #111111;
+  --ac-minor-tick: #1a1a1a;
+  --ac-number: #151515;
+  --ac-number-font: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-number-weight: 900;
+  --ac-label: #2a8fbf;
+  --ac-label-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-label-weight: 500;
+  --ac-hour-hand: #111111;
+  --ac-minute-hand: #111111;
+  --ac-second-hand: #e0201b;
+  --ac-cap: #111111;
+  --ac-digital: #151515;
+  --ac-digital-font: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.analog-clock--wall-white[data-theme="dark"] {
+  --ac-digital: #f0f0f0;
+}

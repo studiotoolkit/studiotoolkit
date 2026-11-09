@@ -1,0 +1,29 @@
+/* Spectrum face: gunmetal case, white dial, ticks in the colours of the
+   @studiotoolkit/color-wheel wheel (red at 12, then yellow, green, cyan, blue,
+   magenta, clockwise), near-black hands. */
+.analog-clock--spectrum {
+  --ac-bezel: #3e4146;
+  --ac-bezel-2: #8a8e94;
+  --ac-face-inner: #ffffff;
+  --ac-face-outer: #eef0f2;
+  /* Spectrum ticks match the color wheel: hsl(hue, 100%, 50%), hue 0 (red) at
+     12 o'clock rising clockwise, 6 degrees per minute */
+  --ac-tick-hue: 0;
+  --ac-tick-hue-step: 6;
+  --ac-tick-sat: 100%;
+  --ac-tick-light: 50%;
+  --ac-number: #1c1d20;
+  --ac-label: #4a4d52;
+  --ac-label-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ac-label-weight: 500;
+  --ac-hour-hand: #1c1d20;
+  --ac-minute-hand: #1c1d20;
+  --ac-second-hand: #e3241b;
+  --ac-cap: #1c1d20;
+  --ac-digital: #2a2b2e;
+  --ac-digital-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.analog-clock--spectrum[data-theme="dark"] {
+  --ac-digital: #e6e8ea;
+}

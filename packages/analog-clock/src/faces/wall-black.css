@@ -1,0 +1,27 @@
+/* Wall Black face: black case, white dial, numbers around the edge, red second hand. */
+.analog-clock--wall-black {
+  --ac-bezel: #141414;
+  --ac-bezel-2: #4a4a4a;
+  --ac-face-inner: #ffffff;
+  --ac-face-outer: #f1f1f1;
+  --ac-tick: #111111;
+  --ac-minor-tick: #222222;
+  --ac-number: #111111;
+  --ac-number-font: 'Century Gothic', Futura, Avenir, 'Trebuchet MS', Arial, sans-serif;
+  --ac-number-weight: 500;
+  --ac-label: #2a8fbf;
+  --ac-label-font: 'Century Gothic', Futura, Avenir, Arial, sans-serif;
+  --ac-label-weight: 400;
+  --ac-hour-hand: #111111;
+  --ac-minute-hand: #111111;
+  --ac-second-hand: #e0201b;
+  --ac-cap: #111111;
+  --ac-digital: #111111;
+  --ac-digital-font: 'Century Gothic', Futura, Avenir, Arial, sans-serif;
+}
+
+.analog-clock--wall-black[data-theme="dark"] {
+  --ac-bezel: #050505;
+  --ac-bezel-2: #5a5a5a;
+  --ac-digital: #e6e6e6;
+}
