@@ -10,6 +10,28 @@ import { FACE_GEOMETRY, type ClockFace } from "./faces";
 import { injectFaceStyles } from "./styles";
 import { secondHandAngle, type SecondHandMotion } from "./motion";
 
+/** Motions that overshoot or wobble; replaced by "tick" under reduced motion. */
+const WOBBLY_MOTIONS: SecondHandMotion[] = ["bounce", "ease", "anticipate"];
+
+/** Second-hand angle at a given instant. Zone offsets are whole minutes,
+ *  so local seconds match every zone. */
+const angleAt = (motion: SecondHandMotion, now: Date) =>
+  secondHandAngle(motion, now.getSeconds(), now.getMilliseconds());
+
+/** True when the user has asked the system for reduced motion. */
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(query.matches);
+    const onChange = () => setReduced(query.matches);
+    query.addEventListener?.("change", onChange);
+    return () => query.removeEventListener?.("change", onChange);
+  }, []);
+  return reduced;
+}
+
 export type ClockTheme = "light" | "dark";
 export type TimeFormat = "12h" | "24h";
 
@@ -28,7 +50,7 @@ export interface ClockProps {
   showSeconds?: boolean;
   /**
    * How the second hand moves: "tick" (one jump per second), "smooth",
-   * "sweep" (8 beats/s), "swiss" (58 s lap, pause, minute jump),
+   * "sweep" (8 beats/s), "stop-to-go" (58 s lap, pause, minute jump),
    * "bounce", "ease" or "anticipate".
    */
   secondHandMotion?: SecondHandMotion;
@@ -186,11 +208,17 @@ export default function Clock({
     injectFaceStyles();
   }, []);
 
+  // Bouncy motions fall back to "tick" for users who ask for less motion
+  const reducedMotion = usePrefersReducedMotion();
+  const motion: SecondHandMotion =
+    reducedMotion && WOBBLY_MOTIONS.includes(secondHandMotion)
+      ? "tick"
+      : secondHandMotion;
+
   // Animated motions move the second hand every frame by setting its
   // transform directly; React still re-renders only once a second.
-  const animated = showSeconds && secondHandMotion !== "tick";
+  const animated = showSeconds && motion !== "tick";
   const secondHandRef = useRef<SVGGElement>(null);
-  const secondAngleRef = useRef(0);
   const centreRef = useRef(0);
 
   useEffect(() => {
@@ -201,29 +229,31 @@ export default function Clock({
     }
     let frame = 0;
     let lastSecond = -1;
+    // Re-render (digital time, other hands) only when the second changes
+    const sync = (now: Date) => {
+      if (now.getSeconds() === lastSecond) return;
+      lastSecond = now.getSeconds();
+      setTime(getTimeInZone(timezone, now));
+    };
     const step = () => {
       const now = new Date();
-      // Zone offsets are whole minutes, so local seconds match every zone
-      const angle = secondHandAngle(
-        secondHandMotion,
-        now.getSeconds(),
-        now.getMilliseconds(),
-      );
-      secondAngleRef.current = angle;
       const C = centreRef.current;
       secondHandRef.current?.setAttribute(
         "transform",
-        `rotate(${angle} ${C} ${C})`,
+        `rotate(${angleAt(motion, now)} ${C} ${C})`,
       );
-      if (now.getSeconds() !== lastSecond) {
-        lastSecond = now.getSeconds();
-        setTime(getTimeInZone(timezone, now));
-      }
+      sync(now);
       frame = requestAnimationFrame(step);
     };
     step();
-    return () => cancelAnimationFrame(frame);
-  }, [timezone, animated, secondHandMotion]);
+    // Browsers pause animation frames in hidden tabs; this keeps the
+    // time (digital readout, aria-label) current there.
+    const timer = setInterval(() => sync(new Date()), 1000);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearInterval(timer);
+    };
+  }, [timezone, animated, motion]);
 
   const g = FACE_GEOMETRY[face] ?? FACE_GEOMETRY.default;
   const fb = fallbacks[theme] ?? fallbacks.light;
@@ -270,14 +300,15 @@ export default function Clock({
     seconds: 0,
   };
   const hourAngle = (((hours % 12) * 60 + minutes) / 720) * 360;
-  // A Swiss railway minute hand jumps once a minute
+  // In stop-to-go mode the minute hand jumps once a minute
   const minuteAngle =
-    secondHandMotion === "swiss"
+    motion === "stop-to-go"
       ? minutes * 6
       : ((minutes * 60 + seconds) / 3600) * 360;
-  const secondAngle = animated
-    ? secondAngleRef.current
-    : secondHandAngle("tick", seconds);
+  // Animated hands are drawn at the current instant, so a re-render never
+  // shows a stale angle before the next frame.
+  const secondAngle =
+    animated && time ? angleAt(motion, new Date()) : secondHandAngle("tick", seconds);
 
   const polar = (angleDeg: number, dist: number) => {
     const rad = (angleDeg - 90) * (Math.PI / 180);
@@ -670,7 +701,7 @@ export default function Clock({
               <g
                 ref={secondHandRef}
                 data-hand="second"
-                data-motion={secondHandMotion}
+                data-motion={motion}
                 className="ac-hand ac-hand--second"
                 transform={`rotate(${secondAngle} ${C} ${C})`}
               >

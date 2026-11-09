@@ -127,16 +127,18 @@ To restyle a face, override its variables:
 | `tick`       | One jump per second (the default).                                       |
 | `smooth`     | Glides continuously, updated every frame.                                |
 | `sweep`      | 8 small steps per second, like an automatic watch.                       |
-| `swiss`      | Swiss railway: one lap in 58 s, a 2 s pause at 12, then the minute hand jumps. The minute hand only moves on the minute. |
+| `stop-to-go` | Stop-to-go: one lap in 58 s, a 2 s pause at 12, then the minute hand jumps. The minute hand only moves on the minute. |
 | `bounce`     | Springs to each second, overshoots and wobbles before settling.          |
 | `ease`       | Soft ease-in-out move to each second.                                    |
 | `anticipate` | Dips back slightly, then snaps forward.                                  |
 
 ```tsx
-<Clock secondHandMotion="swiss" />
+<Clock secondHandMotion="stop-to-go" />
 ```
 
-Every motion except `tick` uses `requestAnimationFrame`. Only the second hand's transform changes each frame, and the component still re-renders once a second. `SECOND_HAND_MOTIONS` lists the motions (`[{ id, label }]`) for a picker, and `secondHandAngle(motion, seconds, ms)` returns the angle in degrees.
+Every motion except `tick` uses `requestAnimationFrame`. Only the second hand's transform changes each frame, and the component still re-renders once a second. `bounce`, `ease` and `anticipate` are timed so the hand reaches each mark exactly when the second changes, in step with the digital time.
+
+When the user's system asks for reduced motion (`prefers-reduced-motion: reduce`), `bounce`, `ease` and `anticipate` fall back to `tick`. `smooth`, `sweep` and `stop-to-go` don't wobble, so they stay as chosen. In a hidden browser tab the hand pauses with the page, but the digital time and `aria-label` keep updating. `SECOND_HAND_MOTIONS` lists the motions (`[{ id, label }]`) for a picker, and `secondHandAngle(motion, seconds, ms)` returns the angle in degrees.
 
 ## Helpers
 

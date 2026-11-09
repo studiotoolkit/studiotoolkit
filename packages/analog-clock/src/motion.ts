@@ -3,7 +3,7 @@ export type SecondHandMotion =
   | "tick"
   | "smooth"
   | "sweep"
-  | "swiss"
+  | "stop-to-go"
   | "bounce"
   | "ease"
   | "anticipate";
@@ -13,7 +13,7 @@ export const SECOND_HAND_MOTIONS: { id: SecondHandMotion; label: string }[] = [
   { id: "tick", label: "Tick (default)" },
   { id: "smooth", label: "Smooth glide" },
   { id: "sweep", label: "Mechanical sweep" },
-  { id: "swiss", label: "Swiss railway" },
+  { id: "stop-to-go", label: "Stop-to-go" },
   { id: "bounce", label: "Spring bounce" },
   { id: "ease", label: "Ease-in-out tick" },
   { id: "anticipate", label: "Anticipation tick" },
@@ -21,6 +21,13 @@ export const SECOND_HAND_MOTIONS: { id: SecondHandMotion; label: string }[] = [
 
 /** How long each per-second move takes, in ms, for the stepped motions. */
 const MOVE_MS = { bounce: 700, ease: 300, anticipate: 350 };
+
+/** Time from the start of a move until the hand first reaches the mark. */
+const LEAD_MS = {
+  bounce: MOVE_MS.bounce / 8, // the spring first crosses the mark at p = 1/8
+  ease: MOVE_MS.ease,
+  anticipate: MOVE_MS.anticipate,
+};
 
 /** Progress curves: 0 at the start of the move, 1 at the end. */
 const CURVES = {
@@ -50,15 +57,20 @@ export function secondHandAngle(
     case "sweep":
       // 8 beats per second, like an automatic movement
       return (seconds + Math.floor(ms / 125) / 8) * 6;
-    case "swiss":
+    case "stop-to-go":
       // One lap in 58 s, then a 2 s wait at 12
       return Math.min((exact * 60) / 58, 60) * 6;
     case "bounce":
     case "ease":
     case "anticipate": {
-      // Moves from the previous second's mark to this one
-      const p = Math.min(ms / MOVE_MS[motion], 1);
-      return (seconds - 1 + CURVES[motion](p)) * 6;
+      // Time the move so the hand first reaches each mark exactly on the
+      // second, in step with the digital readout. A bounce then overshoots.
+      const lead = LEAD_MS[motion];
+      const early = ms >= 1000 - lead; // already heading for the next mark
+      const target = early ? seconds + 1 : seconds;
+      const elapsed = early ? ms - (1000 - lead) : ms + lead;
+      const p = Math.min(elapsed / MOVE_MS[motion], 1);
+      return (target - 1 + CURVES[motion](p)) * 6;
     }
     default:
       return seconds * 6;
