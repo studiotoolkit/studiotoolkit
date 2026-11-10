@@ -5,10 +5,12 @@ import {
   useInsertionEffect,
   useRef,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import { FACE_GEOMETRY, type ClockFace } from "./faces";
 import { injectFaceStyles } from "./styles";
 import { secondHandAngle, type SecondHandMotion } from "./motion";
+import { parseSecondHandStyle, type SecondHandStyle } from "./secondHandStyles";
 
 /** Motions that overshoot or wobble; replaced by "tick" under reduced motion. */
 const WOBBLY_MOTIONS: SecondHandMotion[] = ["bounce", "ease", "anticipate"];
@@ -54,6 +56,18 @@ export interface ClockProps {
    * "bounce", "ease" or "anticipate".
    */
   secondHandMotion?: SecondHandMotion;
+  /**
+   * How the second hand looks: "face" (the face's own hand), "plain",
+   * "tapered", or a line with an object on it, `<shape>-<fill>`: shape
+   * "circle", "rect", "half-circle" or "triangle"; fill "filled" or
+   * "outline". E.g. "circle-filled".
+   */
+  secondHandStyle?: SecondHandStyle;
+  /**
+   * Where the object sits along the second hand, 0-100: 0 is flush with the
+   * inner end (the tail past the centre), 100 flush with the tip.
+   */
+  secondHandMarkerAt?: number;
   /** Show the digital time below the dial. */
   showDigital?: boolean;
   /** Digital time format: "12h" (hh:mm:ss AM) or "24h" (HH:mm:ss). */
@@ -188,6 +202,8 @@ export default function Clock({
   theme = "light",
   showSeconds = true,
   secondHandMotion = "tick",
+  secondHandStyle = "face",
+  secondHandMarkerAt = 100,
   showDigital = true,
   timeFormat = "12h",
   borderColor,
@@ -439,6 +455,115 @@ export default function Clock({
   );
 
   const sh = g.secondHand;
+
+  // Second hand for any style other than "face", drawn pointing up
+  const styledSecondHand = () => {
+    const L = r(sh.length);
+    const T = r(sh.tail);
+    const w = Math.max(1, r(sh.width));
+    const paint = { fill: c.secondHand };
+    const line = (from: number, to: number) => (
+      <line
+        x1={C}
+        y1={C - from}
+        x2={C}
+        y2={C - to}
+        style={{ stroke: c.secondHand }}
+        strokeWidth={w}
+        strokeLinecap="round"
+      />
+    );
+
+    if (secondHandStyle === "tapered") {
+      // Widest at the tail end, narrowing steadily to a fine tip
+      const B = Math.max(2.5, w * 3.5);
+      const P = Math.max(0.6, w * 0.4);
+      return (
+        <path
+          data-part="second-body"
+          d={`M ${C - B / 2} ${C + T} L ${C - P / 2} ${C - L} L ${C + P / 2} ${C - L} L ${C + B / 2} ${C + T} Z`}
+          style={paint}
+        />
+      );
+    }
+
+    const marker = parseSecondHandStyle(secondHandStyle);
+    if (!marker) return line(-T, L); // "plain" (and any unknown style)
+
+    const s = Math.max(3, r(0.05)); // marker half-size
+    const hr = s * 1.25; // half-circle radius
+    // How far each shape reaches from its centre toward the dial centre
+    // (back) and toward the tip (front)
+    const [back, front] =
+      marker.shape === "rect"
+        ? [s * 1.4, s * 1.4]
+        : marker.shape === "half-circle"
+          ? [hr / 2, hr / 2]
+          : marker.shape === "triangle"
+            ? [s, s * 1.4]
+            : [s, s];
+    // 0 = flush with the tail end, 100 = flush with the tip.
+    // d = marker centre, as a distance from the dial centre toward the tip.
+    const at = Number.isFinite(secondHandMarkerAt)
+      ? Math.min(100, Math.max(0, secondHandMarkerAt)) / 100
+      : 1;
+    const [first, last] = [-T + back, L - front];
+    const d = first + (last - first) * at;
+    const [near, far] = [d - back, d + front];
+    const y = C - d;
+    const look = marker.filled
+      ? paint
+      : { fill: "none", stroke: c.secondHand };
+    const stroke = marker.filled ? undefined : w;
+
+    let shape: ReactNode;
+    if (marker.shape === "circle") {
+      shape = <circle cx={C} cy={y} r={s} style={look} strokeWidth={stroke} />;
+    } else if (marker.shape === "rect") {
+      // Long side runs along the hand
+      const hw = s * 0.65;
+      shape = (
+        <rect
+          x={C - hw}
+          y={y - front}
+          width={hw * 2}
+          height={back + front}
+          style={look}
+          strokeWidth={stroke}
+        />
+      );
+    } else if (marker.shape === "half-circle") {
+      // Flat side toward the centre, dome toward the tip
+      const base = y + back;
+      shape = (
+        <path
+          d={`M ${C - hr} ${base} A ${hr} ${hr} 0 0 1 ${C + hr} ${base} Z`}
+          style={look}
+          strokeWidth={stroke}
+        />
+      );
+    } else {
+      // Triangle pointing to the tip
+      shape = (
+        <polygon
+          points={`${C - s},${y + back} ${C + s},${y + back} ${C},${y - front}`}
+          style={look}
+          strokeWidth={stroke}
+          strokeLinejoin="round"
+        />
+      );
+    }
+
+    return (
+      <>
+        {near > -T && line(-T, near)}
+        {far < L && line(far, L)}
+        <g data-part="second-marker" data-marker={marker.shape}>
+          {shape}
+        </g>
+      </>
+    );
+  };
   const showLabel = Boolean(label) && radius >= 50;
   const faceId = `face${uid}`;
   const bezelId = `bezel${uid}`;
@@ -702,42 +827,49 @@ export default function Clock({
                 ref={secondHandRef}
                 data-hand="second"
                 data-motion={motion}
+                data-style={secondHandStyle}
                 className="ac-hand ac-hand--second"
                 transform={`rotate(${secondAngle} ${C} ${C})`}
               >
-                <line
-                  x1={C}
-                  y1={C + r(sh.tail)}
-                  x2={C}
-                  y2={C - r(sh.length)}
-                  style={{ stroke: c.secondHand }}
-                  strokeWidth={Math.max(1, r(sh.width))}
-                  strokeLinecap="round"
-                />
-                {sh.weightStyle === "bar" ? (
-                  <rect
-                    x={C - r(sh.weight) / 2}
-                    y={C}
-                    width={r(sh.weight)}
-                    height={r(sh.tail)}
-                    style={{ fill: c.secondHand }}
-                  />
+                {secondHandStyle === "face" ? (
+                  <>
+                    <line
+                      x1={C}
+                      y1={C + r(sh.tail)}
+                      x2={C}
+                      y2={C - r(sh.length)}
+                      style={{ stroke: c.secondHand }}
+                      strokeWidth={Math.max(1, r(sh.width))}
+                      strokeLinecap="round"
+                    />
+                    {sh.weightStyle === "bar" ? (
+                      <rect
+                        x={C - r(sh.weight) / 2}
+                        y={C}
+                        width={r(sh.weight)}
+                        height={r(sh.tail)}
+                        style={{ fill: c.secondHand }}
+                      />
+                    ) : (
+                      <circle
+                        cx={C}
+                        cy={C + r(sh.tail)}
+                        r={r(sh.weight)}
+                        style={
+                          sh.weightStyle === "ring"
+                            ? { fill: "none", stroke: c.secondHand }
+                            : { fill: c.secondHand }
+                        }
+                        strokeWidth={
+                          sh.weightStyle === "ring"
+                            ? Math.max(1, r(sh.width))
+                            : undefined
+                        }
+                      />
+                    )}
+                  </>
                 ) : (
-                  <circle
-                    cx={C}
-                    cy={C + r(sh.tail)}
-                    r={r(sh.weight)}
-                    style={
-                      sh.weightStyle === "ring"
-                        ? { fill: "none", stroke: c.secondHand }
-                        : { fill: c.secondHand }
-                    }
-                    strokeWidth={
-                      sh.weightStyle === "ring"
-                        ? Math.max(1, r(sh.width))
-                        : undefined
-                    }
-                  />
+                  styledSecondHand()
                 )}
               </g>
             )}

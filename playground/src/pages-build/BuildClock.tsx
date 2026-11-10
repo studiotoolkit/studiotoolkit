@@ -5,8 +5,10 @@ import {
   Clock,
   CLOCK_FACES,
   SECOND_HAND_MOTIONS,
+  SECOND_HAND_STYLES,
   type ClockFace,
   type SecondHandMotion,
+  type SecondHandStyle,
   type TimeFormat,
 } from '@studiotoolkit/analog-clock';
 import '@studiotoolkit/analog-clock/style.css';
@@ -61,6 +63,8 @@ export default function BuildClock() {
   const [timeFormat, setTimeFormat] = useState<TimeFormat>('12h');
   const [showSeconds, setShowSeconds] = useState(true);
   const [motion, setMotion] = useState<SecondHandMotion>('tick');
+  const [handStyle, setHandStyle] = useState<SecondHandStyle>('face');
+  const [markerAt, setMarkerAt] = useState(100);
   const [showDigital, setShowDigital] = useState(true);
   const [colors, setColors] = useState<ColorState>(initialColors);
 
@@ -76,6 +80,9 @@ export default function BuildClock() {
 
   const customColorCount = Object.keys(colorProps).length;
 
+  // The Add At slider only applies to styles that place an object on the hand
+  const hasObject = SECOND_HAND_STYLES.some((s) => s.id === handStyle && s.group === 'Object');
+
   // Only list props that differ from the component defaults
   const props = [
     radius !== 100 && `  radius={${radius}}`,
@@ -86,6 +93,8 @@ export default function BuildClock() {
     timeFormat !== '12h' && `  timeFormat="${timeFormat}"`,
     !showSeconds && `  showSeconds={false}`,
     motion !== 'tick' && `  secondHandMotion="${motion}"`,
+    handStyle !== 'face' && `  secondHandStyle="${handStyle}"`,
+    hasObject && markerAt !== 100 && `  secondHandMarkerAt={${markerAt}}`,
     !showDigital && `  showDigital={false}`,
     ...Object.entries(colorProps).map(([prop, value]) => `  ${prop}="${value}"`),
   ].filter(Boolean);
@@ -105,6 +114,8 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
     setTimeFormat('12h');
     setShowSeconds(true);
     setMotion('tick');
+    setHandStyle('face');
+    setMarkerAt(100);
     setShowDigital(true);
     setColors(initialColors());
   };
@@ -211,6 +222,39 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
               </select>
             </div>
             <div className="build-clock-control-inline">
+              <label htmlFor="clock-hand-style">Second Hand Object</label>
+              <select
+                id="clock-hand-style"
+                value={handStyle}
+                disabled={!showSeconds}
+                onChange={(e) => setHandStyle(e.target.value as SecondHandStyle)}
+                className="build-clock-select"
+              >
+                {[...new Set(SECOND_HAND_STYLES.map((s) => s.group))].map((group) => (
+                  <optgroup key={group} label={group}>
+                    {SECOND_HAND_STYLES.filter((s) => s.group === group).map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+            <div className="build-clock-control-inline">
+              <label htmlFor="clock-marker-at">Add At ({markerAt})</label>
+              <input
+                id="clock-marker-at"
+                type="range"
+                min={0}
+                max={100}
+                value={markerAt}
+                disabled={!showSeconds || !hasObject}
+                onChange={(e) => setMarkerAt(Number(e.target.value))}
+                className="build-clock-range"
+              />
+            </div>
+            <div className="build-clock-control-inline">
               <label htmlFor="clock-digital">Digital Time</label>
               <input
                 id="clock-digital"
@@ -275,6 +319,8 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 timeFormat={timeFormat}
                 showSeconds={showSeconds}
                 secondHandMotion={motion}
+                secondHandStyle={handStyle}
+                secondHandMarkerAt={markerAt}
                 showDigital={showDigital}
                 {...colorProps}
               />
@@ -313,6 +359,8 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                   timezone={timezone || null}
                   showSeconds={showSeconds}
                   secondHandMotion={motion}
+                  secondHandStyle={handStyle}
+                  secondHandMarkerAt={markerAt}
                   showDigital={false}
                 />
               </button>

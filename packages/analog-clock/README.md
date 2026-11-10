@@ -47,6 +47,8 @@ export default function App() {
 | `borderColor` | `string`              | face colour    | Bezel colour.                                                   |
 | `showSeconds` | `boolean`             | `true`         | Show the second hand (and seconds in the digital readout).      |
 | `secondHandMotion` | `SecondHandMotion` | `"tick"`      | How the second hand moves. See [Second hand motion](#second-hand-motion). |
+| `secondHandStyle` | `SecondHandStyle` | `"face"`       | How the second hand looks. See [Second hand style](#second-hand-style). |
+| `secondHandMarkerAt` | `number`      | `100`          | Where the object sits on the second hand, 0 (inner end) to 100 (tip). |
 | `showDigital` | `boolean`             | `true`         | Show the digital time below the dial.                           |
 | `timeFormat`  | `"12h" \| "24h"`      | `"12h"`        | Digital time as `hh:mm:ss AM` or `HH:mm:ss`.                    |
 | `tickColor`   | `string`              | face colour    | Tick marks. Minute ticks are drawn lighter.                     |
@@ -160,6 +162,29 @@ To restyle a face, override its variables:
 Every motion except `tick` uses `requestAnimationFrame`. Only the second hand's transform changes each frame, and the component still re-renders once a second. `bounce`, `ease` and `anticipate` are timed so the hand reaches each mark exactly when the second changes, in step with the digital time.
 
 When the user's system asks for reduced motion (`prefers-reduced-motion: reduce`), `bounce`, `ease` and `anticipate` fall back to `tick`. `smooth`, `sweep` and `stop-to-go` don't wobble, so they stay as chosen. In a hidden browser tab the hand pauses with the page, but the digital time and `aria-label` keep updating. `SECOND_HAND_MOTIONS` lists the motions (`[{ id, label }]`) for a picker, and `secondHandAngle(motion, seconds, ms)` returns the angle in degrees.
+
+## Second hand style
+
+`secondHandStyle` picks the hand, and `secondHandMarkerAt` places an object on it.
+
+| Style     | Look                                         |
+| --------- | -------------------------------------------- |
+| `face`    | The watch face's own hand (the default).     |
+| `plain`   | A simple line.                               |
+| `tapered` | Widest at the tail, narrowing to a fine tip. |
+| `<shape>-<fill>` | A thin line with an object on it. Shape: `circle`, `rect`, `half-circle` (dome toward the tip) or `triangle` (points toward the tip). Fill: `filled` or `outline`. |
+
+Every style except `face` is drawn in the second-hand colour, without the face's counterweight.
+
+`secondHandMarkerAt` (0–100, default `100`) sets where the object sits: `0` is flush with the inner end of the hand (the short tail past the centre), `100` flush with the tip. Values outside 0–100 are clamped. The hand always runs the full length, so a mid-hand object sits on the line.
+
+```tsx
+<Clock secondHandStyle="circle-filled" />                          // dot at the tip
+<Clock secondHandStyle="triangle-outline" secondHandMarkerAt={0} /> // at the inner end
+<Clock secondHandStyle="circle-outline" secondHandMarkerAt={90} />
+```
+
+`SECOND_HAND_STYLES` lists every style (`[{ id, label, group }]`) for a picker; `group` is `"Hand"` or `"Object"`, for `<optgroup>`s.
 
 ## Helpers
 

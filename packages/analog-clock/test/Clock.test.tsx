@@ -2,7 +2,7 @@ import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Clock, { getTimeInZone, formatDigitalTime } from '../src/Clock';
 import * as publicApi from '../src/index';
-import { Clock as NamedClock, AnalogClock, CLOCK_FACES } from '../src/index';
+import { Clock as NamedClock, AnalogClock, CLOCK_FACES, SECOND_HAND_STYLES } from '../src/index';
 import { FACE_GEOMETRY } from '../src/faces';
 import { FACE_STYLE_ID } from '../src/styles';
 
@@ -185,6 +185,87 @@ describe('Clock', () => {
     expect(style('.ac-tick--hour')).toContain('var(--ac-tick, #ddd)');
     expect(style('.ac-number')).toContain('var(--ac-number, #ddd)');
     expect(style('.analog-clock-digital')).toContain('var(--ac-digital, #ddd)');
+  });
+
+  describe('second hand style', () => {
+    const hand = (container: HTMLElement) => container.querySelector('[data-hand="second"]')!;
+    const C = 118; // radius 100 + 18 padding
+    const markerCy = (container: HTMLElement) =>
+      Number(container.querySelector('[data-part="second-marker"] circle')!.getAttribute('cy'));
+
+    it('keeps the face hand by default', () => {
+      const { container } = render(<Clock />);
+      expect(hand(container).getAttribute('data-style')).toBe('face');
+      expect(hand(container).querySelector('[data-part="second-marker"]')).toBeNull();
+    });
+
+    it.each(SECOND_HAND_STYLES.filter((s) => s.id !== 'face').map((s) => s.id))(
+      '%s draws without the face counterweight',
+      (style) => {
+        const { container } = render(<Clock secondHandStyle={style} />);
+        expect(hand(container).getAttribute('data-style')).toBe(style);
+        expect(hand(container).querySelectorAll('circle:not([data-part="second-marker"] *)')).toHaveLength(0);
+      },
+    );
+
+    it('lists the three hands plus every shape, filled and outlined', () => {
+      const ids = SECOND_HAND_STYLES.map((s) => s.id);
+      expect(ids.slice(0, 3)).toEqual(['face', 'plain', 'tapered']);
+      expect(new Set(ids).size).toBe(11);
+      for (const shape of ['circle', 'rect', 'half-circle', 'triangle'])
+        for (const fill of ['filled', 'outline']) expect(ids).toContain(`${shape}-${fill}`);
+    });
+
+    it('draws filled and outlined objects', () => {
+      const style = (c: HTMLElement) =>
+        c.querySelector('[data-part="second-marker"] circle')!.getAttribute('style');
+      expect(style(render(<Clock secondHandStyle="circle-filled" />).container)).not.toContain('fill: none');
+      expect(style(render(<Clock secondHandStyle="circle-outline" />).container)).toContain('fill: none');
+    });
+
+    it('draws each object shape', () => {
+      const shapes = { 'rect-outline': 'rect', 'half-circle-filled': 'path', 'triangle-outline': 'polygon' } as const;
+      for (const [style, tag] of Object.entries(shapes)) {
+        const { container } = render(<Clock secondHandStyle={style as keyof typeof shapes} />);
+        expect(container.querySelector(`[data-part="second-marker"] ${tag}`)).not.toBeNull();
+      }
+    });
+
+    it('places the object along the hand: 0 at the tail end, 100 (default) at the tip', () => {
+      const { length, tail } = FACE_GEOMETRY.default.secondHand;
+      const s = 5; // marker half-size at radius 100
+      const at = (n?: number) =>
+        markerCy(render(<Clock secondHandStyle="circle-filled" secondHandMarkerAt={n} />).container);
+      expect(at()).toBeCloseTo(C - (length * 100 - s));
+      expect(at(100)).toBeCloseTo(C - (length * 100 - s));
+      expect(at(0)).toBeCloseTo(C + (tail * 100 - s));
+      expect(at(50)).toBeCloseTo((at(0) + at(100)) / 2);
+    });
+
+    it('clamps the position to 0-100', () => {
+      const at = (n: number) =>
+        markerCy(render(<Clock secondHandStyle="circle-filled" secondHandMarkerAt={n} />).container);
+      expect(at(150)).toBeCloseTo(at(100));
+      expect(at(-20)).toBeCloseTo(at(0));
+      expect(at(NaN)).toBeCloseTo(at(100));
+    });
+
+    it('keeps the hand running to the tip past a mid-hand object', () => {
+      const { container } = render(<Clock secondHandStyle="circle-filled" secondHandMarkerAt={50} />);
+      const L = FACE_GEOMETRY.default.secondHand.length * 100;
+      const tipY = Math.min(
+        ...Array.from(hand(container).querySelectorAll('line')).map((l) => Number(l.getAttribute('y2'))),
+      );
+      expect(tipY).toBeCloseTo(C - L);
+    });
+
+    it('plain is a single line and tapered a single shape', () => {
+      const plain = render(<Clock secondHandStyle="plain" />).container;
+      expect(hand(plain).children).toHaveLength(1);
+      expect(hand(plain).firstElementChild!.tagName).toBe('line');
+      const tapered = render(<Clock secondHandStyle="tapered" />).container;
+      expect(hand(tapered).querySelector('[data-part="second-body"]')).not.toBeNull();
+    });
   });
 
   describe('faces', () => {
@@ -373,7 +454,7 @@ describe('face styles', () => {
 describe('public API', () => {
   it('does not expose internal face shapes', () => {
     expect(Object.keys(publicApi).sort()).toEqual(
-      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'SECOND_HAND_MOTIONS', 'formatDigitalTime', 'getTimeInZone', 'secondHandAngle'].sort()
+      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'SECOND_HAND_MOTIONS', 'SECOND_HAND_STYLES', 'formatDigitalTime', 'getTimeInZone', 'secondHandAngle'].sort()
     );
   });
 
