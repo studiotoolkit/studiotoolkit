@@ -197,7 +197,8 @@
 }
 
 /* Code */
-.build-clock-code-header {
+.build-clock-code-header,
+.build-clock-settings-header {
   display: flex;
   align-items: center;
   justify-content: space-between;

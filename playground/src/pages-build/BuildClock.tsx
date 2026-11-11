@@ -235,7 +235,11 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
     return () => window.removeEventListener('resize', fit);
   }, [generatedCode]);
 
+  // Bumped on Reset so the Dial and Colors sections close again
+  const [resetCount, setResetCount] = useState(0);
+
   const handleReset = () => {
+    setResetCount((n) => n + 1);
     setRadius(120);
     setLabel('');
     setTimezone('');
@@ -260,7 +264,16 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
         <div className="build-clock-row1">
           {/* Column 1: Settings */}
           <div className="build-clock-controls">
-            <h3>Settings</h3>
+            <div className="build-clock-settings-header">
+              <h3>Settings</h3>
+              <button
+                className="build-clock-reset-button"
+                onClick={handleReset}
+                title="Set every setting back to its default"
+              >
+                Reset
+              </button>
+            </div>
             <div className="build-clock-control-inline">
               <label htmlFor="clock-face">Watch Face</label>
               <select
@@ -394,7 +407,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
               />
             </div>
 
-            <details className="build-clock-colors">
+            <details className="build-clock-colors" key={`dial-${resetCount}`}>
               <summary className="build-clock-subheading">
                 Dial
                 {customDialCount > 0 && (
@@ -427,7 +440,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
               </div>
             </details>
 
-            <details className="build-clock-colors">
+            <details className="build-clock-colors" key={`colors-${resetCount}`}>
               <summary className="build-clock-subheading">
                 Colors
                 {customColorCount > 0 && (
@@ -461,12 +474,6 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
             </details>
 
             <p className="build-clock-hint">Theme follows the site's light/dark toggle.</p>
-            <div className="build-clock-control-inline">
-              <span />
-              <button className="build-clock-reset-button" onClick={handleReset}>
-                Reset
-              </button>
-            </div>
           </div>
 
           {/* Column 2: Preview */}
