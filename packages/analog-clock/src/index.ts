@@ -15,3 +15,15 @@ export type {
   SecondHandMarker,
   SecondHandFill,
 } from "./secondHandStyles";
+export {
+  DIAL_NUMBERS,
+  DIAL_NUMERALS,
+  DIAL_MARKERS,
+  DIAL_MINUTE_TICKS,
+} from "./dial";
+export type {
+  DialNumbers,
+  DialNumerals,
+  DialMarker,
+  DialMinuteTicks,
+} from "./dial";

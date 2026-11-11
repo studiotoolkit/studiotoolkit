@@ -52,8 +52,9 @@ export interface Mark {
    * double: two parallel lines, `width` apart.
    * dot / square: centred between `from` and `to`, `width` across.
    * triangle: base at `from`, point at `to`, `width` across the base.
+   * diamond: points at `from` and `to`, `width` across the middle.
    */
-  shape?: "line" | "double" | "dot" | "square" | "triangle";
+  shape?: "line" | "double" | "dot" | "square" | "triangle" | "diamond";
   /** Outer end, as a fraction of the radius. */
   from: number;
   /** Inner end, as a fraction of the radius. */

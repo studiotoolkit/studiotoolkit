@@ -8,6 +8,13 @@ import {
   type ReactNode,
 } from "react";
 import { FACE_GEOMETRY, type ClockFace } from "./faces";
+import {
+  applyDialOptions,
+  type DialMarker,
+  type DialMinuteTicks,
+  type DialNumbers,
+  type DialNumerals,
+} from "./dial";
 import { injectFaceStyles } from "./styles";
 import { secondHandAngle, type SecondHandMotion } from "./motion";
 import { parseSecondHandStyle, type SecondHandStyle } from "./secondHandStyles";
@@ -68,12 +75,36 @@ export interface ClockProps {
    * inner end (the tail past the centre), 100 flush with the tip.
    */
   secondHandMarkerAt?: number;
+  /** Which hours get a number: "all", "quarters", "12", "12-6" or "none". */
+  numbers?: DialNumbers;
+  /** "arabic" (1, 2), "roman" (I, IV) or "roman-iiii" (I, IIII). */
+  numerals?: DialNumerals;
+  /** Turn each number so its top faces the edge. */
+  rotateNumbers?: boolean;
+  /**
+   * Markers at 12, 3, 6 and 9: "bar", "line", "double", "dot", "square",
+   * "triangle-in", "triangle-out", "diamond" or "none".
+   */
+  mainMarker?: DialMarker;
+  /** Marker at 12 only. Defaults to the main marker. */
+  marker12?: DialMarker;
+  /** Markers at the other 8 hours. Defaults to the main marker. */
+  hourMarker?: DialMarker;
+  /** Minute ticks: "line", "short", "dot", "railway", "rainbow" or "none". */
+  minuteTicks?: DialMinuteTicks;
+  /** Leave out the marker wherever a number is drawn. */
+  hideMarkersAtNumbers?: boolean;
   /** Show the digital time below the dial. */
   showDigital?: boolean;
   /** Digital time format: "12h" (hh:mm:ss AM) or "24h" (HH:mm:ss). */
   timeFormat?: TimeFormat;
   /** Bezel colour. Overrides the face. */
   borderColor?: string;
+  /**
+   * Dial (face) colour. Overrides the face. The edge is shaded slightly
+   * darker so the dial keeps its gentle gradient.
+   */
+  dialColor?: string;
   /** Colour of the tick marks. Minute ticks are drawn at reduced opacity. */
   tickColor?: string;
   /** Colour of the hour hand (and the centre cap). */
@@ -188,6 +219,8 @@ const ROMAN = [
   "XI",
   "XII",
 ];
+/** Roman numerals with 4 written as IV instead of the clock-style IIII. */
+const ROMAN_IV = ROMAN.map((n) => (n === "IIII" ? "IV" : n));
 const FONT = "'Courier New', Courier, monospace";
 
 /** `var(--ac-<name>, <fallback>)` */
@@ -204,9 +237,18 @@ export default function Clock({
   secondHandMotion = "tick",
   secondHandStyle = "face",
   secondHandMarkerAt = 100,
+  numbers: numbersProp,
+  numerals,
+  rotateNumbers,
+  mainMarker,
+  marker12,
+  hourMarker,
+  minuteTicks,
+  hideMarkersAtNumbers,
   showDigital = true,
   timeFormat = "12h",
   borderColor,
+  dialColor,
   tickColor,
   hourHandColor,
   minuteHandColor,
@@ -271,13 +313,26 @@ export default function Clock({
     };
   }, [timezone, animated, motion]);
 
-  const g = FACE_GEOMETRY[face] ?? FACE_GEOMETRY.default;
+  const g = applyDialOptions(FACE_GEOMETRY[face] ?? FACE_GEOMETRY.default, {
+    numbers: numbersProp,
+    numerals,
+    rotateNumbers,
+    mainMarker,
+    marker12,
+    hourMarker,
+    minuteTicks,
+    hideMarkersAtNumbers,
+  });
   const fb = fallbacks[theme] ?? fallbacks.light;
 
   // Colour props win over the face CSS by setting its variables inline
   const overrides: Record<string, string> = {};
   if (borderColor)
     overrides["--ac-bezel"] = overrides["--ac-bezel-2"] = borderColor;
+  if (dialColor) {
+    overrides["--ac-face-inner"] = dialColor;
+    overrides["--ac-face-outer"] = `color-mix(in srgb, ${dialColor} 88%, #000)`;
+  }
   if (tickColor)
     overrides["--ac-tick"] = overrides["--ac-minor-tick"] = tickColor;
   if (hourHandColor) overrides["--ac-hour-hand"] = hourHandColor;
@@ -380,7 +435,12 @@ export default function Clock({
     .sort((a, b) => a - b)
     .map((num) => ({
       num,
-      text: g.numerals === "roman" ? ROMAN[num] : String(num),
+      text:
+        g.numerals !== "roman"
+          ? String(num)
+          : numerals === "roman"
+            ? ROMAN_IV[num]
+            : ROMAN[num],
       ...polar(num * 30, r(g.numberRadius)),
     }));
 
@@ -709,6 +769,21 @@ export default function Clock({
                 key={t.i}
                 className={className}
                 points={`${C - t.width / 2},${top} ${C + t.width / 2},${top} ${C},${tip}`}
+                style={{ fill: paint }}
+                transform={`rotate(${angle} ${C} ${C})`}
+              />
+            );
+          }
+          if (t.shape === "diamond") {
+            // Drawn at 12 o'clock (points at both ends), then rotated
+            const top = C - Math.hypot(t.outer.x - C, t.outer.y - C);
+            const bottom = C - Math.hypot(t.inner.x - C, t.inner.y - C);
+            const mid = (top + bottom) / 2;
+            return (
+              <polygon
+                key={t.i}
+                className={className}
+                points={`${C},${top} ${C + t.width / 2},${mid} ${C},${bottom} ${C - t.width / 2},${mid}`}
                 style={{ fill: paint }}
                 transform={`rotate(${angle} ${C} ${C})`}
               />

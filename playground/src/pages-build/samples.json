@@ -1,0 +1,1226 @@
+[
+  {
+    "id": "default-original",
+    "face": "default",
+    "name": "Default · Original",
+    "props": {
+      "face": "default"
+    }
+  },
+  {
+    "id": "default-forest",
+    "face": "default",
+    "name": "Default · Forest",
+    "props": {
+      "face": "default",
+      "dialColor": "#1f5133",
+      "borderColor": "#0e2a1a",
+      "tickColor": "#e8f3ea",
+      "numberColor": "#e8f3ea",
+      "hourHandColor": "#f4f1e6",
+      "minuteHandColor": "#f4f1e6",
+      "secondHandColor": "#f2b84b",
+      "secondHandStyle": "circle-filled",
+      "secondHandMotion": "smooth",
+      "numbers": "quarters",
+      "mainMarker": "bar",
+      "hourMarker": "line",
+      "minuteTicks": "short"
+    }
+  },
+  {
+    "id": "default-cream",
+    "face": "default",
+    "name": "Default · Cream",
+    "props": {
+      "face": "default",
+      "dialColor": "#f4ead5",
+      "borderColor": "#6b4f2e",
+      "tickColor": "#6b4f2e",
+      "numberColor": "#4a3620",
+      "hourHandColor": "#3b2b19",
+      "minuteHandColor": "#3b2b19",
+      "secondHandColor": "#b8432f",
+      "secondHandStyle": "plain",
+      "numbers": "quarters",
+      "numerals": "roman",
+      "minuteTicks": "railway",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "default-midnight",
+    "face": "default",
+    "name": "Default · Midnight",
+    "props": {
+      "face": "default",
+      "dialColor": "#14213d",
+      "borderColor": "#0a1020",
+      "tickColor": "#e5e5e5",
+      "numberColor": "#e5e5e5",
+      "hourHandColor": "#ffffff",
+      "minuteHandColor": "#ffffff",
+      "secondHandColor": "#fca311",
+      "secondHandStyle": "triangle-filled",
+      "secondHandMotion": "sweep",
+      "numbers": "none",
+      "mainMarker": "bar",
+      "marker12": "triangle-in",
+      "hourMarker": "dot",
+      "minuteTicks": "dot"
+    }
+  },
+  {
+    "id": "default-mint",
+    "face": "default",
+    "name": "Default · Mint",
+    "props": {
+      "face": "default",
+      "dialColor": "#e6f4ef",
+      "borderColor": "#2f6f5e",
+      "tickColor": "#2f6f5e",
+      "numberColor": "#245446",
+      "hourHandColor": "#1f3f36",
+      "minuteHandColor": "#1f3f36",
+      "secondHandColor": "#e76f51",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90,
+      "numbers": "12-6",
+      "mainMarker": "dot",
+      "minuteTicks": "short",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "default-slate",
+    "face": "default",
+    "name": "Default · Slate",
+    "props": {
+      "face": "default",
+      "dialColor": "#3a4250",
+      "borderColor": "#1c2028",
+      "tickColor": "#cfd6df",
+      "numberColor": "#cfd6df",
+      "hourHandColor": "#eef1f5",
+      "minuteHandColor": "#eef1f5",
+      "secondHandColor": "#5fd3c4",
+      "secondHandStyle": "tapered",
+      "secondHandMotion": "smooth",
+      "numbers": "none",
+      "mainMarker": "double",
+      "hourMarker": "bar"
+    }
+  },
+  {
+    "id": "gold-original",
+    "face": "gold",
+    "name": "Gold · Original",
+    "props": {
+      "face": "gold"
+    }
+  },
+  {
+    "id": "gold-black-gold",
+    "face": "gold",
+    "name": "Gold · Black Gold",
+    "props": {
+      "face": "gold",
+      "dialColor": "#151515",
+      "borderColor": "#b8862b",
+      "tickColor": "#d4af37",
+      "numberColor": "#d4af37",
+      "hourHandColor": "#e6c35c",
+      "minuteHandColor": "#e6c35c",
+      "secondHandColor": "#e6c35c",
+      "secondHandStyle": "circle-filled",
+      "secondHandMarkerAt": 90,
+      "secondHandMotion": "sweep",
+      "numbers": "none",
+      "mainMarker": "diamond",
+      "hourMarker": "line"
+    }
+  },
+  {
+    "id": "gold-champagne",
+    "face": "gold",
+    "name": "Gold · Champagne",
+    "props": {
+      "face": "gold",
+      "dialColor": "#f6ecd6",
+      "borderColor": "#b8862b",
+      "tickColor": "#a5813a",
+      "numberColor": "#8a6a2c",
+      "hourHandColor": "#7a5a22",
+      "minuteHandColor": "#7a5a22",
+      "secondHandColor": "#b0302a",
+      "secondHandStyle": "plain",
+      "numerals": "roman"
+    }
+  },
+  {
+    "id": "gold-emerald",
+    "face": "gold",
+    "name": "Gold · Emerald",
+    "props": {
+      "face": "gold",
+      "dialColor": "#0f4a3a",
+      "borderColor": "#c9a24a",
+      "tickColor": "#e2c77a",
+      "numberColor": "#e2c77a",
+      "hourHandColor": "#f0d68c",
+      "minuteHandColor": "#f0d68c",
+      "secondHandColor": "#f0d68c",
+      "secondHandStyle": "triangle-outline",
+      "secondHandMotion": "smooth",
+      "numbers": "12",
+      "mainMarker": "bar",
+      "minuteTicks": "dot",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "gold-burgundy",
+    "face": "gold",
+    "name": "Gold · Burgundy",
+    "props": {
+      "face": "gold",
+      "dialColor": "#5a1a24",
+      "borderColor": "#c9a24a",
+      "tickColor": "#e8cf8f",
+      "numberColor": "#e8cf8f",
+      "hourHandColor": "#f2dca0",
+      "minuteHandColor": "#f2dca0",
+      "secondHandColor": "#f2dca0",
+      "secondHandStyle": "circle-outline",
+      "numerals": "roman-iiii",
+      "minuteTicks": "railway"
+    }
+  },
+  {
+    "id": "gold-ivory-rose",
+    "face": "gold",
+    "name": "Gold · Ivory Rose",
+    "props": {
+      "face": "gold",
+      "dialColor": "#fbf4ee",
+      "borderColor": "#c48b6a",
+      "tickColor": "#b07a5c",
+      "numberColor": "#9a6448",
+      "hourHandColor": "#8a5a40",
+      "minuteHandColor": "#8a5a40",
+      "secondHandColor": "#c9a24a",
+      "secondHandStyle": "half-circle-filled",
+      "secondHandMotion": "ease",
+      "numbers": "none",
+      "mainMarker": "dot",
+      "hourMarker": "dot",
+      "minuteTicks": "none"
+    }
+  },
+  {
+    "id": "blue-original",
+    "face": "blue",
+    "name": "Blue · Original",
+    "props": {
+      "face": "blue"
+    }
+  },
+  {
+    "id": "blue-ice",
+    "face": "blue",
+    "name": "Blue · Ice",
+    "props": {
+      "face": "blue",
+      "dialColor": "#dbe9f6",
+      "borderColor": "#7d8a98",
+      "tickColor": "#24406f",
+      "numberColor": "#24406f",
+      "hourHandColor": "#1b3156",
+      "minuteHandColor": "#1b3156",
+      "secondHandColor": "#e2382c",
+      "secondHandStyle": "circle-filled",
+      "numbers": "all",
+      "minuteTicks": "short"
+    }
+  },
+  {
+    "id": "blue-teal",
+    "face": "blue",
+    "name": "Blue · Teal",
+    "props": {
+      "face": "blue",
+      "dialColor": "#0f5560",
+      "borderColor": "#9aa1aa",
+      "tickColor": "#e0f2f1",
+      "numberColor": "#e0f2f1",
+      "hourHandColor": "#f4f6f8",
+      "minuteHandColor": "#f4f6f8",
+      "secondHandColor": "#ffb703",
+      "secondHandStyle": "triangle-filled",
+      "secondHandMotion": "smooth",
+      "mainMarker": "triangle-in",
+      "hourMarker": "bar"
+    }
+  },
+  {
+    "id": "blue-royal",
+    "face": "blue",
+    "name": "Blue · Royal",
+    "props": {
+      "face": "blue",
+      "dialColor": "#1d2f8c",
+      "borderColor": "#c0c6ce",
+      "tickColor": "#ffffff",
+      "numberColor": "#ffffff",
+      "hourHandColor": "#ffffff",
+      "minuteHandColor": "#ffffff",
+      "secondHandColor": "#ffd166",
+      "secondHandStyle": "plain",
+      "secondHandMotion": "sweep",
+      "numbers": "quarters",
+      "numerals": "roman",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "blue-steel-blue",
+    "face": "blue",
+    "name": "Blue · Steel Blue",
+    "props": {
+      "face": "blue",
+      "dialColor": "#4b6584",
+      "borderColor": "#d1d8e0",
+      "tickColor": "#f1f2f6",
+      "numberColor": "#f1f2f6",
+      "hourHandColor": "#ffffff",
+      "minuteHandColor": "#ffffff",
+      "secondHandColor": "#ff6b6b",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90,
+      "mainMarker": "dot",
+      "hourMarker": "dot",
+      "minuteTicks": "short"
+    }
+  },
+  {
+    "id": "blue-deep-sea",
+    "face": "blue",
+    "name": "Blue · Deep Sea",
+    "props": {
+      "face": "blue",
+      "dialColor": "#08263f",
+      "borderColor": "#5c6b7a",
+      "tickColor": "#7fd1e0",
+      "numberColor": "#7fd1e0",
+      "hourHandColor": "#e9f6f9",
+      "minuteHandColor": "#e9f6f9",
+      "secondHandColor": "#ff7a3d",
+      "secondHandStyle": "tapered",
+      "secondHandMotion": "smooth",
+      "marker12": "triangle-in",
+      "minuteTicks": "railway"
+    }
+  },
+  {
+    "id": "wall-black-original",
+    "face": "wall-black",
+    "name": "Wall Black · Original",
+    "props": {
+      "face": "wall-black"
+    }
+  },
+  {
+    "id": "wall-black-kitchen-white",
+    "face": "wall-black",
+    "name": "Wall Black · Kitchen White",
+    "props": {
+      "face": "wall-black",
+      "dialColor": "#ffffff",
+      "borderColor": "#111111",
+      "tickColor": "#111111",
+      "numberColor": "#111111",
+      "hourHandColor": "#111111",
+      "minuteHandColor": "#111111",
+      "secondHandColor": "#d62828",
+      "secondHandStyle": "plain"
+    }
+  },
+  {
+    "id": "wall-black-station",
+    "face": "wall-black",
+    "name": "Wall Black · Station",
+    "props": {
+      "face": "wall-black",
+      "dialColor": "#f5f5f0",
+      "borderColor": "#1d3557",
+      "tickColor": "#1d3557",
+      "numberColor": "#1d3557",
+      "hourHandColor": "#1d3557",
+      "minuteHandColor": "#1d3557",
+      "secondHandColor": "#e63946",
+      "secondHandStyle": "circle-filled",
+      "secondHandMarkerAt": 90,
+      "secondHandMotion": "stop-to-go",
+      "minuteTicks": "railway"
+    }
+  },
+  {
+    "id": "wall-black-school",
+    "face": "wall-black",
+    "name": "Wall Black · School",
+    "props": {
+      "face": "wall-black",
+      "dialColor": "#fffdf5",
+      "borderColor": "#2b2b2b",
+      "tickColor": "#2b2b2b",
+      "numberColor": "#2b2b2b",
+      "hourHandColor": "#2b2b2b",
+      "minuteHandColor": "#2b2b2b",
+      "secondHandColor": "#e09f3e",
+      "secondHandStyle": "rect-filled",
+      "minuteTicks": "line"
+    }
+  },
+  {
+    "id": "wall-black-retro-green",
+    "face": "wall-black",
+    "name": "Wall Black · Retro Green",
+    "props": {
+      "face": "wall-black",
+      "dialColor": "#e9f0e2",
+      "borderColor": "#2d4a2b",
+      "tickColor": "#2d4a2b",
+      "numberColor": "#2d4a2b",
+      "hourHandColor": "#22381f",
+      "minuteHandColor": "#22381f",
+      "secondHandColor": "#c1121f",
+      "secondHandStyle": "circle-outline",
+      "numbers": "quarters",
+      "numerals": "roman",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "wall-black-chalk",
+    "face": "wall-black",
+    "name": "Wall Black · Chalk",
+    "props": {
+      "face": "wall-black",
+      "dialColor": "#2f3b36",
+      "borderColor": "#151a18",
+      "tickColor": "#f1f1ea",
+      "numberColor": "#f1f1ea",
+      "hourHandColor": "#f1f1ea",
+      "minuteHandColor": "#f1f1ea",
+      "secondHandColor": "#f4a261",
+      "secondHandStyle": "triangle-filled",
+      "secondHandMotion": "sweep",
+      "numbers": "quarters",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "wall-white-original",
+    "face": "wall-white",
+    "name": "Wall White · Original",
+    "props": {
+      "face": "wall-white"
+    }
+  },
+  {
+    "id": "wall-white-charcoal",
+    "face": "wall-white",
+    "name": "Wall White · Charcoal",
+    "props": {
+      "face": "wall-white",
+      "dialColor": "#2b2d31",
+      "borderColor": "#d9d9d9",
+      "tickColor": "#f2f2f2",
+      "numberColor": "#f2f2f2",
+      "hourHandColor": "#f2f2f2",
+      "minuteHandColor": "#f2f2f2",
+      "secondHandColor": "#ff5a4e",
+      "secondHandStyle": "plain"
+    }
+  },
+  {
+    "id": "wall-white-sage",
+    "face": "wall-white",
+    "name": "Wall White · Sage",
+    "props": {
+      "face": "wall-white",
+      "dialColor": "#dfe8dc",
+      "borderColor": "#ffffff",
+      "tickColor": "#3c5a40",
+      "numberColor": "#3c5a40",
+      "hourHandColor": "#2e4632",
+      "minuteHandColor": "#2e4632",
+      "secondHandColor": "#d1495b",
+      "secondHandStyle": "circle-filled",
+      "secondHandMotion": "smooth",
+      "numbers": "quarters"
+    }
+  },
+  {
+    "id": "wall-white-sand",
+    "face": "wall-white",
+    "name": "Wall White · Sand",
+    "props": {
+      "face": "wall-white",
+      "dialColor": "#efe4d2",
+      "borderColor": "#fafafa",
+      "tickColor": "#5b4636",
+      "numberColor": "#5b4636",
+      "hourHandColor": "#47362a",
+      "minuteHandColor": "#47362a",
+      "secondHandColor": "#2a9d8f",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90,
+      "numbers": "quarters",
+      "numerals": "roman"
+    }
+  },
+  {
+    "id": "wall-white-sky",
+    "face": "wall-white",
+    "name": "Wall White · Sky",
+    "props": {
+      "face": "wall-white",
+      "dialColor": "#e3f0fb",
+      "borderColor": "#ffffff",
+      "tickColor": "#1f4e79",
+      "numberColor": "#1f4e79",
+      "hourHandColor": "#163a5a",
+      "minuteHandColor": "#163a5a",
+      "secondHandColor": "#f77f00",
+      "secondHandStyle": "triangle-outline",
+      "minuteTicks": "dot"
+    }
+  },
+  {
+    "id": "wall-white-blush-wall",
+    "face": "wall-white",
+    "name": "Wall White · Blush Wall",
+    "props": {
+      "face": "wall-white",
+      "dialColor": "#fbe7e4",
+      "borderColor": "#ffffff",
+      "tickColor": "#7a3e48",
+      "numberColor": "#7a3e48",
+      "hourHandColor": "#5e2f37",
+      "minuteHandColor": "#5e2f37",
+      "secondHandColor": "#7a3e48",
+      "secondHandStyle": "rect-outline",
+      "secondHandMotion": "ease",
+      "numbers": "12-6",
+      "mainMarker": "dot",
+      "hourMarker": "dot",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "roman-original",
+    "face": "roman",
+    "name": "Roman · Original",
+    "props": {
+      "face": "roman"
+    }
+  },
+  {
+    "id": "roman-parchment",
+    "face": "roman",
+    "name": "Roman · Parchment",
+    "props": {
+      "face": "roman",
+      "dialColor": "#f3e9d2",
+      "borderColor": "#5c4326",
+      "tickColor": "#5c4326",
+      "numberColor": "#4a3520",
+      "hourHandColor": "#3a2a18",
+      "minuteHandColor": "#3a2a18",
+      "secondHandColor": "#8b2e1f",
+      "secondHandStyle": "plain"
+    }
+  },
+  {
+    "id": "roman-ebony",
+    "face": "roman",
+    "name": "Roman · Ebony",
+    "props": {
+      "face": "roman",
+      "dialColor": "#161616",
+      "borderColor": "#c9a24a",
+      "tickColor": "#d9c08a",
+      "numberColor": "#e6cf95",
+      "hourHandColor": "#e6cf95",
+      "minuteHandColor": "#e6cf95",
+      "secondHandColor": "#e6cf95",
+      "secondHandStyle": "triangle-filled",
+      "secondHandMotion": "smooth",
+      "numerals": "roman"
+    }
+  },
+  {
+    "id": "roman-navy-roman",
+    "face": "roman",
+    "name": "Roman · Navy Roman",
+    "props": {
+      "face": "roman",
+      "dialColor": "#1b2a49",
+      "borderColor": "#c0c6ce",
+      "tickColor": "#e8e3d3",
+      "numberColor": "#e8e3d3",
+      "hourHandColor": "#f2eee2",
+      "minuteHandColor": "#f2eee2",
+      "secondHandColor": "#c9a24a",
+      "secondHandStyle": "circle-filled",
+      "secondHandMarkerAt": 90,
+      "mainMarker": "dot"
+    }
+  },
+  {
+    "id": "roman-marble",
+    "face": "roman",
+    "name": "Roman · Marble",
+    "props": {
+      "face": "roman",
+      "dialColor": "#f2f1ee",
+      "borderColor": "#7d7a75",
+      "tickColor": "#3d3b38",
+      "numberColor": "#2f2d2a",
+      "hourHandColor": "#2f2d2a",
+      "minuteHandColor": "#2f2d2a",
+      "secondHandColor": "#a4161a",
+      "secondHandStyle": "circle-outline",
+      "numbers": "quarters"
+    }
+  },
+  {
+    "id": "roman-oxblood",
+    "face": "roman",
+    "name": "Roman · Oxblood",
+    "props": {
+      "face": "roman",
+      "dialColor": "#4a1218",
+      "borderColor": "#d4b483",
+      "tickColor": "#ecd9b0",
+      "numberColor": "#ecd9b0",
+      "hourHandColor": "#f3e5c4",
+      "minuteHandColor": "#f3e5c4",
+      "secondHandColor": "#f3e5c4",
+      "secondHandStyle": "half-circle-outline",
+      "secondHandMotion": "sweep",
+      "rotateNumbers": false
+    }
+  },
+  {
+    "id": "steel-original",
+    "face": "steel",
+    "name": "Steel · Original",
+    "props": {
+      "face": "steel"
+    }
+  },
+  {
+    "id": "steel-gunmetal",
+    "face": "steel",
+    "name": "Steel · Gunmetal",
+    "props": {
+      "face": "steel",
+      "dialColor": "#2c3036",
+      "borderColor": "#a9afb6",
+      "tickColor": "#d5dade",
+      "numberColor": "#d5dade",
+      "hourHandColor": "#e9ecef",
+      "minuteHandColor": "#e9ecef",
+      "secondHandColor": "#ff8c42",
+      "secondHandStyle": "plain",
+      "secondHandMotion": "sweep",
+      "numbers": "none",
+      "mainMarker": "bar",
+      "marker12": "double"
+    }
+  },
+  {
+    "id": "steel-silver-blue",
+    "face": "steel",
+    "name": "Steel · Silver Blue",
+    "props": {
+      "face": "steel",
+      "dialColor": "#e4ebf2",
+      "borderColor": "#a9afb6",
+      "tickColor": "#3f5873",
+      "numberColor": "#3f5873",
+      "hourHandColor": "#2c4058",
+      "minuteHandColor": "#2c4058",
+      "secondHandColor": "#d64545",
+      "secondHandStyle": "circle-filled",
+      "secondHandMotion": "smooth",
+      "numbers": "quarters",
+      "numerals": "arabic",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "steel-salmon",
+    "face": "steel",
+    "name": "Steel · Salmon",
+    "props": {
+      "face": "steel",
+      "dialColor": "#f3d9c8",
+      "borderColor": "#b5bbc2",
+      "tickColor": "#5a4a42",
+      "numberColor": "#5a4a42",
+      "hourHandColor": "#3d332e",
+      "minuteHandColor": "#3d332e",
+      "secondHandColor": "#2f5d8a",
+      "secondHandStyle": "triangle-filled",
+      "numbers": "12",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "steel-olive",
+    "face": "steel",
+    "name": "Steel · Olive",
+    "props": {
+      "face": "steel",
+      "dialColor": "#4b5435",
+      "borderColor": "#a9afb6",
+      "tickColor": "#e7e2c8",
+      "numberColor": "#e7e2c8",
+      "hourHandColor": "#f2eed8",
+      "minuteHandColor": "#f2eed8",
+      "secondHandColor": "#f2a541",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90,
+      "secondHandMotion": "smooth",
+      "numbers": "all",
+      "numerals": "arabic",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "steel-arctic",
+    "face": "steel",
+    "name": "Steel · Arctic",
+    "props": {
+      "face": "steel",
+      "dialColor": "#fbfcfd",
+      "borderColor": "#c8ced5",
+      "tickColor": "#7f8a96",
+      "numberColor": "#4f5a66",
+      "hourHandColor": "#36404a",
+      "minuteHandColor": "#36404a",
+      "secondHandColor": "#1f8fd6",
+      "secondHandStyle": "tapered",
+      "secondHandMotion": "smooth",
+      "minuteTicks": "dot"
+    }
+  },
+  {
+    "id": "navy-original",
+    "face": "navy",
+    "name": "Navy · Original",
+    "props": {
+      "face": "navy"
+    }
+  },
+  {
+    "id": "navy-pepsi",
+    "face": "navy",
+    "name": "Navy · Pepsi",
+    "props": {
+      "face": "navy",
+      "dialColor": "#16264f",
+      "borderColor": "#b0b6be",
+      "tickColor": "#ffffff",
+      "numberColor": "#ffffff",
+      "hourHandColor": "#ffffff",
+      "minuteHandColor": "#ffffff",
+      "secondHandColor": "#e63946",
+      "secondHandStyle": "triangle-filled",
+      "secondHandMotion": "sweep",
+      "numbers": "none",
+      "mainMarker": "bar",
+      "marker12": "triangle-in",
+      "hourMarker": "dot"
+    }
+  },
+  {
+    "id": "navy-denim",
+    "face": "navy",
+    "name": "Navy · Denim",
+    "props": {
+      "face": "navy",
+      "dialColor": "#3d5a80",
+      "borderColor": "#c0c6ce",
+      "tickColor": "#e0fbfc",
+      "numberColor": "#e0fbfc",
+      "hourHandColor": "#f4fbfc",
+      "minuteHandColor": "#f4fbfc",
+      "secondHandColor": "#ee6c4d",
+      "secondHandStyle": "circle-filled",
+      "secondHandMotion": "smooth",
+      "numerals": "roman"
+    }
+  },
+  {
+    "id": "navy-twilight",
+    "face": "navy",
+    "name": "Navy · Twilight",
+    "props": {
+      "face": "navy",
+      "dialColor": "#2a2350",
+      "borderColor": "#a3a9b0",
+      "tickColor": "#d8d2f5",
+      "numberColor": "#d8d2f5",
+      "hourHandColor": "#ece9fb",
+      "minuteHandColor": "#ece9fb",
+      "secondHandColor": "#ffc857",
+      "secondHandStyle": "plain",
+      "minuteTicks": "dot"
+    }
+  },
+  {
+    "id": "navy-harbor",
+    "face": "navy",
+    "name": "Navy · Harbor",
+    "props": {
+      "face": "navy",
+      "dialColor": "#1e4d5c",
+      "borderColor": "#a3a9b0",
+      "tickColor": "#e7f2ef",
+      "numberColor": "#e7f2ef",
+      "hourHandColor": "#f4faf8",
+      "minuteHandColor": "#f4faf8",
+      "secondHandColor": "#f4a259",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90,
+      "numbers": "12-6"
+    }
+  },
+  {
+    "id": "navy-ink",
+    "face": "navy",
+    "name": "Navy · Ink",
+    "props": {
+      "face": "navy",
+      "dialColor": "#0d1321",
+      "borderColor": "#748cab",
+      "tickColor": "#c5d3e8",
+      "numberColor": "#c5d3e8",
+      "hourHandColor": "#f0ebd8",
+      "minuteHandColor": "#f0ebd8",
+      "secondHandColor": "#f0ebd8",
+      "secondHandStyle": "rect-filled",
+      "secondHandMotion": "smooth",
+      "mainMarker": "diamond",
+      "hourMarker": "line",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "spectrum-original",
+    "face": "spectrum",
+    "name": "Spectrum · Original",
+    "props": {
+      "face": "spectrum"
+    }
+  },
+  {
+    "id": "spectrum-night",
+    "face": "spectrum",
+    "name": "Spectrum · Night",
+    "props": {
+      "face": "spectrum",
+      "dialColor": "#121418",
+      "borderColor": "#2e3238",
+      "numberColor": "#f2f2f2",
+      "hourHandColor": "#f2f2f2",
+      "minuteHandColor": "#f2f2f2",
+      "secondHandColor": "#ffd23f",
+      "secondHandStyle": "circle-filled",
+      "secondHandMotion": "smooth",
+      "numbers": "quarters",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "spectrum-paper",
+    "face": "spectrum",
+    "name": "Spectrum · Paper",
+    "props": {
+      "face": "spectrum",
+      "dialColor": "#fbf8f1",
+      "borderColor": "#3e4146",
+      "numberColor": "#1c1d20",
+      "hourHandColor": "#1c1d20",
+      "minuteHandColor": "#1c1d20",
+      "secondHandColor": "#e3241b",
+      "secondHandStyle": "plain",
+      "numbers": "all"
+    }
+  },
+  {
+    "id": "spectrum-graphite",
+    "face": "spectrum",
+    "name": "Spectrum · Graphite",
+    "props": {
+      "face": "spectrum",
+      "dialColor": "#34373d",
+      "borderColor": "#1d1f23",
+      "numberColor": "#eceff3",
+      "hourHandColor": "#eceff3",
+      "minuteHandColor": "#eceff3",
+      "secondHandColor": "#ff5d8f",
+      "secondHandStyle": "triangle-outline",
+      "secondHandMotion": "sweep",
+      "mainMarker": "dot",
+      "hourMarker": "dot"
+    }
+  },
+  {
+    "id": "spectrum-cloud",
+    "face": "spectrum",
+    "name": "Spectrum · Cloud",
+    "props": {
+      "face": "spectrum",
+      "dialColor": "#eef2f7",
+      "borderColor": "#5a6472",
+      "numberColor": "#2a3240",
+      "hourHandColor": "#2a3240",
+      "minuteHandColor": "#2a3240",
+      "secondHandColor": "#7b2cbf",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90,
+      "secondHandMotion": "smooth",
+      "numbers": "12-6",
+      "numerals": "roman",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "spectrum-plum",
+    "face": "spectrum",
+    "name": "Spectrum · Plum",
+    "props": {
+      "face": "spectrum",
+      "dialColor": "#2b1838",
+      "borderColor": "#4a3058",
+      "numberColor": "#f3e8fa",
+      "hourHandColor": "#f3e8fa",
+      "minuteHandColor": "#f3e8fa",
+      "secondHandColor": "#57e2c4",
+      "secondHandStyle": "tapered",
+      "secondHandMotion": "smooth",
+      "mainMarker": "diamond",
+      "hourMarker": "line"
+    }
+  },
+  {
+    "id": "chrono-original",
+    "face": "chrono",
+    "name": "Chrono · Original",
+    "props": {
+      "face": "chrono"
+    }
+  },
+  {
+    "id": "chrono-panda",
+    "face": "chrono",
+    "name": "Chrono · Panda",
+    "props": {
+      "face": "chrono",
+      "dialColor": "#f4f4f2",
+      "borderColor": "#a7adb4",
+      "tickColor": "#1b1d21",
+      "numberColor": "#1b1d21",
+      "hourHandColor": "#1b1d21",
+      "minuteHandColor": "#1b1d21",
+      "secondHandColor": "#d62828",
+      "secondHandStyle": "plain",
+      "secondHandMotion": "sweep"
+    }
+  },
+  {
+    "id": "chrono-racing-red",
+    "face": "chrono",
+    "name": "Chrono · Racing Red",
+    "props": {
+      "face": "chrono",
+      "dialColor": "#1b1d21",
+      "borderColor": "#a7adb4",
+      "tickColor": "#f4f5f6",
+      "numberColor": "#f4f5f6",
+      "hourHandColor": "#c4c9cf",
+      "minuteHandColor": "#c4c9cf",
+      "secondHandColor": "#e63946",
+      "secondHandStyle": "triangle-filled",
+      "secondHandMotion": "sweep",
+      "marker12": "triangle-out"
+    }
+  },
+  {
+    "id": "chrono-khaki",
+    "face": "chrono",
+    "name": "Chrono · Khaki",
+    "props": {
+      "face": "chrono",
+      "dialColor": "#4d4a36",
+      "borderColor": "#8d8a73",
+      "tickColor": "#ece6c8",
+      "numberColor": "#ece6c8",
+      "hourHandColor": "#f3eed6",
+      "minuteHandColor": "#f3eed6",
+      "secondHandColor": "#ff9f1c",
+      "secondHandStyle": "circle-filled",
+      "secondHandMarkerAt": 90,
+      "numbers": "none",
+      "minuteTicks": "railway"
+    }
+  },
+  {
+    "id": "chrono-racing-green",
+    "face": "chrono",
+    "name": "Chrono · Racing Green",
+    "props": {
+      "face": "chrono",
+      "dialColor": "#123524",
+      "borderColor": "#b8bcc2",
+      "tickColor": "#e9efe6",
+      "numberColor": "#e9efe6",
+      "hourHandColor": "#f4f7f2",
+      "minuteHandColor": "#f4f7f2",
+      "secondHandColor": "#f2c14e",
+      "secondHandStyle": "circle-outline",
+      "secondHandMotion": "smooth",
+      "mainMarker": "bar",
+      "marker12": "double"
+    }
+  },
+  {
+    "id": "chrono-tuxedo",
+    "face": "chrono",
+    "name": "Chrono · Tuxedo",
+    "props": {
+      "face": "chrono",
+      "dialColor": "#0b0b0c",
+      "borderColor": "#3a3d42",
+      "tickColor": "#d9dde2",
+      "numberColor": "#d9dde2",
+      "hourHandColor": "#ffffff",
+      "minuteHandColor": "#ffffff",
+      "secondHandColor": "#2ec4b6",
+      "secondHandStyle": "rect-filled",
+      "secondHandMotion": "sweep",
+      "numbers": "quarters",
+      "numerals": "roman"
+    }
+  },
+  {
+    "id": "ocean-original",
+    "face": "ocean",
+    "name": "Ocean · Original",
+    "props": {
+      "face": "ocean"
+    }
+  },
+  {
+    "id": "ocean-abyss",
+    "face": "ocean",
+    "name": "Ocean · Abyss",
+    "props": {
+      "face": "ocean",
+      "dialColor": "#06283d",
+      "borderColor": "#0b1a24",
+      "tickColor": "#47b5ff",
+      "numberColor": "#dff6ff",
+      "hourHandColor": "#dff6ff",
+      "minuteHandColor": "#dff6ff",
+      "secondHandColor": "#ff7a3d",
+      "secondHandStyle": "triangle-filled",
+      "secondHandMotion": "sweep"
+    }
+  },
+  {
+    "id": "ocean-lagoon",
+    "face": "ocean",
+    "name": "Ocean · Lagoon",
+    "props": {
+      "face": "ocean",
+      "dialColor": "#1a9c95",
+      "borderColor": "#0b3a3a",
+      "tickColor": "#eafff9",
+      "numberColor": "#eafff9",
+      "hourHandColor": "#ffffff",
+      "minuteHandColor": "#ffffff",
+      "secondHandColor": "#ffd166",
+      "secondHandStyle": "circle-filled",
+      "secondHandMarkerAt": 90,
+      "secondHandMotion": "smooth",
+      "numbers": "quarters",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "ocean-coral",
+    "face": "ocean",
+    "name": "Ocean · Coral",
+    "props": {
+      "face": "ocean",
+      "dialColor": "#f4f1ea",
+      "borderColor": "#0b2a33",
+      "tickColor": "#127380",
+      "numberColor": "#127380",
+      "hourHandColor": "#0b2a33",
+      "minuteHandColor": "#0b2a33",
+      "secondHandColor": "#ff6b5b",
+      "secondHandStyle": "circle-outline",
+      "mainMarker": "square",
+      "marker12": "triangle-in",
+      "hourMarker": "dot"
+    }
+  },
+  {
+    "id": "ocean-kelp",
+    "face": "ocean",
+    "name": "Ocean · Kelp",
+    "props": {
+      "face": "ocean",
+      "dialColor": "#24412f",
+      "borderColor": "#101d15",
+      "tickColor": "#c8f0a8",
+      "numberColor": "#c8f0a8",
+      "hourHandColor": "#eef7e6",
+      "minuteHandColor": "#eef7e6",
+      "secondHandColor": "#ff9f43",
+      "secondHandStyle": "plain",
+      "secondHandMotion": "sweep",
+      "minuteTicks": "dot"
+    }
+  },
+  {
+    "id": "ocean-sunset-dive",
+    "face": "ocean",
+    "name": "Ocean · Sunset Dive",
+    "props": {
+      "face": "ocean",
+      "dialColor": "#2b2d42",
+      "borderColor": "#14151f",
+      "tickColor": "#ffb38a",
+      "numberColor": "#ffd7ba",
+      "hourHandColor": "#ffd7ba",
+      "minuteHandColor": "#ffd7ba",
+      "secondHandColor": "#ef476f",
+      "secondHandStyle": "tapered",
+      "secondHandMotion": "smooth",
+      "mainMarker": "bar",
+      "marker12": "triangle-in",
+      "hourMarker": "dot"
+    }
+  },
+  {
+    "id": "blush-original",
+    "face": "blush",
+    "name": "Blush · Original",
+    "props": {
+      "face": "blush"
+    }
+  },
+  {
+    "id": "blush-lavender",
+    "face": "blush",
+    "name": "Blush · Lavender",
+    "props": {
+      "face": "blush",
+      "dialColor": "#efe7f7",
+      "borderColor": "#9d7bb8",
+      "tickColor": "#7d5a9c",
+      "numberColor": "#6a4a87",
+      "hourHandColor": "#5a3d75",
+      "minuteHandColor": "#5a3d75",
+      "secondHandColor": "#c0517b",
+      "secondHandStyle": "circle-filled",
+      "secondHandMotion": "ease",
+      "numbers": "all",
+      "numerals": "roman",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "blush-peach",
+    "face": "blush",
+    "name": "Blush · Peach",
+    "props": {
+      "face": "blush",
+      "dialColor": "#ffe8d6",
+      "borderColor": "#c98b6b",
+      "tickColor": "#a15c3d",
+      "numberColor": "#8f4e31",
+      "hourHandColor": "#7a4129",
+      "minuteHandColor": "#7a4129",
+      "secondHandColor": "#6b2d5c",
+      "secondHandStyle": "plain",
+      "mainMarker": "dot",
+      "hourMarker": "dot"
+    }
+  },
+  {
+    "id": "blush-wine",
+    "face": "blush",
+    "name": "Blush · Wine",
+    "props": {
+      "face": "blush",
+      "dialColor": "#4a1626",
+      "borderColor": "#c48b6a",
+      "tickColor": "#f3d1c4",
+      "numberColor": "#f3d1c4",
+      "hourHandColor": "#f8e0d6",
+      "minuteHandColor": "#f8e0d6",
+      "secondHandColor": "#f8e0d6",
+      "secondHandStyle": "half-circle-filled",
+      "secondHandMotion": "smooth",
+      "numbers": "12",
+      "minuteTicks": "dot",
+      "hideMarkersAtNumbers": true
+    }
+  },
+  {
+    "id": "blush-sage-blush",
+    "face": "blush",
+    "name": "Blush · Sage Blush",
+    "props": {
+      "face": "blush",
+      "dialColor": "#e8eee4",
+      "borderColor": "#b7795e",
+      "tickColor": "#6f8a6a",
+      "numberColor": "#5b7357",
+      "hourHandColor": "#4b6047",
+      "minuteHandColor": "#4b6047",
+      "secondHandColor": "#b7795e",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90
+    }
+  },
+  {
+    "id": "blush-pearl",
+    "face": "blush",
+    "name": "Blush · Pearl",
+    "props": {
+      "face": "blush",
+      "dialColor": "#fbfaf7",
+      "borderColor": "#c9b9a8",
+      "tickColor": "#a8998a",
+      "numberColor": "#8a7b6d",
+      "hourHandColor": "#76695c",
+      "minuteHandColor": "#76695c",
+      "secondHandColor": "#c24d6b",
+      "secondHandStyle": "triangle-outline",
+      "secondHandMotion": "ease",
+      "numbers": "quarters",
+      "numerals": "roman-iiii",
+      "minuteTicks": "railway"
+    }
+  }
+]

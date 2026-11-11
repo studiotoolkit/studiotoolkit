@@ -143,6 +143,7 @@ describe('Clock', () => {
       <Clock
         timezone="UTC"
         borderColor="#123456"
+        dialColor="#777777"
         tickColor="#111111"
         hourHandColor="#222222"
         minuteHandColor="#333333"
@@ -155,6 +156,8 @@ describe('Clock', () => {
     const v = (name: string) => root.style.getPropertyValue(name);
     expect(v('--ac-bezel')).toBe('#123456');
     expect(v('--ac-bezel-2')).toBe('#123456');
+    expect(v('--ac-face-inner')).toBe('#777777');
+    expect(v('--ac-face-outer')).toContain('#777777');
     expect(v('--ac-tick')).toBe('#111111');
     expect(v('--ac-minor-tick')).toBe('#111111');
     expect(v('--ac-hour-hand')).toBe('#222222');
@@ -265,6 +268,74 @@ describe('Clock', () => {
       expect(hand(plain).firstElementChild!.tagName).toBe('line');
       const tapered = render(<Clock secondHandStyle="tapered" />).container;
       expect(hand(tapered).querySelector('[data-part="second-body"]')).not.toBeNull();
+    });
+  });
+
+  describe('dial options', () => {
+    const texts = (c: HTMLElement) => Array.from(c.querySelectorAll('.ac-number')).map((n) => n.textContent);
+
+    it('keeps the face design when no dial option is set', () => {
+      // SVG ids differ per render, so compare the drawn marks and numbers
+      const marks = (c: HTMLElement) =>
+        Array.from(c.querySelectorAll('.ac-tick, .ac-number, .ac-ring')).map((el) => el.outerHTML);
+      const plain = marks(render(<Clock face="ocean" />).container);
+      const same = marks(render(<Clock face="ocean" numbers={undefined} mainMarker={undefined} />).container);
+      expect(same).toEqual(plain);
+      expect(plain.length).toBeGreaterThan(0);
+    });
+
+    it('picks which hours get numbers', () => {
+      expect(texts(render(<Clock numbers="quarters" />).container)).toEqual(['3', '6', '9', '12']);
+      expect(texts(render(<Clock numbers="12" />).container)).toEqual(['12']);
+      expect(texts(render(<Clock numbers="12-6" />).container)).toEqual(['6', '12']);
+      expect(texts(render(<Clock numbers="none" />).container)).toEqual([]);
+      expect(texts(render(<Clock face="steel" numbers="all" />).container)).toHaveLength(12);
+    });
+
+    it('writes Roman numerals with IV or clock-style IIII', () => {
+      expect(texts(render(<Clock numerals="roman" />).container)[3]).toBe('IV');
+      expect(texts(render(<Clock numerals="roman-iiii" />).container)[3]).toBe('IIII');
+      expect(texts(render(<Clock face="roman" numerals="arabic" />).container)[3]).toBe('4');
+    });
+
+    it('rotates numbers on request', () => {
+      const n = render(<Clock rotateNumbers />).container.querySelectorAll('.ac-number')[2];
+      expect(n.getAttribute('transform')).toMatch(/^rotate\(90 /);
+    });
+
+    it('draws main, hour and 12 o\'clock markers', () => {
+      const { container } = render(<Clock mainMarker="bar" hourMarker="dot" marker12="triangle-out" minuteTicks="none" />);
+      expect(container.querySelectorAll('circle.ac-tick--hour')).toHaveLength(8);
+      expect(container.querySelectorAll('line.ac-tick--hour')).toHaveLength(3);
+      expect(container.querySelectorAll('polygon.ac-tick--hour')).toHaveLength(1);
+      expect(container.querySelectorAll('.ac-tick:not(.ac-tick--hour)')).toHaveLength(0);
+    });
+
+    it('points the outward triangle toward the edge', () => {
+      const tri = render(<Clock marker12="triangle-out" />).container.querySelector('polygon.ac-tick--hour')!;
+      const ys = tri.getAttribute('points')!.split(' ').map((p) => Number(p.split(',')[1]));
+      // At 12 o'clock the single point (the tip) is above the base
+      expect(Math.min(...ys)).toBe(ys[2]);
+    });
+
+    it('draws diamonds and hides all markers with "none"', () => {
+      expect(render(<Clock mainMarker="diamond" />).container.querySelectorAll('polygon.ac-tick--hour')).toHaveLength(12);
+      const none = render(<Clock mainMarker="none" minuteTicks="none" />).container;
+      expect(none.querySelectorAll('.ac-tick')).toHaveLength(0);
+    });
+
+    it('draws minute ticks as dots, a railway track or a rainbow', () => {
+      expect(render(<Clock minuteTicks="dot" />).container.querySelectorAll('circle.ac-tick:not(.ac-tick--hour)')).toHaveLength(48);
+      expect(render(<Clock minuteTicks="railway" />).container.querySelectorAll('.ac-ring')).toHaveLength(2);
+      const rainbow = render(<Clock minuteTicks="rainbow" />).container.querySelector('line.ac-tick:not(.ac-tick--hour)')!;
+      expect(rainbow.getAttribute('style')).toContain('hsl(');
+    });
+
+    it('can hide or show markers under numbers', () => {
+      const count = (hide: boolean) =>
+        render(<Clock numbers="quarters" hideMarkersAtNumbers={hide} />).container.querySelectorAll('.ac-tick--hour').length;
+      expect(count(true)).toBe(8);
+      expect(count(false)).toBe(12);
     });
   });
 
@@ -454,7 +525,7 @@ describe('face styles', () => {
 describe('public API', () => {
   it('does not expose internal face shapes', () => {
     expect(Object.keys(publicApi).sort()).toEqual(
-      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'SECOND_HAND_MOTIONS', 'SECOND_HAND_STYLES', 'formatDigitalTime', 'getTimeInZone', 'secondHandAngle'].sort()
+      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'DIAL_MARKERS', 'DIAL_MINUTE_TICKS', 'DIAL_NUMERALS', 'DIAL_NUMBERS', 'SECOND_HAND_MOTIONS', 'SECOND_HAND_STYLES', 'formatDigitalTime', 'getTimeInZone', 'secondHandAngle'].sort()
     );
   });
 

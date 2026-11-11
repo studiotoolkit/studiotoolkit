@@ -333,6 +333,47 @@
   color: #2c3e50;
 }
 
+/* One row of six per face (the original + five variations) */
+.build-clock-variations-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .build-clock-variations-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .build-clock-variations-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.build-clock-variations-grid .build-clock-face-card svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.build-clock-variation-group + .build-clock-variation-group {
+  margin-top: 16px;
+}
+
+.build-clock-variation-title {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7c8f;
+}
+
+[data-theme="dark"] .build-clock-variation-title {
+  color: #9aa8b8;
+}
+
 [data-theme="dark"] .build-clock-faces {
   background: #2c313c;
   border-color: #363c4a;

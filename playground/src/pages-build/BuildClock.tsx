@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import {
   Clock,
   CLOCK_FACES,
+  DIAL_MARKERS,
+  DIAL_MINUTE_TICKS,
+  DIAL_NUMERALS,
+  DIAL_NUMBERS,
   SECOND_HAND_MOTIONS,
   SECOND_HAND_STYLES,
   type ClockFace,
+  type ClockProps,
   type SecondHandMotion,
   type SecondHandStyle,
   type TimeFormat,
@@ -14,6 +19,71 @@ import {
 import '@studiotoolkit/analog-clock/style.css';
 import { useTheme } from '../ThemeContext';
 import './BuildClock.css';
+import samplesData from './samples.json';
+
+/** A ready-made look: a face plus colour and second-hand settings. */
+interface Sample {
+  id: string;
+  face: ClockFace;
+  name: string;
+  props: ClockProps;
+}
+
+const SAMPLES = samplesData as Sample[];
+
+/**
+ * Dial settings, in the order they appear. '' leaves the prop out: the face's
+ * own design, or for the 12 and other-hour markers, the main marker.
+ */
+const YES_NO = [
+  { id: 'yes', label: 'Yes' },
+  { id: 'no', label: 'No' },
+];
+const DIAL_FIELDS = [
+  { prop: 'numbers', label: 'Numbers', options: DIAL_NUMBERS },
+  { prop: 'numerals', label: 'Numeral Style', options: DIAL_NUMERALS },
+  { prop: 'rotateNumbers', label: 'Rotate Numbers', options: YES_NO },
+  { prop: 'mainMarker', label: 'Main (12, 3, 6, 9)', options: DIAL_MARKERS },
+  { prop: 'marker12', label: 'Accent at 12', options: DIAL_MARKERS, empty: 'Same as main' },
+  { prop: 'hourMarker', label: 'Other Hours', options: DIAL_MARKERS, empty: 'Same as main' },
+  { prop: 'minuteTicks', label: 'Minute Ticks', options: DIAL_MINUTE_TICKS },
+  { prop: 'hideMarkersAtNumbers', label: 'Hide Markers at Numbers', options: YES_NO },
+] as const;
+
+type DialProp = (typeof DIAL_FIELDS)[number]['prop'];
+type DialState = Record<DialProp, string>;
+const BOOLEAN_DIAL_PROPS: DialProp[] = ['rotateNumbers', 'hideMarkersAtNumbers'];
+
+const initialDial = (): DialState =>
+  Object.fromEntries(DIAL_FIELDS.map((f) => [f.prop, ''])) as DialState;
+
+/** Only the dial settings the user changed, as <Clock> props. */
+function dialToProps(dial: DialState): Partial<ClockProps> {
+  const props: Record<string, string | boolean> = {};
+  for (const { prop } of DIAL_FIELDS) {
+    const v = dial[prop];
+    if (!v) continue;
+    props[prop] = BOOLEAN_DIAL_PROPS.includes(prop) ? v === 'yes' : v;
+  }
+  return props as Partial<ClockProps>;
+}
+
+/** The dial settings stored in a sample's props, as dropdown values. */
+function propsToDial(p: ClockProps): DialState {
+  const dial = initialDial();
+  for (const { prop } of DIAL_FIELDS) {
+    const v = p[prop];
+    if (typeof v === 'boolean') dial[prop] = v ? 'yes' : 'no';
+    else if (v) dial[prop] = v;
+  }
+  return dial;
+}
+
+/** Samples grouped by face, in face order. */
+const SAMPLE_GROUPS = CLOCK_FACES.map((f) => ({
+  face: f,
+  samples: SAMPLES.filter((s) => s.face === f.id),
+})).filter((g) => g.samples.length > 0);
 
 const TIMEZONES: { label: string; tz: string }[] = [
   { label: 'Local time', tz: '' },
@@ -38,6 +108,7 @@ const TIMEZONES: { label: string; tz: string }[] = [
 /** Colour props on <Clock>, in the order they appear in Settings. */
 const COLOR_PROPS = [
   { prop: 'borderColor', label: 'Border', initial: '#000000' },
+  { prop: 'dialColor', label: 'Dial Face', initial: '#ffffff' },
   { prop: 'tickColor', label: 'Ticks', initial: '#000000' },
   { prop: 'numberColor', label: 'Numbers', initial: '#000000' },
   { prop: 'hourHandColor', label: 'Hour Hand', initial: '#000000' },
@@ -67,6 +138,7 @@ export default function BuildClock() {
   const [markerAt, setMarkerAt] = useState(100);
   const [showDigital, setShowDigital] = useState(true);
   const [colors, setColors] = useState<ColorState>(initialColors);
+  const [dial, setDial] = useState<DialState>(initialDial);
 
   const theme = isDark ? 'dark' : 'light';
 
@@ -79,6 +151,45 @@ export default function BuildClock() {
   );
 
   const customColorCount = Object.keys(colorProps).length;
+
+  const dialProps = dialToProps(dial);
+  const customDialCount = Object.keys(dialProps).length;
+
+  // Loads a sample into the settings and brings the preview into view
+  const previewRef = useRef<HTMLDivElement>(null);
+  const applySample = (s: Sample) => {
+    const p = s.props;
+    setFace(s.face);
+    setShowSeconds(true);
+    setMotion(p.secondHandMotion ?? 'tick');
+    setHandStyle(p.secondHandStyle ?? 'face');
+    setMarkerAt(p.secondHandMarkerAt ?? 100);
+    setDial(propsToDial(p));
+    setColors(
+      Object.fromEntries(
+        COLOR_PROPS.map((c) => [
+          c.prop,
+          { enabled: p[c.prop] !== undefined, value: p[c.prop] ?? c.initial },
+        ]),
+      ) as ColorState,
+    );
+    previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  // A sample is highlighted while the settings still match it exactly
+  const matchesSample = (s: Sample) => {
+    const p = s.props;
+    return (
+      face === s.face &&
+      showSeconds &&
+      motion === (p.secondHandMotion ?? 'tick') &&
+      handStyle === (p.secondHandStyle ?? 'face') &&
+      (!SECOND_HAND_STYLES.some((x) => x.id === handStyle && x.group === 'Object') ||
+        markerAt === (p.secondHandMarkerAt ?? 100)) &&
+      DIAL_FIELDS.every((f) => dialProps[f.prop] === p[f.prop]) &&
+      COLOR_PROPS.every((c) => colorProps[c.prop] === p[c.prop])
+    );
+  };
 
   // The Add At slider only applies to styles that place an object on the hand
   const hasObject = SECOND_HAND_STYLES.some((s) => s.id === handStyle && s.group === 'Object');
@@ -96,6 +207,9 @@ export default function BuildClock() {
     handStyle !== 'face' && `  secondHandStyle="${handStyle}"`,
     hasObject && markerAt !== 100 && `  secondHandMarkerAt={${markerAt}}`,
     !showDigital && `  showDigital={false}`,
+    ...Object.entries(dialProps).map(([prop, value]) =>
+      typeof value === 'boolean' ? `  ${prop}={${value}}` : `  ${prop}="${value}"`,
+    ),
     ...Object.entries(colorProps).map(([prop, value]) => `  ${prop}="${value}"`),
   ].filter(Boolean);
 
@@ -118,6 +232,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
     setMarkerAt(100);
     setShowDigital(true);
     setColors(initialColors());
+    setDial(initialDial());
   };
 
   return (
@@ -266,6 +381,39 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
 
             <details className="build-clock-colors">
               <summary className="build-clock-subheading">
+                Dial
+                {customDialCount > 0 && (
+                  <span className="build-clock-colors-count">· {customDialCount} custom</span>
+                )}
+              </summary>
+              <div className="build-clock-colors-body">
+                <p className="build-clock-hint">Numbers, markers and ticks. Face default keeps the watch face's own design.</p>
+                {DIAL_FIELDS.map((field) => {
+                  const { prop, label: fieldLabel, options } = field;
+                  return (
+                  <div className="build-clock-control-inline" key={prop}>
+                    <label htmlFor={`clock-dial-${prop}`}>{fieldLabel}</label>
+                    <select
+                      id={`clock-dial-${prop}`}
+                      value={dial[prop]}
+                      onChange={(e) => setDial((prev) => ({ ...prev, [prop]: e.target.value }))}
+                      className="build-clock-select"
+                    >
+                      <option value="">{'empty' in field ? field.empty : 'Face default'}</option>
+                      {options.map((o) => (
+                        <option key={o.id} value={o.id}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  );
+                })}
+              </div>
+            </details>
+
+            <details className="build-clock-colors">
+              <summary className="build-clock-subheading">
                 Colors
                 {customColorCount > 0 && (
                   <span className="build-clock-colors-count">· {customColorCount} custom</span>
@@ -307,7 +455,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
           </div>
 
           {/* Column 2: Preview */}
-          <div className="build-clock-preview">
+          <div className="build-clock-preview" ref={previewRef}>
             <h3>Preview</h3>
             <div className="build-clock-stage">
               <Clock
@@ -322,6 +470,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 secondHandStyle={handStyle}
                 secondHandMarkerAt={markerAt}
                 showDigital={showDigital}
+                {...dialProps}
                 {...colorProps}
               />
             </div>
@@ -362,10 +511,47 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                   secondHandStyle={handStyle}
                   secondHandMarkerAt={markerAt}
                   showDigital={false}
+                  {...dialProps}
                 />
               </button>
             ))}
           </div>
+        </section>
+
+        {/* Variations gallery: ready-made looks for every face */}
+        <section className="build-clock-faces" aria-labelledby="clock-variations-title">
+          <h3 id="clock-variations-title">Variations</h3>
+          <p className="build-clock-hint">Click a variation to load its settings.</p>
+          {SAMPLE_GROUPS.map(({ face: f, samples }) => (
+            <div key={f.id} className="build-clock-variation-group">
+              <h4 className="build-clock-variation-title">{f.label}</h4>
+              <div className="build-clock-variations-grid">
+                {samples.map((s) => {
+                  const selected = matchesSample(s);
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      className={`build-clock-face-card${selected ? ' is-selected' : ''}`}
+                      aria-pressed={selected}
+                      onClick={() => applySample(s)}
+                    >
+                      <span className="build-clock-face-name">
+                        {s.name.split(' · ')[1] ?? s.name}
+                      </span>
+                      <Clock
+                        {...s.props}
+                        theme={theme}
+                        radius={64}
+                        timezone={timezone || null}
+                        showDigital={false}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </section>
       </main>
       <Footer />

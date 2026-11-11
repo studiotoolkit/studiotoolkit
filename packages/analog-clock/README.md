@@ -45,10 +45,19 @@ export default function App() {
 | `face`        | `ClockFace`           | `"default"`    | Watch face. See [Watch faces](#watch-faces).                    |
 | `theme`       | `"light" \| "dark"`   | `"light"`      | Dial colour scheme.                                             |
 | `borderColor` | `string`              | face colour    | Bezel colour.                                                   |
+| `dialColor`   | `string`              | face colour    | Dial colour. The edge is shaded slightly darker for depth.      |
 | `showSeconds` | `boolean`             | `true`         | Show the second hand (and seconds in the digital readout).      |
 | `secondHandMotion` | `SecondHandMotion` | `"tick"`      | How the second hand moves. See [Second hand motion](#second-hand-motion). |
 | `secondHandStyle` | `SecondHandStyle` | `"face"`       | How the second hand looks. See [Second hand style](#second-hand-style). |
 | `secondHandMarkerAt` | `number`      | `100`          | Where the object sits on the second hand, 0 (inner end) to 100 (tip). |
+| `numbers`     | `DialNumbers`         | face           | Which hours get a number. See [Dial](#dial).                    |
+| `numerals`    | `DialNumerals`        | face           | `"arabic"`, `"roman"` (IV) or `"roman-iiii"` (IIII).            |
+| `rotateNumbers` | `boolean`           | face           | Turn each number so its top faces the edge.                     |
+| `mainMarker`  | `DialMarker`          | face           | Markers at 12, 3, 6 and 9.                                      |
+| `marker12`    | `DialMarker`          | main marker    | Marker at 12 only.                                              |
+| `hourMarker`  | `DialMarker`          | main marker    | Markers at the other 8 hours.                                   |
+| `minuteTicks` | `DialMinuteTicks`     | face           | Minute ticks.                                                   |
+| `hideMarkersAtNumbers` | `boolean`    | face           | Leave out the marker wherever a number is drawn.                |
 | `showDigital` | `boolean`             | `true`         | Show the digital time below the dial.                           |
 | `timeFormat`  | `"12h" \| "24h"`      | `"12h"`        | Digital time as `hh:mm:ss AM` or `HH:mm:ss`.                    |
 | `tickColor`   | `string`              | face colour    | Tick marks. Minute ticks are drawn lighter.                     |
@@ -142,6 +151,26 @@ To restyle a face, override its variables:
 3. Rebuild. Every file in `src/faces/` is included in both the built-in styles and `style.css`.
 
 `FACE_GEOMETRY` is internal and not exported, so face shapes can change in any release without breaking apps that use the clock.
+
+## Dial
+
+Every watch face has its own numbers and markers. These props change them; anything left out keeps the face's design.
+
+| Prop          | Values |
+| ------------- | ------ |
+| `numbers`     | `"all"`, `"quarters"` (12, 3, 6, 9), `"12"`, `"12-6"`, `"none"` |
+| `numerals`    | `"arabic"` (1, 2, 3), `"roman"` (I, II, IV), `"roman-iiii"` (I, II, IIII, the clock-maker style) |
+| `mainMarker`, `marker12`, `hourMarker` | `"bar"`, `"line"`, `"double"`, `"dot"`, `"square"`, `"triangle-in"`, `"triangle-out"`, `"diamond"`, `"none"` |
+| `minuteTicks` | `"line"`, `"short"`, `"dot"`, `"railway"` (ticks between two thin rings), `"rainbow"` (coloured by position), `"none"` |
+
+`marker12` and `hourMarker` default to `mainMarker`, so a triangle at 12 with bars elsewhere is:
+
+```tsx
+<Clock mainMarker="bar" marker12="triangle-out" />
+<Clock numbers="quarters" numerals="roman" minuteTicks="railway" />
+```
+
+New markers start where the face's own markers start, and shrink or move out to the minute track when they would touch the numbers. When numbers are added to a face whose markers run through the same ring (like `gold`), the markers under the numbers are hidden unless `hideMarkersAtNumbers={false}`. `DIAL_NUMBERS`, `DIAL_NUMERALS`, `DIAL_MARKERS` and `DIAL_MINUTE_TICKS` list the values (`[{ id, label }]`) for pickers.
 
 ## Second hand motion
 
