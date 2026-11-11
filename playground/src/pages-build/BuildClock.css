@@ -211,8 +211,9 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  resize: vertical;
+  resize: none;
   min-height: 250px;
+  overflow-y: hidden; /* the box grows to fit the code instead */
   box-sizing: border-box;
 }
 

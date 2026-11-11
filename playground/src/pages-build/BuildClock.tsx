@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import {
@@ -136,7 +136,7 @@ export default function BuildClock() {
   const [motion, setMotion] = useState<SecondHandMotion>('tick');
   const [handStyle, setHandStyle] = useState<SecondHandStyle>('face');
   const [markerAt, setMarkerAt] = useState(100);
-  const [showDigital, setShowDigital] = useState(true);
+  const [showDigital, setShowDigital] = useState(false);
   const [colors, setColors] = useState<ColorState>(initialColors);
   const [dial, setDial] = useState<DialState>(initialDial);
 
@@ -220,6 +220,21 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
 
   const handleCopyCode = () => navigator.clipboard.writeText(generatedCode);
 
+  // Grow the code box to fit the code, so it never needs a scrollbar
+  const codeRef = useRef<HTMLTextAreaElement>(null);
+  useLayoutEffect(() => {
+    const fit = () => {
+      const el = codeRef.current;
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = `${el.scrollHeight + 2}px`; // + border
+    };
+    fit();
+    // Long lines wrap differently at other widths
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [generatedCode]);
+
   const handleReset = () => {
     setRadius(120);
     setLabel('');
@@ -230,7 +245,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
     setMotion('tick');
     setHandStyle('face');
     setMarkerAt(100);
-    setShowDigital(true);
+    setShowDigital(false);
     setColors(initialColors());
     setDial(initialDial());
   };
@@ -484,7 +499,12 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 Copy
               </button>
             </div>
-            <textarea className="build-clock-textarea" value={generatedCode} readOnly />
+            <textarea
+              ref={codeRef}
+              className="build-clock-textarea"
+              value={generatedCode}
+              readOnly
+            />
           </div>
         </div>
 
