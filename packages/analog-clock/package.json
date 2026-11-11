@@ -37,10 +37,12 @@
       "default": "./dist/index.js"
     },
     "./style.css": "./dist/style.css",
+    "./configuration.json": "./configuration.json",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
+    "configuration.json",
     "README.md",
     "LICENSE"
   ],

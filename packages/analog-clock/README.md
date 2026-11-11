@@ -69,6 +69,8 @@ export default function App() {
 
 Colour props always win over the face, so you can start from a face and change just the second hand, for example.
 
+Every prop, with its type, default, description and allowed values, is also listed in [`configuration.json`](./configuration.json), which ships with the package (`import config from '@studiotoolkit/analog-clock/configuration.json'`).
+
 ## Watch faces
 
 <table>

@@ -1,0 +1,587 @@
+{
+  "component": "Clock",
+  "package": "@studiotoolkit/analog-clock",
+  "import": "import { Clock } from '@studiotoolkit/analog-clock';",
+  "notes": [
+    "Every prop is optional: <Clock /> draws a local-time clock on the default face.",
+    "Props left out keep the watch face's own design; props you pass always win over the face.",
+    "Option lists are also exported for pickers: CLOCK_FACES, SECOND_HAND_MOTIONS, SECOND_HAND_STYLES, DIAL_NUMBERS, DIAL_NUMERALS, DIAL_MARKERS and DIAL_MINUTE_TICKS."
+  ],
+  "groups": [
+    {
+      "name": "General",
+      "props": [
+        {
+          "name": "face",
+          "type": "ClockFace",
+          "default": "default",
+          "description": "Watch face: shapes, markers and colours.",
+          "values": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "gold",
+              "label": "Gold"
+            },
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "wall-black",
+              "label": "Wall Black"
+            },
+            {
+              "value": "wall-white",
+              "label": "Wall White"
+            },
+            {
+              "value": "roman",
+              "label": "Roman"
+            },
+            {
+              "value": "steel",
+              "label": "Steel"
+            },
+            {
+              "value": "navy",
+              "label": "Navy"
+            },
+            {
+              "value": "spectrum",
+              "label": "Spectrum"
+            },
+            {
+              "value": "chrono",
+              "label": "Chrono"
+            },
+            {
+              "value": "ocean",
+              "label": "Ocean"
+            },
+            {
+              "value": "blush",
+              "label": "Blush"
+            }
+          ]
+        },
+        {
+          "name": "theme",
+          "type": "\"light\" | \"dark\"",
+          "default": "light",
+          "description": "Colour scheme of the dial. Every face has a light and a dark version.",
+          "values": [
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ]
+        },
+        {
+          "name": "radius",
+          "type": "number",
+          "default": 100,
+          "min": 1,
+          "description": "Radius of the dial in pixels. The SVG is radius * 2 + 36 px square (room for the shadow).",
+          "example": 120
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "",
+          "description": "Text on the dial, shown in capitals, e.g. a city name. Hidden when radius is below 50.",
+          "example": "London"
+        },
+        {
+          "name": "timezone",
+          "type": "string | null",
+          "default": null,
+          "defaultNote": "Not set: local time.",
+          "description": "IANA time zone. An invalid zone falls back to local time.",
+          "example": "America/New_York"
+        }
+      ]
+    },
+    {
+      "name": "Digital time",
+      "props": [
+        {
+          "name": "showDigital",
+          "type": "boolean",
+          "default": true,
+          "description": "Show the digital time below the dial."
+        },
+        {
+          "name": "timeFormat",
+          "type": "\"12h\" | \"24h\"",
+          "default": "12h",
+          "description": "Format of the digital time.",
+          "values": [
+            {
+              "value": "12h",
+              "label": "12-hour",
+              "description": "hh:mm:ss AM"
+            },
+            {
+              "value": "24h",
+              "label": "24-hour",
+              "description": "HH:mm:ss"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Second hand",
+      "props": [
+        {
+          "name": "showSeconds",
+          "type": "boolean",
+          "default": true,
+          "description": "Show the second hand, and seconds in the digital time."
+        },
+        {
+          "name": "secondHandMotion",
+          "type": "SecondHandMotion",
+          "default": "tick",
+          "description": "How the second hand moves. bounce, ease and anticipate fall back to tick when the user's system asks for reduced motion.",
+          "values": [
+            {
+              "value": "tick",
+              "label": "Tick (default)",
+              "description": "One jump per second."
+            },
+            {
+              "value": "smooth",
+              "label": "Smooth glide",
+              "description": "Glides continuously."
+            },
+            {
+              "value": "sweep",
+              "label": "Mechanical sweep",
+              "description": "8 small steps per second, like an automatic watch."
+            },
+            {
+              "value": "stop-to-go",
+              "label": "Stop-to-go",
+              "description": "One lap in 58 s, a 2 s pause at 12, then the minute hand jumps."
+            },
+            {
+              "value": "bounce",
+              "label": "Spring bounce",
+              "description": "Springs to each second, overshoots and settles."
+            },
+            {
+              "value": "ease",
+              "label": "Ease-in-out tick",
+              "description": "Soft ease-in-out move to each second."
+            },
+            {
+              "value": "anticipate",
+              "label": "Anticipation tick",
+              "description": "Dips back slightly, then snaps forward."
+            }
+          ]
+        },
+        {
+          "name": "secondHandStyle",
+          "type": "SecondHandStyle",
+          "default": "face",
+          "description": "How the second hand looks. Every style except face is drawn without the face's counterweight. Object styles are named <shape>-<fill>.",
+          "values": [
+            {
+              "value": "face",
+              "label": "Face default",
+              "description": "The watch face's own second hand."
+            },
+            {
+              "value": "plain",
+              "label": "Simple plain",
+              "description": "A simple line."
+            },
+            {
+              "value": "tapered",
+              "label": "Tapered",
+              "description": "Widest at the tail, narrowing to a fine tip."
+            },
+            {
+              "value": "circle-filled",
+              "label": "Circle · filled"
+            },
+            {
+              "value": "circle-outline",
+              "label": "Circle · outline"
+            },
+            {
+              "value": "rect-filled",
+              "label": "Rectangle · filled"
+            },
+            {
+              "value": "rect-outline",
+              "label": "Rectangle · outline"
+            },
+            {
+              "value": "half-circle-filled",
+              "label": "Half circle · filled",
+              "description": "Dome toward the tip."
+            },
+            {
+              "value": "half-circle-outline",
+              "label": "Half circle · outline",
+              "description": "Dome toward the tip."
+            },
+            {
+              "value": "triangle-filled",
+              "label": "Triangle · filled",
+              "description": "Points toward the tip."
+            },
+            {
+              "value": "triangle-outline",
+              "label": "Triangle · outline",
+              "description": "Points toward the tip."
+            }
+          ]
+        },
+        {
+          "name": "secondHandMarkerAt",
+          "type": "number",
+          "default": 100,
+          "min": 0,
+          "max": 100,
+          "description": "Where the object sits along the second hand: 0 is flush with the inner end (the tail past the centre), 100 flush with the tip. Values outside 0-100 are clamped. Only used by object styles.",
+          "example": 90
+        }
+      ]
+    },
+    {
+      "name": "Dial",
+      "props": [
+        {
+          "name": "numbers",
+          "type": "DialNumbers",
+          "default": null,
+          "defaultNote": "Not set: the watch face's own design is used.",
+          "description": "Which hours get a number.",
+          "values": [
+            {
+              "value": "all",
+              "label": "All (1-12)"
+            },
+            {
+              "value": "quarters",
+              "label": "Quarters (12, 3, 6, 9)"
+            },
+            {
+              "value": "12",
+              "label": "12 only"
+            },
+            {
+              "value": "12-6",
+              "label": "12 and 6"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "name": "numerals",
+          "type": "DialNumerals",
+          "default": null,
+          "defaultNote": "Not set: the watch face's own design is used.",
+          "description": "How numbers are written.",
+          "values": [
+            {
+              "value": "arabic",
+              "label": "Arabic (1, 2, 3)"
+            },
+            {
+              "value": "roman",
+              "label": "Roman (I, II, IV)"
+            },
+            {
+              "value": "roman-iiii",
+              "label": "Roman, clock style (IIII)"
+            }
+          ]
+        },
+        {
+          "name": "rotateNumbers",
+          "type": "boolean",
+          "default": null,
+          "defaultNote": "Not set: the watch face's own design is used.",
+          "description": "Turn each number so its top faces the edge."
+        },
+        {
+          "name": "mainMarker",
+          "type": "DialMarker",
+          "default": null,
+          "defaultNote": "Not set: the watch face's own design is used.",
+          "description": "Markers at 12, 3, 6 and 9. Drawn a little bolder than the other hours.",
+          "values": [
+            {
+              "value": "bar",
+              "label": "Bars"
+            },
+            {
+              "value": "line",
+              "label": "Thin lines"
+            },
+            {
+              "value": "double",
+              "label": "Double bars"
+            },
+            {
+              "value": "dot",
+              "label": "Dots"
+            },
+            {
+              "value": "square",
+              "label": "Squares"
+            },
+            {
+              "value": "triangle-in",
+              "label": "Triangle in"
+            },
+            {
+              "value": "triangle-out",
+              "label": "Triangle out"
+            },
+            {
+              "value": "diamond",
+              "label": "Diamond"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "name": "marker12",
+          "type": "DialMarker",
+          "default": null,
+          "defaultNote": "Not set: same as mainMarker (or the face's own 12 o'clock marker).",
+          "description": "Marker at 12 only, e.g. a triangle with bars elsewhere.",
+          "values": [
+            {
+              "value": "bar",
+              "label": "Bars"
+            },
+            {
+              "value": "line",
+              "label": "Thin lines"
+            },
+            {
+              "value": "double",
+              "label": "Double bars"
+            },
+            {
+              "value": "dot",
+              "label": "Dots"
+            },
+            {
+              "value": "square",
+              "label": "Squares"
+            },
+            {
+              "value": "triangle-in",
+              "label": "Triangle in"
+            },
+            {
+              "value": "triangle-out",
+              "label": "Triangle out"
+            },
+            {
+              "value": "diamond",
+              "label": "Diamond"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "name": "hourMarker",
+          "type": "DialMarker",
+          "default": null,
+          "defaultNote": "Not set: same as mainMarker (or the face's own hour markers).",
+          "description": "Markers at the other 8 hours.",
+          "values": [
+            {
+              "value": "bar",
+              "label": "Bars"
+            },
+            {
+              "value": "line",
+              "label": "Thin lines"
+            },
+            {
+              "value": "double",
+              "label": "Double bars"
+            },
+            {
+              "value": "dot",
+              "label": "Dots"
+            },
+            {
+              "value": "square",
+              "label": "Squares"
+            },
+            {
+              "value": "triangle-in",
+              "label": "Triangle in"
+            },
+            {
+              "value": "triangle-out",
+              "label": "Triangle out"
+            },
+            {
+              "value": "diamond",
+              "label": "Diamond"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "name": "minuteTicks",
+          "type": "DialMinuteTicks",
+          "default": null,
+          "defaultNote": "Not set: the watch face's own design is used.",
+          "description": "Ticks for the minutes between the hours.",
+          "values": [
+            {
+              "value": "line",
+              "label": "Lines"
+            },
+            {
+              "value": "short",
+              "label": "Short lines"
+            },
+            {
+              "value": "dot",
+              "label": "Dots"
+            },
+            {
+              "value": "railway",
+              "label": "Railway track",
+              "description": "Ticks between two thin rings, like a station clock."
+            },
+            {
+              "value": "rainbow",
+              "label": "Rainbow",
+              "description": "Coloured by position around the dial."
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "name": "hideMarkersAtNumbers",
+          "type": "boolean",
+          "default": null,
+          "defaultNote": "Not set: the face decides. When numbers are added to a face whose markers run through the same ring (like gold), the markers under the numbers are hidden.",
+          "description": "Leave out the marker wherever a number is drawn."
+        }
+      ]
+    },
+    {
+      "name": "Colours",
+      "props": [
+        {
+          "name": "borderColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the watch face's colour is used.",
+          "description": "Bezel (case) colour. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        },
+        {
+          "name": "dialColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the watch face's colour is used.",
+          "description": "Dial colour. The edge is shaded slightly darker so the dial keeps its gradient. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        },
+        {
+          "name": "tickColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the watch face's colour is used.",
+          "description": "Markers and ticks. Minute ticks are drawn lighter. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        },
+        {
+          "name": "numberColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the watch face's colour is used.",
+          "description": "Numbers on the dial. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        },
+        {
+          "name": "hourHandColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the watch face's colour is used.",
+          "description": "Hour hand and centre cap. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        },
+        {
+          "name": "minuteHandColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the watch face's colour is used.",
+          "description": "Minute hand. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        },
+        {
+          "name": "secondHandColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the face's colour (#e03a3a on the default face).",
+          "description": "Second hand and centre dot. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        },
+        {
+          "name": "digitalColor",
+          "type": "string",
+          "default": null,
+          "defaultNote": "Not set: the watch face's colour is used.",
+          "description": "Digital time text. Any CSS colour, e.g. \"#1f5133\", \"rgb(31 81 51)\" or \"teal\". Overrides the face.",
+          "example": "#1f5133"
+        }
+      ]
+    }
+  ],
+  "example": {
+    "description": "Gold face, black dial, Roman numerals at the quarters, triangle at 12, ringed second hand near the tip.",
+    "props": {
+      "face": "gold",
+      "dialColor": "#151515",
+      "numberColor": "#d4af37",
+      "numbers": "quarters",
+      "numerals": "roman",
+      "mainMarker": "bar",
+      "marker12": "triangle-in",
+      "secondHandStyle": "circle-outline",
+      "secondHandMarkerAt": 90,
+      "secondHandMotion": "sweep"
+    },
+    "jsx": "<Clock face=\"gold\" dialColor=\"#151515\" numberColor=\"#d4af37\" numbers=\"quarters\" numerals=\"roman\" mainMarker=\"bar\" marker12=\"triangle-in\" secondHandStyle=\"circle-outline\" secondHandMarkerAt={90} secondHandMotion=\"sweep\" />"
+  }
+}
