@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/analog-clock",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "Analog clock React component (SVG) with time zone support, light/dark themes and an optional digital readout",
   "author": "StudioToolkit",
