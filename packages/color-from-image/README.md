@@ -1,112 +1,148 @@
-# Color From Image
+# Color From Image for React
 
-React component for extracting dominant colors from images using advanced color analysis algorithms.
+[![npm version](https://img.shields.io/npm/v/@studiotoolkit/color-from-image.svg)](https://www.npmjs.com/package/@studiotoolkit/color-from-image)
+[![npm downloads](https://img.shields.io/npm/dm/@studiotoolkit/color-from-image.svg)](https://www.npmjs.com/package/@studiotoolkit/color-from-image)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@studiotoolkit/color-from-image)](https://bundlephobia.com/package/@studiotoolkit/color-from-image)
+[![types](https://img.shields.io/npm/types/@studiotoolkit/color-from-image)](https://www.npmjs.com/package/@studiotoolkit/color-from-image)
+[![license](https://img.shields.io/npm/l/@studiotoolkit/color-from-image.svg)](./LICENSE)
+[![live demo](https://img.shields.io/badge/demo-live-ff9800)](https://studiotoolkit.github.io/build-color-from-image)
 
-**Play around and Generate component code here:**  
-https://studiotoolkit.github.io/build-color-from-image
+A **React component that pulls the dominant colours out of an image**. Paste, drop or pass in an image and it returns a 16-colour palette, found with K-Means++ clustering in the OKLab colour space. It is written in TypeScript and needs nothing besides React.
 
-**Complete Demo:**  
-https://studiotoolkit.github.io/demo-all
+**Live demo:** [https://studiotoolkit.github.io/build-color-from-image](https://studiotoolkit.github.io/build-color-from-image). Try every option, then copy the generated code.
 
-**Complete functionality:**  
-https://studiotoolkit.github.io/color-from-image-help
+- **All components together:** [https://studiotoolkit.github.io/demo-all](https://studiotoolkit.github.io/demo-all)
+- **How it works:** [https://studiotoolkit.github.io/color-from-image-help](https://studiotoolkit.github.io/color-from-image-help)
+
+<p align="center">
+  <img src="assets/Empty-Canvas.png" width="200" alt="Empty canvas"/>
+  <img src="assets/Image-Pasted.png" width="200" alt="Image pasted"/>
+  <img src="assets/Settings.png" width="200" alt="Settings"/>
+</p>
 
 ## Features
 
-<table>
-<tr>
-<td align="center"><img src="assets/Empty-Canvas.png" width="200"/><br/>Empty Canvas</td>
-</tr>
-<tr>
-<td align="center"><img src="assets/Image-Pasted.png" width="200"/><br/>Image Pasted</td>
-</tr>
-<tr>
-<td align="center"><img src="assets/Settings.png" width="200"/><br/>Parameters</td>
-</tr>
-</table>
-
-- Extract dominant colors from any image using OKLab color space and K-Means++ clustering
-- Drag and drop or paste image support (Ctrl+V)
-- Customizable canvas dimensions (`width`, `height`)
-- Border styling options (`borderColor`, `borderThickness`)
-- Load from URL (`imageUrl`) or file object (`imageFile`)
-- Programmatic clear with `clearTrigger`
-- CORS-aware image loading with fallback
-- Color extraction callback (`onColorsExtracted`)
+- **Perceptual colour extraction.** Clustering runs in OKLab, so colours that look alike are grouped together.
+- **Keeps small vivid colours.** Saturated pixels are weighted up, so a bright accent isn't swallowed by a large muted background.
+- **Three ways in.** Paste with Ctrl+V / Cmd+V, drag and drop a file, or pass an `imageUrl` or `imageFile`.
+- **CORS-aware.** Remote images are loaded with `crossOrigin="anonymous"`, with a fallback when the server doesn't allow it.
+- **Clear on demand** with the `clearTrigger` prop.
+- **Light.** There are no runtime dependencies, and it works with React 18 and 19.
 
 ## Installation
 
 ```bash
-# Using pnpm
-pnpm add @studiotoolkit/color-from-image
-
-# Using npm
 npm install @studiotoolkit/color-from-image
-
-# Using yarn
+# or
+pnpm add @studiotoolkit/color-from-image
+# or
 yarn add @studiotoolkit/color-from-image
 ```
 
-**React Version:** `^18.0.0` or higher
-
-## Usage
-
-### Basic Usage
+## Quick start
 
 ```tsx
 import { ColorFromImage } from '@studiotoolkit/color-from-image';
 import '@studiotoolkit/color-from-image/style.css';
 
-function App() {
-  const handleColorsExtracted = (colors) => {
-    console.log('Extracted colors:', colors);
-  };
-
-  return <ColorFromImage onColorsExtracted={handleColorsExtracted} />;
+export default function App() {
+  return <ColorFromImage onColorsExtracted={(colors) => console.log(colors.palette)} />;
 }
 ```
 
-**Sample Output:**
+Paste an image anywhere on the page, or drop one onto the canvas. `onColorsExtracted` receives the palette:
 
 ```json
 {
   "palette": [
-    "#627bb8",
-    "#53689e",
-    "#4c597d",
-    "#6c6d67",
-    "#6b3d18",
-    "#657092",
-    "#43311b",
-    "#494b4e",
-    "#81889e",
-    "#965528",
-    "#bc773f",
-    "#221b15",
-    "#808748",
-    "#615d2a",
-    "#cdab71",
-    "#f1d85d"
+    "#627bb8", "#53689e", "#4c597d", "#6c6d67",
+    "#6b3d18", "#657092", "#43311b", "#494b4e",
+    "#81889e", "#965528", "#bc773f", "#221b15",
+    "#808748", "#615d2a", "#cdab71", "#f1d85d"
   ]
 }
 ```
 
-### Steps to Use
+Colours are sorted by a mix of how much of the image they cover and how vivid they are.
 
-1. Import the component and its styles
-2. Add the `ColorFromImage` component to your app
-3. Paste an image or drag and drop onto the canvas
-4. The component will automatically extract dominant colors
-5. Use the `onColorsExtracted` callback to receive the color palette
+## Examples
 
-## Contributors
+### Load from a URL
 
-[StudioToolkit](https://github.com/studiotoolkit)
+```tsx
+<ColorFromImage
+  imageUrl="https://example.com/photo.jpg"
+  width={320}
+  height={240}
+  onColorsExtracted={({ palette }) => setPalette(palette)}
+/>
+```
+
+The server must send CORS headers for the pixels to be readable.
+
+### File input and a clear button
+
+```tsx
+import { useState } from 'react';
+import { ColorFromImage, type ColorEntry } from '@studiotoolkit/color-from-image';
+import '@studiotoolkit/color-from-image/style.css';
+
+export function Extractor() {
+  const [file, setFile] = useState<File | null>(null);
+  const [clear, setClear] = useState(0);
+  const [colors, setColors] = useState<string[]>([]);
+
+  return (
+    <>
+      <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+      <button onClick={() => setClear((n) => n + 1)}>Clear</button>
+      <ColorFromImage
+        imageFile={file}
+        clearTrigger={clear}
+        borderColor="#888"
+        borderThickness={2}
+        onColorsExtracted={(c: ColorEntry) => setColors(c.palette)}
+      />
+      <div style={{ display: 'flex' }}>
+        {colors.map((hex) => (
+          <div key={hex} style={{ background: hex, width: 24, height: 24 }} />
+        ))}
+      </div>
+    </>
+  );
+}
+```
+
+### Pair with Color Palette
+
+Feed the result straight into [`@studiotoolkit/color-palette`](https://www.npmjs.com/package/@studiotoolkit/color-palette) to display it:
+
+```tsx
+<ColorFromImage onColorsExtracted={setPaletteData} />
+<ColorPalette paletteData={paletteData} displayType="square" showCopyButton />
+```
+
+## Props
+
+Every prop is optional.
+
+| Prop                | Type                            | Default     | Description                                                       |
+| ------------------- | ------------------------------- | ----------- | ----------------------------------------------------------------- |
+| `width`             | `number`                        | `200`       | Canvas width in pixels.                                           |
+| `height`            | `number`                        | `200`       | Canvas height in pixels.                                          |
+| `borderColor`       | `string`                        | `"#cccccc"` | Canvas border colour.                                             |
+| `borderThickness`   | `number`                        | `1`         | Canvas border width in pixels.                                    |
+| `imageUrl`          | `string`                        | —           | Load and analyse an image from a URL.                             |
+| `imageFile`         | `File \| null`                  | —           | Load and analyse a `File`, e.g. from an `<input type="file">`.    |
+| `clearTrigger`      | `number`                        | —           | Change this number to clear the canvas.                           |
+| `onColorsExtracted` | `(colors: ColorEntry) => void`  | —           | Called with `{ palette: string[] }` after each image is analysed. |
+
+The `ColorEntry` type is exported.
+
+## Contributing
+
+Issues and pull requests are welcome on [GitHub](https://github.com/studiotoolkit/studiotoolkit/issues).
 
 ## License
 
-Licensed under the MIT License.
-
-## Keywords
-
-color-extraction, image-colors, dominant-colors, color-analysis, image-processing, color-palette, react-component, design-tools
+[MIT](./LICENSE)
