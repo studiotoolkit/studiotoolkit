@@ -20,6 +20,7 @@ import '@studiotoolkit/analog-clock/style.css';
 import { useTheme } from '../ThemeContext';
 import './BuildClock.css';
 import samplesData from './samples.json';
+import { randomLooks } from './randomLook';
 
 /** A ready-made look: a face plus colour and second-hand settings. */
 interface Sample {
@@ -175,6 +176,26 @@ export default function BuildClock() {
     );
     previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
+
+  // Randomise: every variation card gets a new random look for its face.
+  // The page stays put; a card is only loaded when clicked.
+  const [randomGroups, setRandomGroups] = useState<typeof SAMPLE_GROUPS | null>(null);
+  const [shuffleCount, setShuffleCount] = useState(0);
+  const handleRandomise = () => {
+    setShuffleCount((n) => n + 1);
+    setRandomGroups(
+      SAMPLE_GROUPS.map(({ face: f, samples }) => ({
+        face: f,
+        samples: randomLooks(f.id, samples.length).map((look, i) => ({
+          id: `random-${f.id}-${i}`,
+          face: look.face,
+          name: look.name,
+          props: look.props,
+        })),
+      })),
+    );
+  };
+  const variationGroups = randomGroups ?? SAMPLE_GROUPS;
 
   // A sample is highlighted while the settings still match it exactly
   const matchesSample = (s: Sample) => {
@@ -547,9 +568,35 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
 
         {/* Variations gallery: ready-made looks for every face */}
         <section className="build-clock-faces" aria-labelledby="clock-variations-title">
-          <h3 id="clock-variations-title">Variations</h3>
-          <p className="build-clock-hint">Click a variation to load its settings.</p>
-          {SAMPLE_GROUPS.map(({ face: f, samples }) => (
+          <div className="build-clock-variations-header">
+            <h3 id="clock-variations-title">Variations</h3>
+            <div className="build-clock-randomise">
+              {randomGroups && (
+                <button
+                  type="button"
+                  className="build-clock-curated-button"
+                  onClick={() => setRandomGroups(null)}
+                  title="Show the hand-picked variations again"
+                >
+                  Curated
+                </button>
+              )}
+              <button
+                type="button"
+                className="build-clock-randomise-button"
+                onClick={handleRandomise}
+                title="Give every variation a random set of colors, dial and second hand"
+              >
+                <span aria-hidden="true">⚄</span> Randomise
+              </button>
+            </div>
+          </div>
+          <p className="build-clock-hint" aria-live="polite">
+            {randomGroups
+              ? 'Random mixes. Click one to load its settings, or Randomise again.'
+              : 'Click a variation to load its settings, or Randomise for new mixes.'}
+          </p>
+          {variationGroups.map(({ face: f, samples }) => (
             <div key={f.id} className="build-clock-variation-group">
               <h4 className="build-clock-variation-title">{f.label}</h4>
               <div className="build-clock-variations-grid">
@@ -557,14 +604,15 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                   const selected = matchesSample(s);
                   return (
                     <button
-                      key={s.id}
+                      key={`${s.id}-${randomGroups ? shuffleCount : 0}`}
                       type="button"
+                      title={s.name}
                       className={`build-clock-face-card${selected ? ' is-selected' : ''}`}
                       aria-pressed={selected}
                       onClick={() => applySample(s)}
                     >
                       <span className="build-clock-face-name">
-                        {s.name.split(' · ')[1] ?? s.name}
+                        {s.name.split(' · ').slice(1).join(' · ') || s.name}
                       </span>
                       <Clock
                         {...s.props}

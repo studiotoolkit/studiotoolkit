@@ -403,3 +403,105 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Variations header: title, last random look, Randomise button */
+.build-clock-variations-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 4px;
+}
+
+.build-clock-variations-header h3 {
+  margin: 0;
+}
+
+.build-clock-randomise {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.build-clock-curated-button {
+  padding: 5px 12px;
+  background: transparent;
+  color: #b26a00;
+  border: 1px solid #ff9800;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.build-clock-curated-button:hover {
+  background: rgba(255, 152, 0, 0.1);
+}
+
+.build-clock-curated-button:focus-visible {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+.build-clock-randomise-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: #ff9800;
+  color: #1f1f1f;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.build-clock-randomise-button span {
+  font-size: 15px;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.build-clock-randomise-button:hover {
+  background: #f57c00;
+}
+
+.build-clock-randomise-button:hover span {
+  transform: rotate(90deg);
+}
+
+.build-clock-randomise-button:active {
+  transform: scale(0.96);
+}
+
+.build-clock-randomise-button:focus-visible {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .build-clock-curated-button {
+  color: #ffb74d;
+}
+
+/* Random mix names can be long: keep each card to one line */
+.build-clock-variations-grid .build-clock-face-name {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .build-clock-randomise-button,
+  .build-clock-randomise-button span {
+    transition: none;
+  }
+}

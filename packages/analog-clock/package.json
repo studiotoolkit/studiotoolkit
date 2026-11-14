@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/analog-clock",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
   "description": "React analog clock component (SVG) with 12 watch faces, any IANA time zone, light/dark themes, smooth and sweep second hands, and an optional digital readout. SSR-safe, TypeScript, zero dependencies.",
   "author": "StudioToolkit",

@@ -5,8 +5,11 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@studiotoolkit/analog-clock)](https://bundlephobia.com/package/@studiotoolkit/analog-clock)
 [![types](https://img.shields.io/npm/types/@studiotoolkit/analog-clock)](https://www.npmjs.com/package/@studiotoolkit/analog-clock)
 [![license](https://img.shields.io/npm/l/@studiotoolkit/analog-clock.svg)](./LICENSE)
+[![live demo](https://img.shields.io/badge/demo-live-ff9800)](https://studiotoolkit.github.io/build-clock)
 
 A live **analog clock React component**, drawn in SVG. It shows any IANA time zone and comes with 12 watch faces, light and dark themes, 7 second-hand motions and an optional digital readout. It works with server rendering, is written in TypeScript and needs nothing besides React.
+
+**Live demo:** [https://studiotoolkit.github.io/build-clock](https://studiotoolkit.github.io/build-clock). Try every face, colour and dial option, then copy the generated code.
 
 <p align="center">
   <img src="assets/default.png" width="140" alt="Default face"/>
