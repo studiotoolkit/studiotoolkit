@@ -5,7 +5,7 @@
   "notes": [
     "Every prop is optional: <Clock /> draws a local-time clock on the default face.",
     "Props left out keep the watch face's own design; props you pass always win over the face.",
-    "Option lists are also exported for pickers: CLOCK_FACES, SECOND_HAND_MOTIONS, SECOND_HAND_STYLES, DIAL_NUMBERS, DIAL_NUMERALS, DIAL_MARKERS and DIAL_MINUTE_TICKS."
+    "Option lists are also exported for pickers: CLOCK_FACES, SECOND_HAND_MOTIONS, SECOND_HAND_STYLES, DATE_FORMATS, DIAL_NUMBERS, DIAL_NUMERALS, DIAL_MARKERS and DIAL_MINUTE_TICKS."
   ],
   "groups": [
     {
@@ -109,7 +109,7 @@
       ]
     },
     {
-      "name": "Digital time",
+      "name": "Digital time and date",
       "props": [
         {
           "name": "showDigital",
@@ -134,6 +134,60 @@
               "description": "HH:mm:ss"
             }
           ]
+        },
+        {
+          "name": "dateFormat",
+          "type": "DateFormat",
+          "default": "none",
+          "description": "Date shown in the clock's time zone, below the clock in the digital time colour (or on the dial with dateInside).",
+          "values": [
+            {
+              "value": "none",
+              "label": "None",
+              "description": "No date"
+            },
+            {
+              "value": "day-short",
+              "label": "Day short",
+              "description": "Sat"
+            },
+            {
+              "value": "day-long",
+              "label": "Day full",
+              "description": "Saturday"
+            },
+            {
+              "value": "date-us",
+              "label": "Date US",
+              "description": "11/14/2026"
+            },
+            {
+              "value": "date-short",
+              "label": "Date short",
+              "description": "Nov-14-2026"
+            },
+            {
+              "value": "date-intl",
+              "label": "Date intl",
+              "description": "14-Nov-2026"
+            },
+            {
+              "value": "day-date",
+              "label": "Day + date",
+              "description": "Sat · Nov 14"
+            },
+            {
+              "value": "locale",
+              "label": "Visitor's locale",
+              "description": "Sat, Nov 14 (follows the visitor's language)"
+            }
+          ]
+        },
+        {
+          "name": "dateInside",
+          "type": "boolean",
+          "default": false,
+          "description": "Draw the date inside the dial, in the lower half (in the label colour), instead of below the clock. Falls back to below the clock when radius < 50."
         }
       ]
     },

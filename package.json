@@ -26,6 +26,7 @@
     "@testing-library/user-event": "^14.6.8",
     "@typescript-eslint/eslint-plugin": "^8.72.1",
     "@typescript-eslint/parser": "^8.72.1",
+    "@vitest/coverage-v8": "5.1.0",
     "@vitest/ui": "^5.1.0",
     "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",

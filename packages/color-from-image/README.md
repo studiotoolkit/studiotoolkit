@@ -15,9 +15,9 @@ A **React component that pulls the dominant colours out of an image**. Paste, dr
 - **How it works:** [https://studiotoolkit.github.io/color-from-image-help](https://studiotoolkit.github.io/color-from-image-help)
 
 <p align="center">
-  <img src="assets/Empty-Canvas.png" width="200" alt="Empty canvas"/>
-  <img src="assets/Image-Pasted.png" width="200" alt="Image pasted"/>
-  <img src="assets/Settings.png" width="200" alt="Settings"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-from-image/assets/Empty-Canvas.png" width="200" alt="Empty canvas"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-from-image/assets/Image-Pasted.png" width="200" alt="Image pasted"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-from-image/assets/Settings.png" width="200" alt="Settings"/>
 </p>
 
 ## Features

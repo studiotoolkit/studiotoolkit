@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import {
   Clock,
   CLOCK_FACES,
+  DATE_FORMATS,
   DIAL_MARKERS,
   DIAL_MINUTE_TICKS,
   DIAL_NUMERALS,
@@ -12,6 +13,7 @@ import {
   SECOND_HAND_STYLES,
   type ClockFace,
   type ClockProps,
+  type DateFormat,
   type SecondHandMotion,
   type SecondHandStyle,
   type TimeFormat,
@@ -106,6 +108,21 @@ const TIMEZONES: { label: string; tz: string }[] = [
   { label: 'Auckland', tz: 'Pacific/Auckland' },
 ];
 
+/** Cities for Randomise: the Time Zone list without Local time and UTC. */
+const CITIES = TIMEZONES.filter((z) => z.tz && z.tz !== 'UTC');
+/** Date formats for Randomise: every format except None. */
+const RANDOM_DATE_FORMATS = DATE_FORMATS.filter((d) => d.id !== 'none').map((d) => d.id);
+
+/** A shuffled copy (Fisher-Yates). */
+function shuffled<T>(items: readonly T[]): T[] {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 /** Colour props on <Clock>, in the order they appear in Settings. */
 const COLOR_PROPS = [
   { prop: 'borderColor', label: 'Border', initial: '#000000' },
@@ -138,6 +155,8 @@ export default function BuildClock() {
   const [handStyle, setHandStyle] = useState<SecondHandStyle>('face');
   const [markerAt, setMarkerAt] = useState(100);
   const [showDigital, setShowDigital] = useState(false);
+  const [dateFormat, setDateFormat] = useState<DateFormat>('none');
+  const [dateInside, setDateInside] = useState(false);
   const [colors, setColors] = useState<ColorState>(initialColors);
   const [dial, setDial] = useState<DialState>(initialDial);
 
@@ -166,6 +185,13 @@ export default function BuildClock() {
     setHandStyle(p.secondHandStyle ?? 'face');
     setMarkerAt(p.secondHandMarkerAt ?? 100);
     setDial(propsToDial(p));
+    // Random variations carry a city, its time zone and a date format
+    if (p.timezone !== undefined) {
+      setTimezone(p.timezone ?? '');
+      setLabel(p.label ?? '');
+      setDateFormat(p.dateFormat ?? 'none');
+      setDateInside(p.dateInside ?? false);
+    }
     setColors(
       Object.fromEntries(
         COLOR_PROPS.map((c) => [
@@ -186,12 +212,27 @@ export default function BuildClock() {
     setRandomGroups(
       SAMPLE_GROUPS.map(({ face: f, samples }) => ({
         face: f,
-        samples: randomLooks(f.id, samples.length).map((look, i) => ({
-          id: `random-${f.id}-${i}`,
-          face: look.face,
-          name: look.name,
-          props: look.props,
-        })),
+        samples: (() => {
+          // A different city for every card in the row
+          const cities = shuffled(CITIES);
+          return randomLooks(f.id, samples.length).map((look, i) => {
+            const city = cities[i % cities.length];
+            const dateFormat =
+              RANDOM_DATE_FORMATS[Math.floor(Math.random() * RANDOM_DATE_FORMATS.length)];
+            return {
+              id: `random-${f.id}-${i}`,
+              face: look.face,
+              name: look.name,
+              props: {
+                ...look.props,
+                timezone: city.tz,
+                label: city.label,
+                dateFormat,
+                dateInside: true,
+              },
+            };
+          });
+        })(),
       })),
     );
   };
@@ -208,6 +249,11 @@ export default function BuildClock() {
       (!SECOND_HAND_STYLES.some((x) => x.id === handStyle && x.group === 'Object') ||
         markerAt === (p.secondHandMarkerAt ?? 100)) &&
       DIAL_FIELDS.every((f) => dialProps[f.prop] === p[f.prop]) &&
+      (p.timezone === undefined ||
+        (timezone === p.timezone &&
+          label === (p.label ?? '') &&
+          dateFormat === (p.dateFormat ?? 'none') &&
+          dateInside === (p.dateInside ?? false))) &&
       COLOR_PROPS.every((c) => colorProps[c.prop] === p[c.prop])
     );
   };
@@ -228,6 +274,8 @@ export default function BuildClock() {
     handStyle !== 'face' && `  secondHandStyle="${handStyle}"`,
     hasObject && markerAt !== 100 && `  secondHandMarkerAt={${markerAt}}`,
     !showDigital && `  showDigital={false}`,
+    dateFormat !== 'none' && `  dateFormat="${dateFormat}"`,
+    dateFormat !== 'none' && dateInside && `  dateInside`,
     ...Object.entries(dialProps).map(([prop, value]) =>
       typeof value === 'boolean' ? `  ${prop}={${value}}` : `  ${prop}="${value}"`,
     ),
@@ -271,6 +319,8 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
     setHandStyle('face');
     setMarkerAt(100);
     setShowDigital(false);
+    setDateFormat('none');
+    setDateInside(false);
     setColors(initialColors());
     setDial(initialDial());
   };
@@ -427,6 +477,31 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 onChange={(e) => setShowDigital(e.target.checked)}
               />
             </div>
+            <div className="build-clock-control-inline">
+              <label htmlFor="clock-date">Date Display</label>
+              <select
+                id="clock-date"
+                value={dateFormat}
+                onChange={(e) => setDateFormat(e.target.value as DateFormat)}
+                className="build-clock-select"
+              >
+                {DATE_FORMATS.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.example ? `${d.label} (${d.example})` : d.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="build-clock-control-inline">
+              <label htmlFor="clock-date-inside">Date Inside Dial</label>
+              <input
+                id="clock-date-inside"
+                type="checkbox"
+                checked={dateInside}
+                disabled={dateFormat === 'none'}
+                onChange={(e) => setDateInside(e.target.checked)}
+              />
+            </div>
 
             <details className="build-clock-colors" key={`dial-${resetCount}`}>
               <summary className="build-clock-subheading">
@@ -513,6 +588,8 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                 secondHandStyle={handStyle}
                 secondHandMarkerAt={markerAt}
                 showDigital={showDigital}
+                dateFormat={dateFormat}
+                dateInside={dateInside}
                 {...dialProps}
                 {...colorProps}
               />
@@ -606,7 +683,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                     <button
                       key={`${s.id}-${randomGroups ? shuffleCount : 0}`}
                       type="button"
-                      title={s.name}
+                      title={s.props.label ? `${s.name} · ${s.props.label}` : s.name}
                       className={`build-clock-face-card${selected ? ' is-selected' : ''}`}
                       aria-pressed={selected}
                       onClick={() => applySample(s)}
@@ -618,7 +695,7 @@ ${props.length ? `<Clock\n${props.join('\n')}\n/>` : '<Clock />'}`;
                         {...s.props}
                         theme={theme}
                         radius={64}
-                        timezone={timezone || null}
+                        timezone={s.props.timezone ?? (timezone || null)}
                         showDigital={false}
                       />
                     </button>

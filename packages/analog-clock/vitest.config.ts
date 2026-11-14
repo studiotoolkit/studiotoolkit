@@ -15,6 +15,9 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{ts,tsx}'],
+      // Every line and branch is tested; keep it that way
+      thresholds: { 100: true },
     },
   },
 });

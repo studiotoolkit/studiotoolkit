@@ -1,6 +1,6 @@
 {
   "name": "@studiotoolkit/analog-clock",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "license": "MIT",
   "description": "React analog clock component (SVG) with 12 watch faces, any IANA time zone, light/dark themes, smooth and sweep second hands, and an optional digital readout. SSR-safe, TypeScript, zero dependencies.",
   "author": "StudioToolkit",
@@ -72,6 +72,7 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "prepublishOnly": "pnpm run build && pnpm test"

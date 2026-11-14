@@ -525,7 +525,7 @@ describe('face styles', () => {
 describe('public API', () => {
   it('does not expose internal face shapes', () => {
     expect(Object.keys(publicApi).sort()).toEqual(
-      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'DIAL_MARKERS', 'DIAL_MINUTE_TICKS', 'DIAL_NUMERALS', 'DIAL_NUMBERS', 'SECOND_HAND_MOTIONS', 'SECOND_HAND_STYLES', 'formatDigitalTime', 'getTimeInZone', 'secondHandAngle'].sort()
+      ['AnalogClock', 'CLOCK_FACES', 'Clock', 'DIAL_MARKERS', 'DIAL_MINUTE_TICKS', 'DIAL_NUMERALS', 'DATE_FORMATS', 'DIAL_NUMBERS', 'SECOND_HAND_MOTIONS', 'SECOND_HAND_STYLES', 'formatClockDate', 'formatDigitalTime', 'getTimeInZone', 'secondHandAngle'].sort()
     );
   });
 

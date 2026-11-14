@@ -1,4 +1,4 @@
-.PHONY: help install run dev build preview lint lint-fix typecheck audit clean
+.PHONY: help install run dev build preview lint lint-fix typecheck test audit clean
 
 .DEFAULT_GOAL := help
 
@@ -35,6 +35,9 @@ lint-fix: ## Run ESLint and fix what it can
 
 typecheck: ## Type-check with TypeScript
 	$(PNPM) exec tsc -b
+
+test: typecheck lint ## Type-check, lint, and run the workspace package tests
+	cd .. && $(PNPM) $(PACKAGES) test
 
 audit: ## Check dependencies for known vulnerabilities
 	$(PNPM) audit

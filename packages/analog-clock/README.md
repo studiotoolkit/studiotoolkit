@@ -12,10 +12,10 @@ A live **analog clock React component**, drawn in SVG. It shows any IANA time zo
 **Live demo:** [https://studiotoolkit.github.io/build-clock](https://studiotoolkit.github.io/build-clock). Try every face, colour and dial option, then copy the generated code.
 
 <p align="center">
-  <img src="assets/default.png" width="140" alt="Default face"/>
-  <img src="assets/gold.png" width="140" alt="Gold face"/>
-  <img src="assets/navy.png" width="140" alt="Navy face"/>
-  <img src="assets/ocean.png" width="140" alt="Ocean face"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/default.png" width="140" alt="Default face"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/gold.png" width="140" alt="Gold face"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/navy.png" width="140" alt="Navy face"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/ocean.png" width="140" alt="Ocean face"/>
 </p>
 
 ## Features
@@ -24,7 +24,7 @@ A live **analog clock React component**, drawn in SVG. It shows any IANA time zo
 - **12 watch faces**, from a plain wall clock to dress, dive and chronograph styles. You can restyle any face with CSS variables.
 - **Customisable dial.** Choose Arabic or Roman numerals, 8 marker shapes and 5 minute-tick styles.
 - **7 second-hand motions:** tick, smooth, sweep, stop-to-go (like a railway clock), bounce, ease and anticipate.
-- **Light and dark themes**, plus an optional 12h or 24h digital readout.
+- **Light and dark themes**, plus an optional 12h or 24h digital readout and a day or date display in 7 formats.
 - **SSR-safe.** There are no hydration errors in Next.js, Remix and similar frameworks.
 - **Accessible.** The clock has `role="img"` and a live `aria-label`, and it respects `prefers-reduced-motion`.
 - **Light.** There are no runtime dependencies, no CSS import is needed, and the clock works with React 18 and 19.
@@ -111,6 +111,8 @@ Every prop is optional.
 | `showSeconds` | `boolean`             | `true`         | Show the second hand, and seconds in the digital readout.       |
 | `showDigital` | `boolean`             | `true`         | Show the digital time below the dial.                           |
 | `timeFormat`  | `"12h" \| "24h"`      | `"12h"`        | Digital time as `hh:mm:ss AM` or `HH:mm:ss`.                    |
+| `dateFormat`  | `DateFormat`          | `"none"`       | Day or date, in the clock's time zone. See [Date](#date).       |
+| `dateInside`  | `boolean`             | `false`        | Draw the date inside the dial instead of below the clock.       |
 | `secondHandMotion` | `SecondHandMotion` | `"tick"`     | How the second hand moves. See [Second hand motion](#second-hand-motion). |
 | `secondHandStyle` | `SecondHandStyle` | `"face"`       | How the second hand looks. See [Second hand style](#second-hand-style). |
 | `secondHandMarkerAt` | `number`      | `100`          | Where the object sits on the second hand, from 0 (inner end) to 100 (tip). |
@@ -143,22 +145,22 @@ import config from '@studiotoolkit/analog-clock/configuration.json';
 
 <table>
 <tr>
-<td align="center"><img src="assets/default.png" width="160" alt="Default face"/><br/><code>default</code></td>
-<td align="center"><img src="assets/gold.png" width="160" alt="Gold face"/><br/><code>gold</code></td>
-<td align="center"><img src="assets/blue.png" width="160" alt="Blue face"/><br/><code>blue</code></td>
-<td align="center"><img src="assets/wall-black.png" width="160" alt="Wall Black face"/><br/><code>wall-black</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/default.png" width="160" alt="Default face"/><br/><code>default</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/gold.png" width="160" alt="Gold face"/><br/><code>gold</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/blue.png" width="160" alt="Blue face"/><br/><code>blue</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/wall-black.png" width="160" alt="Wall Black face"/><br/><code>wall-black</code></td>
 </tr>
 <tr>
-<td align="center"><img src="assets/wall-white.png" width="160" alt="Wall White face"/><br/><code>wall-white</code></td>
-<td align="center"><img src="assets/roman.png" width="160" alt="Roman face"/><br/><code>roman</code></td>
-<td align="center"><img src="assets/steel.png" width="160" alt="Steel face"/><br/><code>steel</code></td>
-<td align="center"><img src="assets/navy.png" width="160" alt="Navy face"/><br/><code>navy</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/wall-white.png" width="160" alt="Wall White face"/><br/><code>wall-white</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/roman.png" width="160" alt="Roman face"/><br/><code>roman</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/steel.png" width="160" alt="Steel face"/><br/><code>steel</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/navy.png" width="160" alt="Navy face"/><br/><code>navy</code></td>
 </tr>
 <tr>
-<td align="center"><img src="assets/spectrum.png" width="160" alt="Spectrum face"/><br/><code>spectrum</code></td>
-<td align="center"><img src="assets/chrono.png" width="160" alt="Chrono face"/><br/><code>chrono</code></td>
-<td align="center"><img src="assets/ocean.png" width="160" alt="Ocean face"/><br/><code>ocean</code></td>
-<td align="center"><img src="assets/blush.png" width="160" alt="Blush face"/><br/><code>blush</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/spectrum.png" width="160" alt="Spectrum face"/><br/><code>spectrum</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/chrono.png" width="160" alt="Chrono face"/><br/><code>chrono</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/ocean.png" width="160" alt="Ocean face"/><br/><code>ocean</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/analog-clock/assets/blush.png" width="160" alt="Blush face"/><br/><code>blush</code></td>
 </tr>
 </table>
 
@@ -235,6 +237,28 @@ New markers start where the face's own markers start. They shrink, or move out t
 
 `DIAL_NUMBERS`, `DIAL_NUMERALS`, `DIAL_MARKERS` and `DIAL_MINUTE_TICKS` list the values as `[{ id, label }]` for pickers.
 
+## Date
+
+`dateFormat` shows the day or date in the clock's `timezone`, so a Tokyo clock shows Tokyo's date. By default it sits below the clock (under the digital time when that is on), in the `digitalColor` colour. Add `dateInside` to draw it on the dial instead, in the lower half and in the label colour, like a watch's date window. Inside needs `radius` of at least 50; smaller clocks show it below.
+
+| Value          | Example (Saturday 14 Nov 2026) |
+| -------------- | ------------------------------ |
+| `"none"`       | (nothing, the default)         |
+| `"day-short"`  | Sat                            |
+| `"day-long"`   | Saturday                       |
+| `"date-us"`    | 11/14/2026                     |
+| `"date-short"` | Nov-14-2026                    |
+| `"date-intl"`  | 14-Nov-2026                    |
+| `"day-date"`   | Sat · Nov 14                   |
+| `"locale"`     | The visitor's own format, e.g. "Sat, Nov 14" or "Sat 14 Nov" |
+
+```tsx
+<Clock timezone="Asia/Tokyo" label="Tokyo" dateFormat="day-date" />
+<Clock dateFormat="date-intl" dateInside />
+```
+
+`DATE_FORMATS` lists every value as `[{ id, label, example }]` for pickers. Style the text with the `.analog-clock-date` class (`.ac-date` on the dial), or set its font with the `--ac-date-font` CSS variable.
+
 ## Second hand motion
 
 | Motion       | Movement                                                                 |
@@ -278,14 +302,15 @@ Every style except `face` is drawn in the second-hand colour, without the face's
 
 ## Helpers
 
-`Clock` is also exported as `AnalogClock`. The prop and value types are exported too: `ClockProps`, `ClockFace`, `ClockTheme`, `TimeFormat`, `SecondHandMotion`, `SecondHandStyle`, `SecondHandMarker`, `SecondHandFill`, `DialNumbers`, `DialNumerals`, `DialMarker` and `DialMinuteTicks`.
+`Clock` is also exported as `AnalogClock`. The prop and value types are exported too: `ClockProps`, `ClockFace`, `ClockTheme`, `TimeFormat`, `DateFormat`, `SecondHandMotion`, `SecondHandStyle`, `SecondHandMarker`, `SecondHandFill`, `DialNumbers`, `DialNumerals`, `DialMarker` and `DialMinuteTicks`.
 
 ```ts
-import { getTimeInZone, formatDigitalTime } from '@studiotoolkit/analog-clock';
+import { getTimeInZone, formatDigitalTime, formatClockDate } from '@studiotoolkit/analog-clock';
 
 getTimeInZone('Asia/Kolkata');                                           // e.g. { hours: 15, minutes: 45, seconds: 30 }
 formatDigitalTime({ hours: 15, minutes: 45, seconds: 30 });              // "03:45:30 PM"
 formatDigitalTime({ hours: 15, minutes: 45, seconds: 30 }, true, '24h'); // "15:45:30"
+formatClockDate('date-intl', new Date(), 'Asia/Tokyo');                  // e.g. "15-Nov-2026"
 ```
 
 ## Server rendering (Next.js, Remix)

@@ -14,10 +14,10 @@ An **interactive colour wheel React component** for building colour harmonies. D
 **All components together:** [https://studiotoolkit.github.io/demo-all](https://studiotoolkit.github.io/demo-all)
 
 <p align="center">
-  <img src="assets/complementary.png" width="140" alt="Complementary"/>
-  <img src="assets/triadic.png" width="140" alt="Triadic"/>
-  <img src="assets/square.png" width="140" alt="Square"/>
-  <img src="assets/harmony-polygon.png" width="140" alt="Harmony polygon"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/complementary.png" width="140" alt="Complementary"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/triadic.png" width="140" alt="Triadic"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/square.png" width="140" alt="Square"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/harmony-polygon.png" width="140" alt="Harmony polygon"/>
 </p>
 
 ## Features
@@ -60,15 +60,15 @@ export default function App() {
 
 <table>
 <tr>
-<td align="center"><img src="assets/complementary.png" width="120" alt="Complementary"/><br/><code>complementary</code></td>
-<td align="center"><img src="assets/analogous.png" width="120" alt="Analogous"/><br/><code>analogous</code></td>
-<td align="center"><img src="assets/monochromatic.png" width="120" alt="Monochromatic"/><br/><code>monochromatic</code></td>
-<td align="center"><img src="assets/split-complementary.png" width="120" alt="Split complementary"/><br/><code>split</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/complementary.png" width="120" alt="Complementary"/><br/><code>complementary</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/analogous.png" width="120" alt="Analogous"/><br/><code>analogous</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/monochromatic.png" width="120" alt="Monochromatic"/><br/><code>monochromatic</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/split-complementary.png" width="120" alt="Split complementary"/><br/><code>split</code></td>
 </tr>
 <tr>
-<td align="center"><img src="assets/triadic.png" width="120" alt="Triadic"/><br/><code>triadic</code></td>
-<td align="center"><img src="assets/square.png" width="120" alt="Square"/><br/><code>square</code></td>
-<td align="center"><img src="assets/simple.png" width="120" alt="Simple"/><br/><code>simple</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/triadic.png" width="120" alt="Triadic"/><br/><code>triadic</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/square.png" width="120" alt="Square"/><br/><code>square</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/simple.png" width="120" alt="Simple"/><br/><code>simple</code></td>
 <td></td>
 </tr>
 </table>
@@ -87,11 +87,11 @@ export default function App() {
 
 <table>
 <tr>
-<td align="center"><img src="assets/background-image.png" width="120" alt="Background colour"/><br/>Background</td>
-<td align="center"><img src="assets/center-dot.png" width="120" alt="Centre dot"/><br/>Centre dot</td>
-<td align="center"><img src="assets/harmony-polygon.png" width="120" alt="Harmony polygon"/><br/>Harmony polygon</td>
-<td align="center"><img src="assets/thickness.png" width="120" alt="Thickness"/><br/>Wheel thickness</td>
-<td align="center"><img src="assets/thickness2.png" width="120" alt="Thickness variation"/><br/>Thinner wheel</td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/background-image.png" width="120" alt="Background colour"/><br/>Background</td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/center-dot.png" width="120" alt="Centre dot"/><br/>Centre dot</td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/harmony-polygon.png" width="120" alt="Harmony polygon"/><br/>Harmony polygon</td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/thickness.png" width="120" alt="Thickness"/><br/>Wheel thickness</td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-wheel/assets/thickness2.png" width="120" alt="Thickness variation"/><br/>Thinner wheel</td>
 </tr>
 </table>
 

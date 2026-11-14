@@ -1,3 +1,4 @@
+import { formatClockDate, type DateFormat } from "./date";
 import {
   useState,
   useEffect,
@@ -98,6 +99,18 @@ export interface ClockProps {
   showDigital?: boolean;
   /** Digital time format: "12h" (hh:mm:ss AM) or "24h" (HH:mm:ss). */
   timeFormat?: TimeFormat;
+  /**
+   * Date shown below the dial, in the clock's time zone: "none",
+   * "day-short" (Sat), "day-long" (Saturday), "date-us" (11/14/2026),
+   * "date-short" (Nov-14-2026), "date-intl" (14-Nov-2026),
+   * "day-date" (Sat · Nov 14) or "locale" (the visitor's own format).
+   */
+  dateFormat?: DateFormat;
+  /**
+   * Draw the date inside the dial, in the lower half, instead of below the
+   * clock. Falls back to below the clock when radius < 50.
+   */
+  dateInside?: boolean;
   /** Bezel colour. Overrides the face. */
   borderColor?: string;
   /**
@@ -247,6 +260,8 @@ export default function Clock({
   hideMarkersAtNumbers,
   showDigital = true,
   timeFormat = "12h",
+  dateFormat = "none",
+  dateInside = false,
   borderColor,
   dialColor,
   tickColor,
@@ -634,7 +649,14 @@ export default function Clock({
     showSeconds,
     timeFormat,
   );
-  const spoken = time ? digitalTime : "Clock";
+  const showDate = dateFormat !== "none";
+  // Inside the dial it needs room, like the label
+  const dateOnDial = showDate && dateInside && radius >= 50;
+  // Below the centre; under the label when the face puts that below too
+  const dateOffset =
+    showLabel && g.labelOffset < 0 ? -g.labelOffset + 0.15 : 0.4;
+  const dateText = time && showDate ? formatClockDate(dateFormat, new Date(), timezone) : "";
+  const spoken = time ? (dateText ? `${digitalTime}, ${dateText}` : digitalTime) : "Clock";
   const ariaLabel = label ? `${label}: ${spoken}` : spoken;
 
   return (
@@ -878,6 +900,26 @@ export default function Clock({
           </text>
         )}
 
+        {/* Date on the dial */}
+        {dateOnDial && (
+          <text
+            className="ac-date"
+            x={C}
+            y={C + r(dateOffset)}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={r(0.09)}
+            letterSpacing={r(0.008)}
+            style={{
+              fill: c.label,
+              fontFamily: cssVar("date-font", FONT),
+              fontWeight: 600,
+            }}
+          >
+            {dateText}
+          </text>
+        )}
+
         {/* Hands (only once the time is known) */}
         {time && (
           <g filter={`url(#${handShadowId})`}>
@@ -987,6 +1029,23 @@ export default function Clock({
           >
             {digitalTime}
           </span>
+        </div>
+      )}
+
+      {showDate && !dateOnDial && (
+        <div
+          className="analog-clock-date"
+          style={{
+            fontSize: r(0.16),
+            fontFamily: cssVar("date-font", FONT),
+            fontWeight: 600,
+            letterSpacing: "0.05em",
+            marginTop: showDigital ? 2 : 8,
+            color: c.digital,
+          }}
+        >
+          {/* Non-breaking space before mount keeps the layout from jumping */}
+          {dateText || "\u00a0"}
         </div>
       )}
     </div>

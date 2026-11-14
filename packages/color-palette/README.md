@@ -14,7 +14,7 @@ A **React component for showing colour palettes**. Pass it named lists of hex co
 **All components together:** [https://studiotoolkit.github.io/demo-all](https://studiotoolkit.github.io/demo-all)
 
 <p align="center">
-  <img src="assets/Box.png" width="600" alt="Block display"/>
+  <img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-palette/assets/Box.png" width="600" alt="Block display"/>
 </p>
 
 ## Features
@@ -57,12 +57,12 @@ Each key in `paletteData` becomes one titled row of swatches.
 
 <table>
 <tr>
-<td align="center"><img src="assets/Box.png" width="280" alt="Block"/><br/><code>block</code></td>
-<td align="center"><img src="assets/Square.png" width="280" alt="Square"/><br/><code>square</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-palette/assets/Box.png" width="280" alt="Block"/><br/><code>block</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-palette/assets/Square.png" width="280" alt="Square"/><br/><code>square</code></td>
 </tr>
 <tr>
-<td align="center"><img src="assets/Circle.png" width="280" alt="Circle"/><br/><code>circle</code></td>
-<td align="center"><img src="assets/Triangle.png" width="280" alt="Triangle"/><br/><code>triangle</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-palette/assets/Circle.png" width="280" alt="Circle"/><br/><code>circle</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-palette/assets/Triangle.png" width="280" alt="Triangle"/><br/><code>triangle</code></td>
 </tr>
 </table>
 
@@ -75,8 +75,8 @@ Each key in `paletteData` becomes one titled row of swatches.
 
 <table>
 <tr>
-<td align="center"><img src="assets/Single-Tone.png" width="280" alt="Single tone"/><br/><code>parts={1}</code></td>
-<td align="center"><img src="assets/Two-Tone.png" width="280" alt="Two tone"/><br/><code>parts={2}</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-palette/assets/Single-Tone.png" width="280" alt="Single tone"/><br/><code>parts={1}</code></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/studiotoolkit/studiotoolkit@main/packages/color-palette/assets/Two-Tone.png" width="280" alt="Two tone"/><br/><code>parts={2}</code></td>
 </tr>
 </table>
 
